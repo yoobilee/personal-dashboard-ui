@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>나만의 일정 대시보드</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="profile">내 프로필</div>
+        <nav>메뉴들</nav>
+    </aside>
+
+    <div class="scroll-container">
+
+        <section class="page">
+            <div class="roadmap-container">
+                <h2 class="roadmap-title">유비의 2026 로드맵 🚀</h2>
+
+                <div class="horizontal-timeline">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-item">
+                        <div class="marker">👋</div>
+                        <div class="content">
+                            <h4>3월</h4>
+                            <p>24일 QA 업무 마무리 및 퇴사!<br>개인 포트폴리오 기획</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="marker">🔥</div>
+                        <div class="content">
+                            <h4>5월</h4>
+                            <p>KDT 부트캠프 합류<br>본격적인 개발자 커리어 시작</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="marker">🚩</div>
+                        <div class="content">
+                            <h4>하반기</h4>
+                            <p>프론트엔드 개발자 취업 성공!<br>진짜 내 무대를 찾아서</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="scroll-down-indicator">
+                <span>Scroll Down</span>
+                <div class="arrow">↓</div>
+            </div>
+        </section>
+
+        <section class="page">
+            <main class="board-container">
+                <div class="column">
+                    <h3>To Do (할 일)</h3>
+
+                    <button class="add-btn">+ 새로운 할 일</button>
+
+                    <div class="task-card" draggable="true">
+                        <button class="delete-btn">×</button>
+                        <span class="tag">기획</span>
+                        <p class="task-title">대시보드 UI 스케치하기</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Doing (진행 중)</h3>
+
+                    <div class="task-card" draggable="true">
+                        <button class="delete-btn">×</button>
+                        <span class="tag">기획</span>
+                        <p class="task-title">대시보드 UI 스케치하기</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Done (완료)</h3>
+
+                    <div class="task-card" draggable="true">
+                        <button class="delete-btn">×</button>
+                        <span class="tag">기획</span>
+                        <p class="task-title">대시보드 UI 스케치하기</p>
+                    </div>
+                </div>
+            </main>
+        </section>
+    </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
