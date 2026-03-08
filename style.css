@@ -1,21 +1,113 @@
-/* 1. 도화지 세팅 (전체 배경 그라데이션) */
+/* 1. 배경: 그라데이션 중심을 왼쪽(사이드바 쪽)으로 이동 */
 body {
   margin: 0;
-  display: flex; /* 사이드바와 보드를 양옆으로 나란히 배치 */
-  height: 100vh; /* 화면 꽉 차게 */
-  background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
-  font-family: 'Pretendard', 'Malgun Gothic', sans-serif; 
+  display: flex;
+  height: 100vh;
+  /* ⭐️ 왼쪽 상단(0% 0%)과 왼쪽 중앙(0% 50%)에 블루 포인트를 줘서 사이드바 뒤를 채움 */
+  background: radial-gradient(at 0% 0%, rgba(49, 130, 246, 0.4) 0px, transparent 50%),
+              radial-gradient(at 0% 50%, rgba(49, 130, 246, 0.2) 0px, transparent 50%),
+              #f2f4f6; /* 베이스는 깨끗한 토스 그레이 */
+  background-attachment: fixed;
+  font-family: 'Pretendard', -apple-system, sans-serif;
+  overflow: hidden;
 }
 
-/* 2. 왼쪽 사이드바 (글래스모피즘 유리창 효과) */
+/* 2. 사이드바: 뒤에 비치는 블루를 더 쫀득하게 표현 */
 .sidebar {
-  width: 250px;
-  background: rgba(255, 255, 255, 0.3); /* 반투명 흰색 */
-  backdrop-filter: blur(12px); /* 뒤에 비치는 배경을 흐리게 */
-  -webkit-backdrop-filter: blur(12px); /* 사파리 브라우저 호환용 */
-  border-right: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 24px;
+  width: 280px;
+  /* 유리 느낌을 위해 투명도를 살짝 더 낮춤 (배경색이 더 잘 비치게) */
+  background: rgba(255, 255, 255, 0.1); 
+  
+  /* ⭐️ 블러를 40px로 높여서 뒤의 블루를 아주 몽글몽글하게 확산시킴 */
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  
+  /* 유리의 입체감을 살리는 아주 얇고 밝은 테두리 */
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  
+  padding: 40px 24px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  /* 왼쪽에서 빛이 들어오는 듯한 은은한 그림자 */
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.02);
+}
+
+/* 2. 상단: 프로필 영역 (이미지와 텍스트 정렬) */
+.profile-section {
+  text-align: center;             /* 내부의 이미지와 글자를 모두 가운데 정렬 */
+  margin-bottom: 40px;            /* 메뉴 영역과의 간격 확보 */
+}
+
+.profile-image {
+  width: 90px;                    /* 이미지 원의 너비 */
+  height: 90px;                   /* 이미지 원의 높이 */
+  background-color: #ffffff;      /* 배경을 하얗게 설정 */
+  border-radius: 50%;             /* 50%를 깎아서 완벽한 원형으로 만듦 */
+  margin: 0 auto 20px;            /* 상단 0, 좌우 자동(가운데), 하단 20px 마진 */
+  display: flex;                  /* 이모지(👤)를 정중앙에 놓기 위해 Flex 사용 */
+  justify-content: center;        /* 가로 중앙 정렬 */
+  align-items: center;            /* 세로 중앙 정렬 */
+  font-size: 45px;                /* 내부 이모지 크기 키우기 */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); /* 바닥에 살짝 뜬 듯한 부드러운 그림자 */
+}
+
+.user-name {
+  font-size: 22px;                /* 이름 텍스트 크기 */
+  color: #333d4b;                 /* 토스 메인 텍스트 색상 (짙은 회색) */
+  margin: 0 0 8px 0;              /* 아래 역할 텍스트와의 간격 */
+  font-weight: 700;               /* 이름을 가장 두껍게 강조 */
+}
+
+.user-role {
+  font-size: 14px;                /* 역할 텍스트 크기 */
+  color: #6b7684;                 /* 보조 텍스트 색상 (부드러운 회색) */
+  font-weight: 500;               /* 적당한 굵기 설정 */
+}
+
+/* 3. 중간: 메뉴 리스트 영역 */
+.sidebar-menu {
+  flex: 1;                        /* 남는 중간 공간을 이 영역이 모두 차지하게 함 */
+  margin-top: 20px;               /* 프로필 영역과의 여유 공간 */
+}
+
+.sidebar-menu ul {
+  list-style: none;               /* 리스트 특유의 점(●) 제거 */
+  padding: 0;                     /* 기본 패딩 제거 */
+  margin: 0;                      /* 기본 마진 제거 */
+}
+
+.sidebar-menu li {
+  padding: 14px 18px;             /* 클릭 영역을 확보하기 위한 내부 여백 */
+  border-radius: 12px;            /* 메뉴 모서리를 둥글게 깎음 */
+  margin-bottom: 10px;            /* 메뉴 항목들 사이의 수직 간격 */
+  color: #4e5968;                 /* 메뉴 글자 색상 */
+  font-size: 15px;                /* 메뉴 글자 크기 */
+  font-weight: 600;               /* 가독성을 위해 약간 두껍게 */
+  cursor: pointer;                /* 마우스를 올리면 손가락 모양으로 변경 */
+  transition: all 0.2s ease;      /* 배경색, 글자색 변화를 0.2초 동안 부드럽게 재생 */
+}
+
+/* 메뉴에 마우스를 올리거나(Hover) 현재 활성화된(Active) 상태 */
+.sidebar-menu li.active, 
+/* 3. 메뉴: 마우스 올렸을 때 흰색 유리가 더 덧대어지는 느낌 */
+.sidebar-menu li:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #3182f6;
+  backdrop-filter: blur(10px); /* 메뉴 위에도 작은 유리막 효과 */
+  transform: translateX(8px); /* 조금 더 역동적으로 이동 */
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* 튕기는 듯한 부드러운 애니메이션 */
+}
+
+/* 4. 하단: 정보 영역 (위치, 연락처) */
+.sidebar-footer {
+  padding-top: 20px;              /* 구분선과 텍스트 사이의 여백 */
+  border-top: 1px solid rgba(255, 255, 255, 0.5); /* 상단에 얇은 구분선 추가 */
+  font-size: 13px;                /* 부가 정보이므로 크기를 작게 조절 */
+  color: #8b95a1;                 /* 연한 회색으로 시각적 중요도 낮춤 */
+  line-height: 1.8;               /* 줄 간격을 넓혀서 가독성 확보 */
 }
 
 /* 두 번째 화면: 칸반 보드 전용 (회색 배경 꽉 차게!) */
