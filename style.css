@@ -7,7 +7,7 @@ body {
   background: radial-gradient(at 0% 0%, rgba(49, 130, 246, 0.4) 0px, transparent 50%),
               radial-gradient(at 0% 50%, rgba(49, 130, 246, 0.2) 0px, transparent 50%),
               #f2f4f6; /* 베이스는 깨끗한 토스 그레이 */
-  background-attachment: fixed;
+  background-attachment: fixed; /* 배경 그라데이션이 스크롤해도 움직이지 않고 고정됨 */
   font-family: 'Pretendard', -apple-system, sans-serif;
   overflow: hidden;
 }
@@ -113,50 +113,58 @@ body {
 /* 두 번째 화면: 칸반 보드 전용 (회색 배경 꽉 차게!) */
 .board-container {
   width: 100%;
-  height: 100%; /* ⭐️ 핵심! 페이지 전체 높이를 100% 꽉 채워라! */
-  background-color: #f2f4f6; /* 토스 회색 배경 */
+  height: 100%; 
+  background-color: transparent; /* ⭐️ 기존 #f2f4f6를 지우고 투명하게 바꿉니다. */
   padding: 40px;
   display: flex;
   gap: 24px;
   box-sizing: border-box;
 }
 
-/* 4. 칸반 보드 기둥들 (새하얗고 둥근 모서리) */
+/* 3. 칸반 기둥(Column)을 '투명 유리판'으로 변신 */
 .column {
-  flex: 1; /* 3개의 기둥이 동일한 너비를 나눠 가짐 */
-  background-color: #ffffff;
-  border-radius: 20px; /* 둥근 모서리 */
-  padding: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04); /* 아주 연하고 부드러운 그림자 */
-  font-weight: bold;
-  color: #333d4b;
+  /* 배경을 반투명한 흰색으로 설정하여 뒤의 블루 그라데이션이 비치게 합니다. */
+  background: rgba(255, 255, 255, 0.2); 
+  
+  /* ⭐️ 핵심: 뒤를 흐릿하게 만드는 블러 효과 */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  
+  /* 유리의 테두리 느낌을 주는 얇은 선 */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 24px; /* 조금 더 둥글게 깎아서 토스 느낌을 살립니다. */
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05); /* 입체감을 위한 은은한 그림자 */
+  
+  /* 기둥이 너무 좁아지지 않게 최소 너비 설정 */
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 기둥 안의 제목(To Do 등) 스타일 */
 .column h3 {
   margin-top: 0;
   margin-bottom: 20px;
-  font-size: 16px;
-  color: #8b95a1; /* 토스 특유의 차분한 진회색 텍스트 */
+  font-size: 18px;
+  color: #333d4b; /* 텍스트를 조금 더 진하게 하여 유리 위에서도 잘 보이게 합니다. */
+  font-weight: 700;
 }
 
-/* ⭐️ 일정 카드 본체 스타일 */
+/* 5. 카드 디자인 (배경이 비치면 글자가 안 보일 수 있으니 흰색 유지) */
 .task-card {
-  background-color: #ffffff;
-  border: 1px solid #e5e8eb; /* 아주 연한 테두리로 구분감 주기 */
-  border-radius: 12px; /* 카드 모서리도 둥글게 */
+  background: #ffffff; /* 카드는 가독성을 위해 불투명한 흰색 유지 */
+  border-radius: 16px;
   padding: 16px;
-  margin-bottom: 12px; /* 카드와 카드 사이 간격 */
-  cursor: pointer; /* 마우스 올리면 손가락 모양으로 변함 */
-  transition: all 0.2s ease; /* 애니메이션을 부드럽게 */
-  position: relative;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 /* 카드에 마우스를 올렸을 때(Hover) 효과 - QA 테스트 필수 항목! */
 .task-card:hover {
-  transform: translateY(-4px); /* 위로 살짝(4px) 떠오르는 느낌 */
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08); /* 그림자가 진해짐 */
-  border-color: #3182f6; /* 토스 블루 컬러로 테두리 강조 */
+  transform: translateY(-5px); /* 살짝 떠오르는 효과 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* 카드 안의 꼬리표(태그) 스타일 */
