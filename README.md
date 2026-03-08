@@ -5,8 +5,16 @@
 토스(Toss) 스타일의 깔끔한 UI와 글래스모피즘(Glassmorphism) 디자인을 적용하여 사용자 경험(UX)을 극대화했습니다.
 
 ## 🛠 기술 스택
-- **Front-end:** HTML5, CSS3, Vanilla JavaScript (프레임워크 없이 순수 JS로 구현)
-- **Design:** CSS Flexbox, Scroll Snap, Keyframes Animation
+
+### 🎨 Front-end
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black)
+
+### 🔧 Tools & Version Control
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 
 ## ✨ 핵심 기능 (Key Features)
 
