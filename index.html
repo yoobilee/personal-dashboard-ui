@@ -46,15 +46,15 @@
         <section class="page">
 
             <div class="progress-container">
-                    <div class="progress-header">
-                        <span>2026년 한 해 달성률</span>
-                        <span id="progress-text">0%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progress-fill"></div>
-                    </div>
+                <div class="progress-header">
+                    <span>2026년 한 해 달성률</span>
+                    <span id="progress-text">0%</span>
                 </div>
-                
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
             <div class="roadmap-container">
                 <h2 class="roadmap-title">유비의 2026 로드맵 🚀</h2>
 
@@ -128,7 +128,37 @@
                 </div>
             </main>
         </section>
-    </div>
+
+        <section class="page">
+            <div class="calendar-wrapper">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prev-month">◀</button>
+                        <h2 id="calendar-title">2026년 3월</h2>
+                        <button id="next-month">▶</button>
+                    </div>
+
+                    <div class="calendar-days">
+                        <div>일</div>
+                        <div>월</div>
+                        <div>화</div>
+                        <div>수</div>
+                        <div>목</div>
+                        <div>금</div>
+                        <div>토</div>
+                    </div>
+
+                    <div class="calendar-dates" id="calendar-dates">
+                    </div>
+                </div>
+
+                <div class="memo-container">
+                    <h3 id="memo-date-title">날짜를 선택해주세요 📅</h3>
+                    <textarea id="memo-input" placeholder="이 날의 일정을 적어보세요... (예: 깃허브 잔디 심기)"></textarea>
+                    <button id="save-memo-btn">메모 저장하기 💾</button>
+                </div>
+            </div>
+        </section>
     </div>
     <script src="script.js"></script>
 </body>

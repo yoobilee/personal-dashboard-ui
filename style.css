@@ -511,13 +511,17 @@ body {
 
 /* 스위치 전체 크기 및 ⭐️ 우측 상단 고정 배치 */
 .super-stylish-switch {
-  position: fixed; /* 화면 스크롤을 내려도 항상 같은 자리에 따라오도록 고정! */
-  top: 30px;       /* 위에서 30px 띄우기 */
-  right: 40px;     /* 오른쪽에서 40px 띄우기 */
+  position: fixed;
+  /* 화면 스크롤을 내려도 항상 같은 자리에 따라오도록 고정! */
+  top: 30px;
+  /* 위에서 30px 띄우기 */
+  right: 40px;
+  /* 오른쪽에서 40px 띄우기 */
   display: inline-block;
   width: 80px;
   height: 40px;
-  z-index: 9999;   /* 다른 모든 요소들보다 무조건 맨 위에 보이게 설정 */
+  z-index: 9999;
+  /* 다른 모든 요소들보다 무조건 맨 위에 보이게 설정 */
 }
 
 .super-stylish-switch input {
@@ -530,11 +534,15 @@ body {
 .super-stylish-switch .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(to bottom, #73C0F8, #D4F0FF);
   border-radius: 40px;
   transition: 0.5s;
-  overflow: hidden; /* 스위치 밖으로 삐져나가는 구름/별 숨기기 */
+  overflow: hidden;
+  /* 스위치 밖으로 삐져나가는 구름/별 숨기기 */
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -545,10 +553,12 @@ body {
   width: 32px;
   left: 4px;
   bottom: 4px;
-  background-color: #FFD700; /* 예쁜 노란색 */
+  background-color: #FFD700;
+  /* 예쁜 노란색 */
   border-radius: 50%;
   transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); /* 햇빛 퍼지는 효과 */
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  /* 햇빛 퍼지는 효과 */
   z-index: 2;
 }
 
@@ -570,12 +580,13 @@ body {
 /* ================== 다크 모드 켜졌을 때 ================== */
 
 /* 🌙 다크 모드 배경 (보라빛 밤하늘 그라데이션) */
-input:checked + .slider {
-  background: linear-gradient(to bottom, #2B1B54, #533C87); /* 올려준 이미지 느낌의 보라색 */
+input:checked+.slider {
+  background: linear-gradient(to bottom, #2B1B54, #533C87);
+  /* 올려준 이미지 느낌의 보라색 */
 }
 
 /* 🌙 해가 달로 변신하며 오른쪽으로 이동! */
-input:checked + .slider .sun-moon {
+input:checked+.slider .sun-moon {
   transform: translateX(40px);
   background-color: #E2E2E2;
   /* ⭐️ 핵심: 그림자를 안쪽으로 줘서 달의 분화구/초승달 느낌 내기 */
@@ -583,12 +594,12 @@ input:checked + .slider .sun-moon {
 }
 
 /* 구름은 아래로 숨어버림 */
-input:checked + .slider::before {
+input:checked+.slider::before {
   transform: translateY(40px);
 }
 
 /* ✨ 별 찍기 (다크 모드일 때만 보임) */
-input:checked + .slider .stars {
+input:checked+.slider .stars {
   position: absolute;
   width: 3px;
   height: 3px;
@@ -599,13 +610,19 @@ input:checked + .slider .stars {
   /* box-shadow로 별 여러 개를 한 번에 찍어버리는 마법 */
   box-shadow: 25px 15px 0 -1px white, 10px 20px 0 0px white, 35px 5px 0 -1px white;
   opacity: 1;
-  animation: twinkle 2s infinite alternate; /* 별 반짝임 애니메이션 */
+  animation: twinkle 2s infinite alternate;
+  /* 별 반짝임 애니메이션 */
 }
 
 /* 별 반짝임 애니메이션 */
 @keyframes twinkle {
-  0% { opacity: 0.3; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 /* =========================================
@@ -615,8 +632,8 @@ input:checked + .slider .stars {
 /* 1. 전체 배경색과 기본 글자색 반전 */
 body.dark-mode {
   background: radial-gradient(at 0% 0%, rgba(30, 41, 59, 0.9) 0px, transparent 50%),
-              radial-gradient(at 0% 50%, rgba(15, 23, 42, 0.9) 0px, transparent 50%),
-              #0f172a;
+    radial-gradient(at 0% 50%, rgba(15, 23, 42, 0.9) 0px, transparent 50%),
+    #0f172a;
   color: #f8f9fa;
 }
 
@@ -628,7 +645,7 @@ body.dark-mode .column {
 }
 
 /* 3. 진한 글자들을 밝은 흰색/회색으로 반전 (가독성 확보) */
-body.dark-mode .user-name, 
+body.dark-mode .user-name,
 body.dark-mode .roadmap-title,
 body.dark-mode .column h3,
 body.dark-mode .task-title,
@@ -658,18 +675,21 @@ body.dark-mode .content {
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translateX(-50%); /* 정확히 한가운데로 맞추기 */
+  transform: translateX(-50%);
+  /* 정확히 한가운데로 맞추기 */
   width: 60%;
   margin-bottom: 30px;
   padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.2); /* 유리 배경 */
+  background: rgba(255, 255, 255, 0.2);
+  /* 유리 배경 */
   border-radius: 0 0 24px 24px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-top: none;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  z-index: 100; /* 다른 화면 위로 둥둥 떠 있도록 설정 */
+  z-index: 100;
+  /* 다른 화면 위로 둥둥 떠 있도록 설정 */
 }
 
 .progress-header {
@@ -677,7 +697,8 @@ body.dark-mode .content {
   justify-content: space-between;
   margin-bottom: 12px;
   font-weight: 700;
-  color: #333d4b; /* 토스 다크 그레이 */
+  color: #333d4b;
+  /* 토스 다크 그레이 */
   font-size: 15px;
 }
 
@@ -693,10 +714,12 @@ body.dark-mode .content {
 /* ⭐️ 차오르는 게이지 바 (토스 블루 그라데이션) */
 .progress-bar-fill {
   height: 100%;
-  width: 0%; /* 자바스크립트가 채워줄 예정! */
+  width: 0%;
+  /* 자바스크립트가 채워줄 예정! */
   background: linear-gradient(90deg, #3182f6, #5ce1e6);
   border-radius: 10px;
-  transition: width 1.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* 부드럽게 차오르는 애니메이션 */
+  transition: width 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  /* 부드럽게 차오르는 애니메이션 */
 }
 
 /* 🌙 다크 모드 오버라이드 (다크 모드일 때 글자색/배경색 조정) */
@@ -704,9 +727,308 @@ body.dark-mode .progress-container {
   background: rgba(30, 41, 59, 0.6);
   border-color: rgba(255, 255, 255, 0.1);
 }
+
 body.dark-mode .progress-header {
   color: #f1f5f9;
 }
+
 body.dark-mode .progress-bar-bg {
   background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================= */
+/* 📅 3페이지 캘린더 & 메모장 동적 노출 로직 */
+/* ========================================= */
+
+.calendar-wrapper {
+  /* 캘린더와 메모장을 양옆으로 묶어주는 거대한 부모 상자입니다. */
+  display: flex;
+  /* 내부 상자들을 가로로 나란히 배치하기 위해 flex 모드를 켭니다. */
+  width: 100%;
+  /* 부모(페이지)의 너비에 꽉 차도록 100%로 설정합니다. */
+  max-width: auto; /* ⭐️ 핵심 1: 하지만 화면이 엄청 넓어져도 1200px 이상으로는 찢어지지 않게 한계선을 그어줍니다! */
+  height: 100%; /* 세로 높이는 칸반 보드처럼 페이지에 100% 꽉 채웁니다. */
+  /* ⭐️ 핵심 3: 칸반 보드의 패딩과 똑같이 맞춥니다! (위 80px, 오른쪽 40px, 아래 40px, 왼쪽 40px) */
+  /* 위쪽을 80px 띄워서 상단에 떠 있는 다크모드 스위치와 안 겹치게 밑으로 내려줍니다. */
+  padding: 80px 40px 40px 40px; /* 칸반 보드랑 똑같이 위쪽을 80px 띄워서 상단 시작 위치를 완벽하게 맞춥니다. */
+  margin: 0 auto; /* ⭐️ 핵심 2: 1200px을 뺀 나머지 양옆의 빈 공간을 똑같이 나눠 가져서 캘린더를 '화면 정중앙'으로 끌고 옵니다! */
+    
+  box-sizing: border-box; /* ⭐️ 핵심 4: 패딩(여백)을 추가하더라도 100% 크기가 화면 밖으로 삐져나가지 않게 꽉 잡아줍니다. */
+}
+
+.calendar-container {
+  /* 왼쪽 캘린더 상자의 기본 스타일입니다. */
+  flex: 1;
+  /* ⭐️ 기본 상태: 메모장이 없을 때는 혼자서 래퍼의 전체 공간(100%)을 다 차지합니다! */
+  transition: flex 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  /* 100%에서 70%로 쪼그라들 때 엄청 부드럽게 변하도록 애니메이션을 줍니다. */
+  /* 캘린더를 감싸는 제일 큰 상자 스타일입니다. */
+  /* width: 100%; */
+  /* 부모 크기에 맞춰 너비를 꽉 채웁니다. */
+  /* max-width: 800px; */
+  /* 하지만 최대 800px까지만 커지게 제한합니다. (너무 넓어짐 방지) */
+  margin: 0;
+  /* 래퍼에서 중앙 정렬을 했으므로, 자체 마진은 0으로 지웁니다. */
+  padding: 30px;
+  /* 상자 안쪽으로 30px의 푹신한 여백을 줍니다. */
+  background: rgba(255, 255, 255, 0.2);
+  /* 반투명한 흰색 배경으로 유리의 기본을 만듭니다. */
+  backdrop-filter: blur(12px);
+  /* 배경 뒤쪽의 색상을 12px만큼 흐리게 만듭니다. (유리 효과 핵심!) */
+  -webkit-backdrop-filter: blur(12px);
+  /* 아이폰, 맥북 등 애플 기기를 위한 흐림 효과 코드입니다. */
+  border-radius: 20px;
+  /* 상자의 네 모서리를 둥글게(20px) 깎아줍니다. */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  /* 상자에 얇고 반투명한 흰색 테두리를 두릅니다. */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  /* 상자 아래에 은은한 그림자를 깔아 입체감을 줍니다. */
+}
+
+/* ⭐️ 오른쪽 메모장 컨테이너 (캘린더와 동일한 유리 질감) */
+.memo-container { /* 아무것도 누르지 않은 '기본 상태'의 메모장 스타일입니다. */
+    display: flex; /* 메모장이 숨어있을 때도 flex 상태는 항상 켜둡니다. (깜빡임 버그 해결의 핵심!) */
+    flex-direction: column; /* 안의 요소들을 세로로 쌓아 올립니다. */
+    flex: 0; /* ⭐️ 평소엔 가로 비율을 0으로 만들어서 종잇장처럼 완전히 찌그러뜨립니다! */
+    width: 0; /* 너비도 0으로 꽉 묶어둡니다. */
+    padding: 0; /* 안쪽 여백도 0으로 만들어서 정말 아무 공간도 차지하지 않게 합니다. */
+    margin-left: 0; /* 왼쪽 캘린더와의 여백도 0으로 없앱니다. */
+    opacity: 0; /* 투명도를 0으로 설정해서 눈에 아예 보이지 않게 투명망토를 씌웁니다. */
+    overflow: hidden; /* 찌그러져 있을 때 안의 글씨들이 밖으로 튀어나오지 못하게 칼같이 잘라냅니다. */
+    transition: flex 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s ease, padding 0.4s ease, margin-left 0.4s ease; /* ⭐️ 크기, 투명도, 여백이 모두 0.4초 동안 동시에 스르륵 변하게 애니메이션 마법을 겁니다. */
+    background: rgba(255, 255, 255, 0.2); /* 유리의 반투명한 흰색 배경을 깔아줍니다. */
+    backdrop-filter: blur(12px); /* 배경 너머를 12px 흐리게 만들어 진짜 유리처럼 보이게 합니다. */
+    -webkit-backdrop-filter: blur(12px); /* 아이폰, 맥북 등 애플 기기에서도 유리 효과가 나게 합니다. */
+    border-radius: 20px; /* 상자의 네 모서리를 20px 둥글게 깎아줍니다. */
+    border: 1px solid rgba(255, 255, 255, 0.4); /* 얇고 반투명한 테두리를 둘러줍니다. */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* 은은한 그림자를 줘서 공중에 뜬 느낌을 만듭니다. */
+}
+
+.calendar-header {
+  /* 년/월 제목과 화살표 버튼이 있는 상단 구역입니다. */
+  display: flex;
+  /* 요소들을 가로로 나란히 한 줄로 세웁니다. */
+  justify-content: space-between;
+  /* 요소들을 양 끝과 가운데로 쫙 벌려 배치합니다. */
+  align-items: center;
+  /* 요소들의 세로 높낮이를 중앙으로 일정하게 맞춥니다. */
+  margin-bottom: 20px;
+  /* 아래쪽 요일 구역과의 간격을 20px 벌려줍니다. */
+}
+
+.calendar-header button {
+  /* 화살표 버튼들의 스타일입니다. */
+  background: none;
+  /* 원래 버튼이 가진 회색 배경을 투명하게 없앱니다. */
+  border: none;
+  /* 원래 버튼이 가진 까만 테두리를 없앱니다. */
+  font-size: 20px;
+  /* 화살표 아이콘(글자)의 크기를 20px로 키웁니다. */
+  cursor: pointer;
+  /* 버튼에 마우스를 올리면 클릭할 수 있게 손가락 모양으로 바꿉니다. */
+  color: #333d4b;
+  /* 화살표의 색상을 토스 스타일의 진한 회색으로 칠합니다. */
+}
+
+#calendar-title {
+  /* '2026년 3월' 이라고 적히는 제목 부분입니다. */
+  margin: 0;
+  /* 제목 위아래에 기본적으로 들어가는 불필요한 여백을 지웁니다. */
+  color: #333d4b;
+  /* 제목 글자 색상을 진한 회색으로 칠합니다. */
+}
+
+.calendar-days {
+  /* 일, 월, 화... 요일이 적히는 한 줄입니다. */
+  display: grid;
+  /* 요소들을 격자(바둑판) 모양으로 배치하겠다고 선언합니다. */
+  grid-template-columns: repeat(7, 1fr);
+  /* 정확히 7칸으로 나누고, 모두 똑같은 1비율(1fr) 크기를 가집니다. */
+  text-align: center;
+  /* 각 칸 안의 글자들을 가운데로 정렬합니다. */
+  font-weight: bold;
+  /* 요일 글자들을 두껍게(볼드체) 만듭니다. */
+  margin-bottom: 10px;
+  /* 아래쪽 날짜 격자와의 간격을 10px 벌려줍니다. */
+  color: #4e5968;
+  /* 요일 글자 색상을 중간 톤의 회색으로 칠합니다. */
+}
+
+.calendar-dates {
+  /* 1일부터 31일까지 들어갈 전체 날짜 격자입니다. */
+  display: grid;
+  /* 요일 구역과 똑같이 격자(바둑판) 배치를 사용합니다. */
+  grid-template-columns: repeat(7, 1fr);
+  /* 똑같이 7칸으로 나누고 동일한 크기로 설정합니다. */
+  gap: 10px;
+  /* 각 날짜 칸들 사이의 틈(상하좌우)을 10px씩 벌려줍니다. */
+}
+
+.calendar-dates div {
+  /* 날짜가 들어가는 개별 칸(네모 상자) 하나의 스타일입니다. */
+  background: rgba(255, 255, 255, 0.3);
+  /* 개별 칸의 배경을 조금 더 투명한 흰색으로 채웁니다. */
+  height: 80px;
+  /* 칸 하나의 세로 길이를 80px로 넉넉하게 잡습니다. (나중에 일정 넣기 위해) */
+  border-radius: 10px;
+  /* 칸의 모서리들을 10px 둥글게 깎아줍니다. */
+  padding: 10px;
+  /* 칸 안쪽으로 10px의 여백을 줘서 숫자가 벽에 안 붙게 합니다. */
+  font-weight: bold;
+  /* 숫자 글씨를 두껍게 칠합니다. */
+  color: #333d4b;
+  /* 숫자 색상을 진한 회색으로 칠합니다. */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* 칸마다 아주 연한 흰색 테두리를 줍니다. */
+  transition: all 0.2s ease;
+  /* 마우스를 올렸을 때 애니메이션이 0.2초 동안 부드럽게 변하게 합니다. */
+}
+
+/* ⭐️ 오늘 날짜 강조 스타일 */
+.calendar-dates div.today {
+  /* 자바스크립트가 오늘 날짜에 붙여줄 'today' 클래스입니다. */
+  background: #3182f6;
+  /* 토스 블루 색상으로 배경을 강렬하게 칠합니다. */
+  color: white;
+  /* 글자색을 흰색으로 눈에 띄게 바꿉니다. */
+  box-shadow: 0 4px 10px rgba(49, 130, 246, 0.4);
+  /* 파란색 그림자로 빛나게 합니다. */
+  border: none;
+  /* 기존 흰색 테두리는 지워줍니다. */
+}
+
+/* ⭐️ 클릭해서 선택된 날짜 강조 스타일 */
+.calendar-dates div.selected {
+  /* 마우스로 클릭한 날짜에 붙을 클래스입니다. */
+  border: 3px solid #3182f6;
+  /* 파란색 두꺼운 테두리를 쳐서 "나 선택됐어!"를 보여줍니다. */
+  transform: translateY(-2px);
+  /* 살짝 위로 떠오르게 만듭니다. */
+}
+
+.calendar-dates div:hover {
+  /* 개별 날짜 칸에 마우스를 올렸을 때의 변화입니다. */
+  transform: translateY(-2px);
+  /* 칸 전체가 위로 2px 살짝 떠오르는 효과를 줍니다. */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  /* 떠오르면서 생기는 그림자를 살짝 더 진하게 만듭니다. */
+  background: rgba(255, 255, 255, 0.5);
+  /* 유리 배경을 조금 더 진한 흰색으로 밝혀줍니다. */
+}
+
+.calendar-dates div.empty {
+  /* 1일이 시작하기 전의 빈칸들(이전 달 날짜 공간)을 위한 투명 스타일입니다. */
+  background: transparent;
+  /* 배경색을 완전히 투명하게 없앱니다. */
+  border: none;
+  /* 빈칸은 테두리도 그리지 않습니다. */
+  box-shadow: none;
+  /* 빈칸은 그림자도 지우고 아무것도 없는 척합니다. */
+}
+
+/* 🌙 다크 모드일 때의 캘린더 색상 반전 (다크모드 구역에 쏙 넣어주세요!) */
+body.dark-mode .calendar-container {
+  /* 다크모드 시 캘린더 전체 껍데기 설정 */
+  background: rgba(30, 41, 59, 0.6);
+  /* 유리를 어두운 네이비색으로 바꿉니다. */
+}
+
+body.dark-mode #calendar-title,
+body.dark-mode .calendar-header button,
+body.dark-mode .calendar-days {
+  /* 제목, 버튼, 요일 글자 색상 설정 */
+  color: #f1f5f9;
+  /* 다크모드에 맞춰 글씨를 밝은 흰회색으로 반전시킵니다. */
+}
+
+body.dark-mode .calendar-dates div {
+  /* 다크모드 시 개별 날짜 칸 설정 */
+  background: rgba(15, 23, 42, 0.5);
+  /* 칸 배경을 더 깊고 어두운 색으로 바꿉니다. */
+  color: #e2e8f0;
+  /* 날짜 숫자 글자를 밝게 바꿉니다. */
+  border-color: rgba(255, 255, 255, 0.05);
+  /* 테두리를 아주아주 연하게 바꿉니다. */
+}
+
+/* 메모장 내부 요소들 스타일 */
+#memo-date-title { /* 메모장 상단의 날짜 제목 스타일입니다. */
+    margin-top: 0; /* 위쪽 여백을 없앱니다. */
+    margin-bottom: 20px; /* 텍스트 상자와의 간격을 20px 줍니다. */
+    color: #333d4b; /* 진한 회색으로 글자를 칠합니다. */
+    white-space: nowrap; /* ⭐️ 핵심 1: 창이 좁아져도 글자가 밑으로(세로로) 줄바꿈되지 않게 한 줄로 꽉 묶어둡니다! */
+}
+
+#memo-input { /* 글씨를 쓰는 넓은 텍스트 영역 스타일입니다. */
+    flex: 1; /* 남은 세로 공간을 혼자 모두 차지하도록 쫙 늘립니다. */
+    resize: none; /* 사용자가 임의로 창 크기를 조절하지 못하게 우측 하단 빗금을 막습니다. */
+    padding: 15px; /* 글씨가 벽에 안 붙게 안쪽 여백을 15px 줍니다. */
+    border-radius: 12px; /* 모서리를 12px 둥글게 깎습니다. */
+    border: 1px solid rgba(255, 255, 255, 0.5); /* 얇은 테두리를 줍니다. */
+    background: rgba(255, 255, 255, 0.4); /* 살짝 투명한 배경을 줍니다. */
+    font-family: inherit; /* 대시보드 웹사이트의 기본 폰트를 그대로 따릅니다. */
+    font-size: 15px; /* 글자 크기를 15px로 맞춥니다. */
+    color: #333d4b; /* 글자색을 진한 회색으로 합니다. */
+    margin-bottom: 15px; /* 아래쪽 저장 버튼과의 간격을 15px 줍니다. */
+    outline: none; /* 클릭했을 때 텍스트창 겉에 생기는 기본 검은 테두리를 지웁니다. */
+    min-width: 250px; /* ⭐️ 핵심 2: 창이 닫힐 때 텍스트 박스가 250px 이하로 찌그러지지 않고 빳빳하게 형태를 유지하게 버팁니다! */
+}
+
+#save-memo-btn { /* 저장 버튼 스타일입니다. */
+    padding: 14px; /* 위아래 안쪽 여백을 14px 넉넉히 줍니다. */
+    border: none; /* 버튼의 기본 테두리를 없앱니다. */
+    border-radius: 10px; /* 모서리를 10px 둥글게 만듭니다. */
+    background: #3182f6; /* 쨍한 토스 블루 색상으로 칠합니다. */
+    color: white; /* 글자를 흰색으로 만듭니다. */
+    font-weight: bold; /* 글자를 두껍게 만듭니다. */
+    cursor: pointer; /* 마우스를 올리면 누를 수 있게 손가락 모양으로 바꿉니다. */
+    transition: background 0.2s; /* 마우스를 올렸을 때 배경색이 0.2초에 걸쳐 부드럽게 변합니다. */
+    white-space: nowrap; /* ⭐️ 핵심 3: 버튼 안의 '메모 저장하기' 글자도 창이 닫힐 때 두 줄로 쪼개지지 않게 막아줍니다! */
+}
+
+#save-memo-btn:hover {
+  /* 저장 버튼에 마우스를 올렸을 때의 변화입니다. */
+  background: #1b64da;
+  /* 더 짙은 파란색으로 변해서 눌리는 느낌을 줍니다. */
+}
+
+/* 🌙 다크 모드용 오버라이드 (파일 맨 아래 다크모드 구역에 쏙 넣어줘!) */
+body.dark-mode .memo-container {
+  /* 다크모드 시 메모장 껍데기 설정입니다. */
+  background: rgba(30, 41, 59, 0.6);
+  /* 유리를 어두운 네이비색으로 바꿉니다. */
+}
+
+body.dark-mode #memo-date-title {
+  /* 다크모드 시 메모장 제목 설정입니다. */
+  color: #f1f5f9;
+  /* 제목 글씨를 밝게 반전시킵니다. */
+}
+
+body.dark-mode #memo-input {
+  /* 다크모드 시 텍스트 입력창 설정입니다. */
+  background: rgba(15, 23, 42, 0.5);
+  /* 입력창 배경을 어둡게 바꿉니다. */
+  color: #f1f5f9;
+  /* 입력되는 글씨를 밝게 바꿉니다. */
+  border-color: rgba(255, 255, 255, 0.1);
+  /* 테두리를 어둡게 조절합니다. */
+}
+
+/* ⭐️ JS가 날짜 클릭을 감지해서 래퍼에 'show-memo'를 붙였을 때 일어나는 마법! */
+.calendar-wrapper.show-memo .calendar-container { /* 메모장이 나타날 때 왼쪽 캘린더의 변화입니다. */
+    flex: 7; /* 혼자 100% 다 쓰던 캘린더가 7(70%)의 비율로 스윽 양보하며 줄어듭니다! */
+}
+
+.calendar-wrapper.show-memo .memo-container { /* 찌그러져 있던 메모장은 어떻게 될까요? */
+    flex: 3; /* ⭐️ 0이었던 비율이 3(30%)으로 스윽~ 하고 넓어집니다! */
+    padding: 30px; /* 0이었던 안쪽 여백이 30px로 살아나서 숨통이 트입니다! */
+    margin-left: 24px; /* ⭐️ 아까 삭제한 gap 대신, 메모장 왼쪽에 24px 간격을 줘서 캘린더와 사이를 벌려줍니다! */
+    opacity: 1; /* 투명도 0이었던 메모장이 1(100%)로 선명하게 모습을 드러냅니다! */
+}
+
+/* (우측에서 스르륵 나타나는 애니메이션 코드는 아까 그대로 두시면 됩니다!) */
+@keyframes fadeInRight { /* 페이드인 라이트 애니메이션입니다. */
+    from { opacity: 0; transform: translateX(30px); } /* 시작: 투명하고 오른쪽으로 30px 밀려있음 */
+    to { opacity: 1; transform: translateX(0); } /* 끝: 선명해지고 제자리로 안착 */
 }

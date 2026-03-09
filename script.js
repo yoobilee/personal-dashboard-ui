@@ -176,3 +176,116 @@ if (themeCheckbox) {
         }
     });
 }
+
+/**
+ * [Phase 7] 3페이지 유비의 캘린더 & 메모장 구동 로직
+ */
+
+const todayDate = new Date(); // 컴퓨터의 진짜 오늘 날짜와 시간을 가져옵니다.
+let currentCalYear = todayDate.getFullYear(); // 현재 캘린더가 띄우고 있는 연도를 저장합니다.
+let currentCalMonth = todayDate.getMonth(); // 현재 캘린더가 띄우고 있는 월을 저장합니다.
+
+function renderCalendar() { // 캘린더를 화면에 그려주는 함수입니다.
+    const titleElement = document.getElementById('calendar-title'); // 달력 제목 태그를 찾아옵니다.
+    const datesElement = document.getElementById('calendar-dates'); // 날짜 격자 컨테이너를 찾아옵니다.
+
+    const firstDayOfMonth = new Date(currentCalYear, currentCalMonth, 1); // 이번 달 1일 날짜 객체를 만듭니다.
+    const lastDayOfMonth = new Date(currentCalYear, currentCalMonth + 1, 0); // 이번 달 마지막 날짜 객체를 만듭니다.
+    const startDayOfWeek = firstDayOfMonth.getDay(); // 이번 달 1일이 무슨 요일인지 숫자로 가져옵니다.
+    const totalDaysInMonth = lastDayOfMonth.getDate(); // 이번 달이 총 며칠까지 있는지 알아냅니다.
+
+    titleElement.innerText = `${currentCalYear}년 ${currentCalMonth + 1}월`; // 달력 제목에 연도와 월을 씁니다.
+    datesElement.innerHTML = ''; // 이전에 그려놨던 날짜들을 싹 지웁니다.
+
+    const realToday = new Date(); // 하이라이트를 위해 '진짜 오늘 날짜'를 다시 한 번 확인합니다.
+    const isThisMonth = (currentCalYear === realToday.getFullYear() && currentCalMonth === realToday.getMonth()); // 지금 보고 있는 달력이 현실의 이번 달이 맞는지 검사합니다.
+
+    for (let i = 0; i < startDayOfWeek; i++) { // 1일 시작 전 빈칸 개수만큼 반복합니다.
+        const emptySlot = document.createElement('div'); // 빈칸 태그를 만듭니다.
+        emptySlot.classList.add('empty'); // 투명하게 설정합니다.
+        datesElement.appendChild(emptySlot); // 화면에 집어넣습니다.
+    }
+
+    for (let day = 1; day <= totalDaysInMonth; day++) { // 1일부터 마지막 날까지 반복합니다.
+        const dateSlot = document.createElement('div'); // 날짜 칸을 만듭니다.
+        dateSlot.innerText = day; // 칸에 숫자를 적습니다.
+
+        // ⭐️ [오늘 날짜 하이라이트 기능]
+        if (isThisMonth && day === realToday.getDate()) { // 보고 있는 달력이 이번 달이고, 그리는 숫자가 오늘 날짜와 같다면?
+            dateSlot.classList.add('today'); // 'today' 클래스를 붙여서 파란색 불을 켭니다!
+        }
+
+        // ⭐️ [날짜 클릭 이벤트 (열고 닫기 토글 기능 완벽 적용)]
+        dateSlot.addEventListener('click', () => { // 날짜 칸을 마우스로 클릭했을 때 실행되는 구역입니다.
+            
+            // 1. 방금 유비가 클릭한 날짜가 이미 '선택된 상태(selected)'인지 확인합니다.
+            const isAlreadySelected = dateSlot.classList.contains('selected'); 
+            
+            if (isAlreadySelected) { // 만약 이미 파란 테두리가 쳐진 날짜를 '한 번 더' 누른 거라면? (메모장 닫기 모드)
+                
+                dateSlot.classList.remove('selected'); // 클릭한 날짜의 파란 테두리를 지워서 선택을 취소합니다.
+                
+                document.querySelector('.calendar-wrapper').classList.remove('show-memo'); // 캘린더 래퍼에서 'show-memo' 이름표를 떼어서 메모장을 숨기고 달력을 100%로 되돌립니다.
+                
+            } else { // 선택되지 않은 새로운 날짜를 누른 거라면? (메모장 열기 모드)
+                
+                // 기존에 선택되어 있던 다른 날짜들의 파란 테두리(selected)를 모두 지워 초기화합니다.
+                document.querySelectorAll('.calendar-dates div').forEach(el => el.classList.remove('selected')); 
+                
+                // 방금 클릭한 새로운 날짜 칸에만 'selected' 클래스를 붙여 파란 테두리를 씌웁니다.
+                dateSlot.classList.add('selected'); 
+                
+                // 캘린더 전체 래퍼에 'show-memo' 이름표를 붙여서 메모장을 스르륵 나타나게 합니다.
+                document.querySelector('.calendar-wrapper').classList.add('show-memo'); 
+                
+                // 우측 메모장 제목을 'OOO년 O월 O일 일정'으로 맞춰서 바꿔줍니다.
+                document.getElementById('memo-date-title').innerText = `${currentCalYear}년 ${currentCalMonth + 1}월 ${day}일 일정`; 
+                
+                // 이 날짜만의 고유 열쇠(Key)를 만듭니다. (예: yoobiMemo_2026_3_9)
+                const memoKey = `yoobiMemo_${currentCalYear}_${currentCalMonth}_${day}`; 
+                
+                // 로컬 스토리지(브라우저 금고)에서 그 열쇠로 저장해 둔 메모가 있는지 찾아옵니다.
+                const savedMemo = localStorage.getItem(memoKey); 
+                
+                // 저장된 메모가 있다면 텍스트창에 띄워주고, 없다면 창을 깨끗하게 비웁니다.
+                document.getElementById('memo-input').value = savedMemo ? savedMemo : ''; 
+                
+                // 저장 버튼이 현재 날짜의 열쇠를 기억하도록 속성(data-key)에 몰래 적어둡니다.
+                document.getElementById('save-memo-btn').setAttribute('data-key', memoKey); 
+                
+            } // 조건문 끝!
+        });
+
+        datesElement.appendChild(dateSlot); // 완성된 날짜 칸을 화면에 집어넣습니다.
+    }
+}
+
+// 초기 실행 및 화살표 버튼 이벤트 (기존과 동일합니다)
+document.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
+
+document.getElementById('prev-month').addEventListener('click', () => {
+    currentCalMonth--;
+    if (currentCalMonth < 0) { currentCalMonth = 11; currentCalYear--; }
+    renderCalendar();
+});
+
+document.getElementById('next-month').addEventListener('click', () => {
+    currentCalMonth++;
+    if (currentCalMonth > 11) { currentCalMonth = 0; currentCalYear++; }
+    renderCalendar();
+});
+
+// ⭐️ [메모장 저장 버튼 이벤트 추가]
+document.getElementById('save-memo-btn').addEventListener('click', () => { // 메모 저장하기 버튼을 클릭하면 실행됩니다.
+    const btn = document.getElementById('save-memo-btn'); // 클릭된 버튼을 가져옵니다.
+    const memoKey = btn.getAttribute('data-key'); // 날짜 클릭 시 버튼에 숨겨뒀던 고유 열쇠를 꺼냅니다.
+
+    if (!memoKey) { // 만약 날짜를 클릭하지도 않고 다짜고짜 저장 버튼부터 눌렀다면?
+        alert('왼쪽 달력에서 날짜를 먼저 선택해주세요! 📅'); // 경고창을 띄웁니다.
+        return; // 아래 코드는 무시하고 함수를 끝냅니다.
+    }
+
+    const memoText = document.getElementById('memo-input').value; // 텍스트 창에 유비가 적은 글씨를 통째로 가져옵니다.
+    localStorage.setItem(memoKey, memoText); // 로컬 스토리지 금고에 열쇠와 내용을 짝지어 영구 저장합니다.
+    alert('이 날의 일정이 성공적으로 저장되었습니다! 💾'); // 저장 완료 안내창을 띄웁니다.
+});
