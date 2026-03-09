@@ -31,10 +31,18 @@
 
 ## 🛠️ Tech Stack (기술 스택)
 
-* **Language:** HTML5, CSS3, Vanilla JavaScript
-* **Design:** Glassmorphism, CSS Animation, Flexbox/Grid Layout
-* **Data Management:** Web Storage API (`localStorage`)
-* **Deployment:** GitHub Pages
+<div align="center">
+  
+  <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+  <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
+  <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript" />
+  
+  <br/>
+
+  <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
+  <img src="https://img.shields.io/badge/github%20pages-121013?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Pages" />
+  
+</div>
 
 <br/>
 
