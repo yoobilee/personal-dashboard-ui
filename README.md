@@ -2,7 +2,7 @@
 
 > **"QA Engineer에서 Frontend Developer로의 도약을 기록하는 나만의 관제탑"** > 목표 달성률을 시각화하고, 매일의 일정을 관리하기 위해 제작한 **글래스모피즘(Glassmorphism)** 기반의 개인 대시보드 웹 애플리케이션입니다. 
 
-🔗 **Live Demo:** [유비의 대시보드 보러가기](https://yoobilee.github.io/여기에-리포지토리-이름-입력) 
+🔗 **Live Demo:** [유비의 대시보드 보러가기](https://yoobilee.github.io/personal-dashboard-ui/) 
 
 <br/> 
 
