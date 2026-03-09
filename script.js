@@ -1,109 +1,150 @@
-// 1. HTML에서 '화살표 버튼'과 '두 번째 페이지'를 찾아서 변수에 담아!
+/**
+ * [Phase 1] 초기 세팅 및 데이터 불러오기
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    // 페이지가 열리자마자 브라우저 금고(LocalStorage)에서 데이터를 꺼내와 화면에 뿌립니다.
+    loadTasks();
+});
+
+// 1. 화살표 버튼 클릭 시 부드럽게 스크롤 이동 (기존 기능 유지)
 const scrollDownBtn = document.querySelector('.scroll-down-indicator');
-const secondPage = document.querySelectorAll('.page')[1]; // [1]은 두 번째라는 뜻이야 (0부터 세니까!)
+const secondPage = document.querySelectorAll('.page')[1];
 
-// 2. 화살표 버튼에 '클릭(click)' 이벤트가 발생하는지 귀 기울이고 있어!
 scrollDownBtn.addEventListener('click', () => {
-
-    // 3. 클릭하면 두 번째 페이지로 부드럽게(smooth) 화면을 굴려줘!
     secondPage.scrollIntoView({ behavior: 'smooth' });
-
 });
 
-// ==========================================
-// 1. 대상을 찾는다!
-// ==========================================
-const addBtn = document.querySelector('.add-btn'); // 아까 만든 버튼
-const todoColumn = document.querySelectorAll('.column')[0]; // 기둥 3개 중에 첫 번째(To Do) 기둥!
+/**
+ * [Phase 2] 할 일(Task) 관리 핵심 로직
+ */
 
-// ==========================================
-// 2. 감시한다! (버튼을 클릭하면 아래 함수를 실행해!)
-// ==========================================
+// 2. 새로운 할 일 추가 버튼 클릭
+const addBtn = document.querySelector('.add-btn');
 addBtn.addEventListener('click', () => {
-  
-  // 브라우저에 기본으로 있는 팝업창을 띄워서 사용자에게 글자를 입력받아!
-  const taskText = prompt('새로운 일정을 입력하세요 (예: 깃허브 잔디 심기)');
+    const taskText = prompt('새로운 일정을 입력하세요 (예: 깃허브 잔디 심기)');
 
-  // ⭐️ QA 방어 로직: 만약 사용자가 '취소'를 누르거나 빈칸만 입력했다면? 
-  // 아무 일도 하지 말고 그냥 종료(return)해버려! (버그 방지)
-  if (!taskText || taskText.trim() === '') {
-    return; 
-  }
+    // QA 방어 로직: 입력값이 없으면 무시
+    if (!taskText || taskText.trim() === '') return;
 
-  // ==========================================
-  // 3. 명령한다! (입력받은 글자로 새 카드를 조립해서 넣어라!)
-  // ==========================================
-  
-  // 백틱(``)을 쓰면 HTML 코드 안에 자바스크립트 변수(${taskText})를 쏙 끼워 넣을 수 있어!
-  const newCardHTML = `
-    <div class="task-card">
-        <button class="delete-btn">×</button> <span class="tag">신규</span>
-        <p class="task-title">${taskText}</p>
-    </div>
-  `;
-
-  // To Do 기둥의 맨 끝(beforeend)에 방금 조립한 새 카드 코드를 찰싹 붙여라!
-  todoColumn.insertAdjacentHTML('beforeend', newCardHTML);
-
+    // 카드를 생성하여 'To Do' 기둥(0번)에 넣고 저장합니다.
+    createTaskCard(taskText, 0);
+    saveTasks(); 
 });
 
-// ==========================================
-// ⭐️ 대망의 카드 삭제 기능 (이벤트 위임 + 안전장치)
-// ==========================================
-
-const boardContainer = document.querySelector('.board-container');
-
-boardContainer.addEventListener('click', (event) => {
-  
-  // 1. 클릭한 게 'delete-btn'이 맞는지 확인
-  if (event.target.classList.contains('delete-btn')) {
+// 3. ⭐️ 카드 생성 함수 (중복 코드를 줄이고 저장/삭제 기능을 통합 관리합니다.)
+function createTaskCard(text, columnIndex) {
+    const card = document.createElement('div');
+    card.classList.add('task-card');
+    card.setAttribute('draggable', 'true'); // 드래그 가능하게 설정
     
-    // ⭐️ QA 방어 로직: 진짜 지울 건지 한 번 더 물어보기!
-    // confirm 창에서 '확인(true)'을 눌렀을 때만 아래 코드 실행
-    const isConfirmed = confirm('정말 이 일정을 삭제하시겠습니까? 🗑️');
-    
-    if (isConfirmed) {
-      // 확인을 눌렀다면 해당 카드를 찾아서 통째로 날려버려!
-      const cardToRemove = event.target.closest('.task-card');
-      cardToRemove.remove();
-    }
-    // 취소를 누르면? 아무 일도 안 일어나고 팝업만 닫힘!
-    
-  }
-});
+    // 카드 내용 조립 (유비님이 기획한 신규 태그와 텍스트)
+    card.innerHTML = `
+        <button class="delete-btn">×</button>
+        <span class="tag">신규</span>
+        <p class="task-title">${text}</p>
+    `;
 
-// ==========================================
-// ⭐️ 드래그 앤 드롭 마법!
-// ==========================================
+    // [삭제 기능 연결]
+    const deleteBtn = card.querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', () => {
+        if (confirm('정말 이 일정을 삭제하시겠습니까? 🗑️')) {
+            card.remove();
+            saveTasks(); // 삭제 후 금고 최신화
+        }
+    });
 
-const columns = document.querySelectorAll('.column'); // To Do, Doing, Done 기둥 3개 다 찾기
+    // [드래그 이벤트 연결]
+    card.addEventListener('dragstart', () => card.classList.add('dragging'));
+    card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        saveTasks(); // 이동이 끝난 후 금고 최신화
+    });
 
-// 1. 카드에 드래그 능력을 부여하는 함수 만들기
-function addDragEvents(card) {
-  // 마우스로 카드를 꾹 쥐었을 때
-  card.addEventListener('dragstart', () => {
-    card.classList.add('dragging'); // CSS에서 만든 반투명 옷 입히기
-  });
-
-  // 마우스에서 손을 뗐을 때
-  card.addEventListener('dragend', () => {
-    card.classList.remove('dragging'); // 반투명 옷 벗기기
-  });
+    // 지정된 기둥(index)에 카드를 꽂습니다.
+    const columns = document.querySelectorAll('.column');
+    columns[columnIndex].appendChild(card);
 }
 
-// 2. 처음에 HTML에 만들어둔 샘플 카드들에게 드래그 능력 부여!
-const existingCards = document.querySelectorAll('.task-card');
-existingCards.forEach(card => {
-  addDragEvents(card);
+/**
+ * [Phase 3] 브라우저 금고(LocalStorage) 시스템
+ */
+
+// 4. ⭐️ 저장 함수: 현재 모든 기둥의 할 일 목록을 텍스트로 저장합니다.
+function saveTasks() {
+    const columns = document.querySelectorAll('.column');
+    const taskData = [[], [], []]; // [todo, doing, done] 데이터를 담을 바구니
+
+    columns.forEach((column, index) => {
+        const titles = column.querySelectorAll('.task-title');
+        titles.forEach(title => {
+            taskData[index].push(title.innerText); // 각 기둥의 글자만 추출해서 저장
+        });
+    });
+
+    // 브라우저 로컬 저장소에 'yoobiTasks'라는 이름으로 저장 (문자열 형태로 변환)
+    localStorage.setItem('yoobiTasks', JSON.stringify(taskData));
+}
+
+// 5. ⭐️ 로드 함수: 저장된 데이터를 바탕으로 카드를 다시 그려냅니다.
+function loadTasks() {
+    const savedData = localStorage.getItem('yoobiTasks');
+    if (!savedData) return; // 저장된 게 없으면 종료
+
+    const taskData = JSON.parse(savedData); // 문자열을 다시 배열로 변환
+    
+    // 화면에 기본으로 있던 샘플 카드들을 지우고 시작 (중복 방지)
+    document.querySelectorAll('.task-card').forEach(card => card.remove());
+
+    // 데이터 바구니를 열어 각 기둥에 맞게 카드를 복구합니다.
+    taskData.forEach((columnTasks, columnIndex) => {
+        columnTasks.forEach(text => {
+            createTaskCard(text, columnIndex);
+        });
+    });
+}
+
+/**
+ * [Phase 4] 드래그 앤 드롭 배경 로직
+ */
+const columns = document.querySelectorAll('.column');
+columns.forEach(column => {
+    column.addEventListener('dragover', (event) => {
+        event.preventDefault(); // 드롭을 허용하는 필수 방어막
+        const draggingCard = document.querySelector('.dragging');
+        if (draggingCard) {
+            column.appendChild(draggingCard);
+        }
+    });
 });
 
-// 3. 기둥(Column)들이 카드를 받아들이도록 설정하기
-columns.forEach(column => {
-  // 카드가 기둥 위를 지나갈 때
-  column.addEventListener('dragover', (event) => {
-    event.preventDefault(); // ⭐️ [핵심 방어막] 원래 브라우저는 요소가 겹치는 걸 튕겨내는데, 그걸 허락해 주는 마법!
-    
-    const draggingCard = document.querySelector('.dragging'); // 지금 공중에 떠 있는 그 카드 찾기
-    column.appendChild(draggingCard); // 내 기둥의 맨 밑에 찰싹 붙여라!
-  });
-});
+/**
+ * [Phase 5] 스타일리시 다크 모드 스위치 연동
+ */
+const themeCheckbox = document.getElementById('theme-checkbox');
+const body = document.body;
+
+// 1. 금고(LocalStorage)에서 이전 테마 설정 꺼내오기
+const savedTheme = localStorage.getItem('yoobiTheme');
+
+// 2. 만약 이전에 다크모드를 켰었다면? 화면을 까맣게 만들고 스위치도 '켬' 상태로 변경!
+if (savedTheme === 'dark') {
+    body.classList.add('dark-mode');
+    if (themeCheckbox) {
+        themeCheckbox.checked = true; // 스위치를 오른쪽(달🌙)으로 이동
+    }
+}
+
+// 3. 스위치를 클릭(change)할 때마다 동작
+if (themeCheckbox) {
+    themeCheckbox.addEventListener('change', () => {
+        if (themeCheckbox.checked) {
+            // 스위치 켜짐 -> 다크모드 실행 및 저장
+            body.classList.add('dark-mode');
+            localStorage.setItem('yoobiTheme', 'dark');
+        } else {
+            // 스위치 꺼짐 -> 라이트모드로 복귀 및 저장
+            body.classList.remove('dark-mode');
+            localStorage.setItem('yoobiTheme', 'light');
+        }
+    });
+}
