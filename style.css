@@ -649,3 +649,64 @@ body.dark-mode .content {
   background-color: rgba(30, 41, 59, 0.8);
   border-color: rgba(255, 255, 255, 0.1);
 }
+
+/* =========================================
+   📊 2026 진행률 게이지 (Progress Bar)
+   ========================================= */
+.progress-container {
+  /* 1. 화면 최상단 중앙 고정 */
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%); /* 정확히 한가운데로 맞추기 */
+  width: 60%;
+  margin-bottom: 30px;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.2); /* 유리 배경 */
+  border-radius: 0 0 24px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-top: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  z-index: 100; /* 다른 화면 위로 둥둥 떠 있도록 설정 */
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: #333d4b; /* 토스 다크 그레이 */
+  font-size: 15px;
+}
+
+/* 바의 텅 빈 배경 */
+.progress-bar-bg {
+  width: 100%;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ⭐️ 차오르는 게이지 바 (토스 블루 그라데이션) */
+.progress-bar-fill {
+  height: 100%;
+  width: 0%; /* 자바스크립트가 채워줄 예정! */
+  background: linear-gradient(90deg, #3182f6, #5ce1e6);
+  border-radius: 10px;
+  transition: width 1.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* 부드럽게 차오르는 애니메이션 */
+}
+
+/* 🌙 다크 모드 오버라이드 (다크 모드일 때 글자색/배경색 조정) */
+body.dark-mode .progress-container {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .progress-header {
+  color: #f1f5f9;
+}
+body.dark-mode .progress-bar-bg {
+  background: rgba(255, 255, 255, 0.1);
+}

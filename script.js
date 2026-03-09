@@ -2,8 +2,36 @@
  * [Phase 1] 초기 세팅 및 데이터 불러오기
  */
 document.addEventListener('DOMContentLoaded', () => {
-    // 페이지가 열리자마자 브라우저 금고(LocalStorage)에서 데이터를 꺼내와 화면에 뿌립니다.
+    // 1. 기존 데이터 불러오기
     loadTasks();
+
+    // 2. 2026년 연간 진행률 계산기 함수 정의
+    function updateYearProgress() {
+        const now = new Date(); // 현재 시간
+        const year = now.getFullYear();
+
+        // 올해의 시작일 (1월 1일)과 내년의 시작일 계산
+        const start = new Date(year, 0, 1);
+        const end = new Date(year + 1, 0, 1);
+
+        // 진행률 계산
+        const progress = ((now - start) / (end - start)) * 100;
+
+        const fill = document.getElementById('progress-fill');
+        const text = document.getElementById('progress-text');
+
+        if (fill && text) {
+            text.innerText = progress.toFixed(1) + '%';
+
+            // 애니메이션 효과
+            setTimeout(() => {
+                fill.style.width = progress.toFixed(1) + '%';
+            }, 100);
+        }
+    }
+
+    // 3. ⭐️ 함수를 바로 실행!
+    updateYearProgress();
 });
 
 // 1. 화살표 버튼 클릭 시 부드럽게 스크롤 이동 (기존 기능 유지)
@@ -28,7 +56,7 @@ addBtn.addEventListener('click', () => {
 
     // 카드를 생성하여 'To Do' 기둥(0번)에 넣고 저장합니다.
     createTaskCard(taskText, 0);
-    saveTasks(); 
+    saveTasks();
 });
 
 // 3. ⭐️ 카드 생성 함수 (중복 코드를 줄이고 저장/삭제 기능을 통합 관리합니다.)
@@ -36,7 +64,7 @@ function createTaskCard(text, columnIndex) {
     const card = document.createElement('div');
     card.classList.add('task-card');
     card.setAttribute('draggable', 'true'); // 드래그 가능하게 설정
-    
+
     // 카드 내용 조립 (유비님이 기획한 신규 태그와 텍스트)
     card.innerHTML = `
         <button class="delete-btn">×</button>
@@ -91,7 +119,7 @@ function loadTasks() {
     if (!savedData) return; // 저장된 게 없으면 종료
 
     const taskData = JSON.parse(savedData); // 문자열을 다시 배열로 변환
-    
+
     // 화면에 기본으로 있던 샘플 카드들을 지우고 시작 (중복 방지)
     document.querySelectorAll('.task-card').forEach(card => card.remove());
 
