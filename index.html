@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="favicon.png">
     <title>나만의 일정 대시보드</title>
-
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -20,151 +18,192 @@
         </span>
     </label>
 
-    <aside class="sidebar">
-        <div class="profile-section">
-            <div class="profile-image">👤</div>
-            <h2 class="user-name">이유비 (YooBi LEE)</h2>
-            <p class="user-role">QA Engineer ➡ Frontend Developer</p>
-        </div>
+    <div id="home-view" class="app-view active">
+        <section class="page hero-page">
+            <div class="hero-container">
+                <div class="hero-text-area">
+                    <span class="hero-badge">🚀 QA Engineer to Frontend Developer</span>
+                    <h1 class="hero-title"> Do not just test code.<br /> <span class="highlight">Build the
+                            future.</span> </h1>
 
-        <nav class="sidebar-menu">
-            <ul>
-                <li class="active">📅 2026 Roadmap</li>
-                <li>📊 Project Dashboard</li>
-                <li>📄 Resume (PDF)</li>
-            </ul>
-        </nav>
+                    <p class="hero-desc"> 품질을 보증하던 꼼꼼한 시선으로, 이제는 완벽한 사용자 경험(UX)을 직접 설계합니다.<br /> 데이터와 디테일이 살아 숨 쉬는 저만의
+                        프론트엔드 관제탑을 경험해 보세요. </p>
 
-        <div class="sidebar-footer">
-            <p>📍 서울특별시 강동구 고덕로 130</p>
-            <p>📧 yblee@google.com</p>
-        </div>
-    </aside>
-
-    <div class="scroll-container">
-
-        <section class="page">
-
-            <div class="progress-container">
-                <div class="progress-header">
-                    <span>2026년 한 해 달성률</span>
-                    <span id="progress-text">0%</span>
-                </div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" id="progress-fill"></div>
-                </div>
-            </div>
-
-            <div class="top-status-bar">
-                <div id="simple-weather">날씨 불러오는 중...</div>
-                <div id="simple-clock">00:00</div>
-            </div>
-
-            <div class="roadmap-container">
-                <h2 class="roadmap-title">유비의 2026 로드맵 🚀</h2>
-
-                <div class="horizontal-timeline">
-                    <div class="timeline-line"></div>
-
-                    <div class="timeline-item">
-                        <div class="marker">👋</div>
-                        <div class="content">
-                            <h4>3월</h4>
-                            <p>24일 QA 업무 마무리 및 퇴사!<br>개인 포트폴리오 기획</p>
+                    <div class="hero-stats">
+                        <div class="stat-box">
+                            <h4>100%</h4>
+                            <p>Passion & Detail</p>
+                        </div>
+                        <div class="stat-box">
+                            <h4>3+ Years</h4>
+                            <p>QA Experience</p>
+                        </div>
+                        <div class="stat-box">
+                            <h4>∞</h4>
+                            <p>Growth Potential</p>
                         </div>
                     </div>
-
-                    <div class="timeline-item">
-                        <div class="marker">🔥</div>
-                        <div class="content">
-                            <h4>5월</h4>
-                            <p>KDT 부트캠프 합류<br>본격적인 개발자 커리어 시작</p>
+                    <button id="go-to-dashboard-btn" class="go-dashboard-btn">Launch Dashboard 🚀</button>
+                </div>
+                <div class="hero-visual-area">
+                    <div class="glass-profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">👤</div>
+                            <div class="profile-info">
+                                <h3>이유비 (YooBi)</h3>
+                                <p>Frontend Developer</p>
+                            </div>
+                        </div>
+                        <div class="profile-body">
+                            <p><strong>Stack:</strong> HTML, CSS, Vanilla JS, React</p>
+                            <p><strong>Goal:</strong> 사용자 중심의 인터랙티브 웹 구현</p>
                         </div>
                     </div>
-
-                    <div class="timeline-item">
-                        <div class="marker">🚩</div>
-                        <div class="content">
-                            <h4>하반기</h4>
-                            <p>프론트엔드 개발자 취업 성공!<br>진짜 내 무대를 찾아서</p>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="scroll-down-indicator">
-                <span>Scroll Down</span>
-                <div class="arrow">↓</div>
-            </div>
-        </section>
-
-        <section class="page">
-            <main class="board-container">
-                <div class="column">
-                    <h3>To Do (할 일)</h3>
-
-                    <button class="add-btn">+ 새로운 할 일</button>
-
-                    <div class="task-card" draggable="true">
-                        <button class="delete-btn">×</button>
-                        <span class="tag">기획</span>
-                        <p class="task-title">대시보드 UI 스케치하기</p>
-                    </div>
-                </div>
-                <div class="column">
-                    <h3>Doing (진행 중)</h3>
-
-                    <div class="task-card" draggable="true">
-                        <button class="delete-btn">×</button>
-                        <span class="tag">기획</span>
-                        <p class="task-title">대시보드 UI 스케치하기</p>
-                    </div>
-                </div>
-                <div class="column">
-                    <h3>Done (완료)</h3>
-
-                    <div class="task-card" draggable="true">
-                        <button class="delete-btn">×</button>
-                        <span class="tag">기획</span>
-                        <p class="task-title">대시보드 UI 스케치하기</p>
-                    </div>
-                </div>
-            </main>
-        </section>
-
-        <section class="page">
-            <div class="calendar-wrapper">
-                <div class="calendar-container">
-                    <div class="calendar-header">
-                        <button id="prev-month">◀</button>
-                        <h2 id="calendar-title">2026년 3월</h2>
-                        <button id="next-month">▶</button>
-                    </div>
-
-                    <div class="calendar-days">
-                        <div>일</div>
-                        <div>월</div>
-                        <div>화</div>
-                        <div>수</div>
-                        <div>목</div>
-                        <div>금</div>
-                        <div>토</div>
-                    </div>
-
-                    <div class="calendar-dates" id="calendar-dates">
-                    </div>
-                </div>
-
-                <div class="memo-container">
-                    <h3 id="memo-date-title">날짜를 선택해주세요 📅</h3>
-                    <textarea id="memo-input" placeholder="이 날의 일정을 적어보세요... (예: 깃허브 잔디 심기)"></textarea>
-                    <button id="save-memo-btn">메모 저장하기 💾</button>
                 </div>
             </div>
         </section>
     </div>
+    <div id="dashboard-view" class="app-view">
+
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="profile-image">👤</div>
+                <h2 class="user-name">이유비 (YooBi LEE)</h2>
+                <p class="user-role">QA Engineer ➡ Frontend Developer</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <ul>
+                    <li id="go-to-home-btn">🏠 My 관제탑 (Home)</li>
+
+                    <li class="nav-divider"></li>
+
+                    <li class="active">📋 일정 & 칸반 (Task)</li>
+                    <li>📅 캘린더 (Schedule)</li>
+                    <li>📚 스터디 아카이브 (Study)</li>
+                    <li>
+                        <a href="https://github.com/yoobilee" target="_blank"
+                            style="text-decoration: none; color: inherit; display: block;">
+                            🔗 Resume & GitHub
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>📍 서울특별시 강동구 고덕로 130</p>
+                <p>📧 yblee@google.com</p>
+            </div>
+        </aside>
+
+        <div class="scroll-container">
+            <section class="page">
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span>2026년 한 해 달성률</span>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="roadmap-container">
+                    <h2 class="roadmap-title">유비의 2026 로드맵 🚀</h2>
+                    <div class="horizontal-timeline">
+                        <div class="timeline-line"></div>
+                        <div class="timeline-item">
+                            <div class="marker">👋</div>
+                            <div class="content">
+                                <h4>3월</h4>
+                                <p>24일 QA 업무 마무리 및 퇴사!<br>개인 포트폴리오 기획</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="marker">🔥</div>
+                            <div class="content">
+                                <h4>5월</h4>
+                                <p>KDT 부트캠프 합류<br>본격적인 개발자 커리어 시작</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="marker">🚩</div>
+                            <div class="content">
+                                <h4>하반기</h4>
+                                <p>프론트엔드 개발자 취업 성공!<br>진짜 내 무대를 찾아서</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scroll-down-indicator">
+                    <span>Scroll Down</span>
+                    <div class="arrow">↓</div>
+                </div>
+            </section>
+
+            <section class="page">
+                <main class="board-container">
+                    <div class="column">
+                        <h3>To Do (할 일)</h3>
+                        <button class="add-btn">+ 새로운 할 일</button>
+                    </div>
+                    <div class="column">
+                        <h3>Doing (진행 중)</h3>
+                    </div>
+                    <div class="column">
+                        <h3>Done (완료)</h3>
+                    </div>
+                </main>
+            </section>
+
+            <section class="page">
+                <div class="calendar-wrapper">
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button id="prev-month">◀</button>
+                            <h2 id="calendar-title">2026년 3월</h2>
+                            <button id="next-month">▶</button>
+                        </div>
+                        <div class="calendar-days">
+                            <div>일</div>
+                            <div>월</div>
+                            <div>화</div>
+                            <div>수</div>
+                            <div>목</div>
+                            <div>금</div>
+                            <div>토</div>
+                        </div>
+                        <div class="calendar-dates" id="calendar-dates">
+                        </div>
+                    </div>
+
+                    <div class="memo-container">
+                        <h3 id="memo-date-title">날짜를 선택해주세요 📅</h3>
+                        <textarea id="memo-input" placeholder="이 날의 일정을 적어보세요... (예: 깃허브 잔디 심기)"></textarea>
+                        <button id="save-memo-btn">메모 저장하기 💾</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div id="task-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>📝 새로운 할 일 추가</h2> <input type="text" id="modal-task-input" placeholder="어떤 일을 하실 건가요?">
+            <div class="modal-buttons"> <button id="modal-cancel-btn">취소</button> <button
+                    id="modal-add-btn">추가하기</button> </div>
+        </div>
+    </div>
+
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>🗑️ 일정 삭제</h2>
+            <p>정말 이 일정을 삭제하시겠습니까?</p> <br />
+            <div class="modal-buttons"> <button id="delete-cancel-btn">취소</button> <button
+                    id="delete-confirm-btn">삭제하기</button> </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 
