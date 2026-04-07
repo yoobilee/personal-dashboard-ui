@@ -288,38 +288,340 @@ if(saveMemoBtn) {
 }
 
 /**
- * [Phase 9 최종] SPA 라우팅 (장막 제거 & 심플 페이드아웃)
- */ 
+ * [Phase 9 최종] SPA 라우팅 (사르르 크로스 페이드)
+ */ /* 라우팅 섹션 주석입니다. */
+const goDashboardBtn = document.getElementById('go-to-dashboard-btn'); /* 대시보드로 가는 버튼 요소를 찾아 변수에 넣습니다. */
+const goToHomeBtn = document.getElementById('go-to-home-btn'); /* 홈으로 돌아가는 버튼 요소를 찾아 변수에 넣습니다. */
+const homeView = document.getElementById('home-view'); /* 대문(Home) 화면 껍데기를 찾아옵니다. */
+const dashboardView = document.getElementById('dashboard-view'); /* 대시보드 화면 껍데기를 찾아옵니다. */
 
-const goDashboardBtn = document.getElementById('go-to-dashboard-btn'); 
-const goToHomeBtn = document.getElementById('go-to-home-btn'); 
-const homeView = document.getElementById('home-view'); 
-const dashboardView = document.getElementById('dashboard-view'); 
-
-if (goDashboardBtn && goToHomeBtn && homeView && dashboardView) { 
+if (goDashboardBtn && goToHomeBtn && homeView && dashboardView) { /* 4개의 요소가 화면에 전부 잘 렌더링되었는지 확인합니다. */
     
-    // ➡️ [1] 대문 -> 대시보드
-    goDashboardBtn.addEventListener('click', () => { 
-        dashboardView.classList.add('active'); // 1. 대시보드 화면을 켭니다.
-        homeView.classList.add('fade-out'); // 2. 대문 화면을 투명하게 만듭니다.
-
-        setTimeout(() => { 
-            homeView.classList.remove('active'); // 3. 투명해지면 클릭 안 되게 끕니다.
-        }, 600); 
-    }); 
-
-    // ⬅️ [2] 대시보드 -> 대문
-    goToHomeBtn.addEventListener('click', () => {
-        homeView.classList.add('active'); // 1. 대문을 다시 켭니다.
+    // ➡️ [1] 대문 -> 대시보드 전환
+    goDashboardBtn.addEventListener('click', () => { /* 버튼을 클릭했을 때 이 안의 코드가 실행됩니다. */
+        homeView.classList.remove('active'); /* 대문의 불을 꺼서 사르르 투명하게 만듭니다. */
         
-        // 0.05초 뒤에 fade-out을 떼서 부드럽게 나타나게 합니다.
-        setTimeout(() => {
-            homeView.classList.remove('fade-out'); 
-        }, 50);
+        setTimeout(() => { /* 일정 시간이 지난 후에 코드를 실행하는 타이머입니다. */
+            dashboardView.classList.add('active'); /* 0.3초 대기 후 대시보드의 불을 켜서 사르르 나타나게 합니다. */
+        }, 150); /* 150밀리초(0.15초) 동안 대기합니다. (잔상 겹침 방지!) */
+    }); /* 대문 -> 대시보드 이벤트 리스너를 닫습니다. */
 
-        setTimeout(() => { 
-            dashboardView.classList.remove('active'); // 2. 대문이 다 덮이면 대시보드를 끕니다.
-        }, 600);
+    // ⬅️ [2] 대시보드 -> 대문 전환
+    goToHomeBtn.addEventListener('click', () => { /* 홈 버튼을 클릭했을 때 실행됩니다. */
+        dashboardView.classList.remove('active'); /* 대시보드의 불을 먼저 꺼서 스르륵 사라지게 합니다. */
+        
+        setTimeout(() => { /* 겹치지 않게 타이머를 줍니다. */
+            homeView.classList.add('active'); /* 0.3초 대기 후 대문 화면을 다시 사르르 나타나게 켭니다. */
+        }, 150); /* 150밀리초(0.15초)를 기다립니다. */
+    }); /* 대시보드 -> 대문 이벤트 리스너를 닫습니다. */
+
+} /* 전체 if문을 닫습니다. */
+
+/**
+ * [Phase 10 최종] Three.js WebGL: Neural Network Field
+ * - 살아 숨쉬는 노드 연결망이 배경에 깔리고
+ * - 마우스가 지나갈 때 근처 노드들이 네온으로 활성화되는 인터랙션
+ * - 2026 포트폴리오 트렌드: Fluid Particle + Mouse Reactive
+ */
+if (homeView && window.THREE) {
+    // ── 1. 씬 / 카메라 / 렌더러 ──────────────────────────────────
+    const scene    = new THREE.Scene();
+    const camera   = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 500);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+ 
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 성능 과부하 방지
+    Object.assign(renderer.domElement.style, {
+        position: 'absolute', top: '0', left: '0',
+        zIndex: '-1', pointerEvents: 'none'
     });
-
+    homeView.appendChild(renderer.domElement);
+    camera.position.z = 42;
+ 
+    // ── 2. 노드 데이터 정의 ───────────────────────────────────────
+    const NODE_COUNT  = 180;  // 노드 수 늘려서 넓게 펼쳐도 촘촘하게
+    const LINK_DIST   = 9.0;  // 연결 거리도 넓혀서 선이 화면 가득 연결되게
+    const W = 98, H = 47;     // 화면 전체를 덮는 범위로 대폭 확장
+ 
+    // 각 노드의 위치, 속도, 호흡 위상을 저장
+    const nodes = Array.from({ length: NODE_COUNT }, () => ({
+        x:  (Math.random() - 0.5) * W,
+        y:  (Math.random() - 0.5) * H,
+        z:  (Math.random() - 0.5) * 8,
+        vx: (Math.random() - 0.5) * 0.012, // 이동 속도 (매우 느림)
+        vy: (Math.random() - 0.5) * 0.008,
+        phase: Math.random() * Math.PI * 2, // 호흡 애니메이션 위상
+    }));
+ 
+    // ── 3. 노드(점) 렌더링 ───────────────────────────────────────
+    const nodeGeo = new THREE.BufferGeometry();
+    const nodePosArr   = new Float32Array(NODE_COUNT * 3);
+    const nodeColorArr = new Float32Array(NODE_COUNT * 3);
+ 
+    nodes.forEach((n, i) => {
+        nodePosArr[i*3]   = n.x;
+        nodePosArr[i*3+1] = n.y;
+        nodePosArr[i*3+2] = n.z;
+        nodeColorArr[i*3]   = 0.1;
+        nodeColorArr[i*3+1] = 0.18;
+        nodeColorArr[i*3+2] = 0.28;
+    });
+ 
+    nodeGeo.setAttribute('position', new THREE.BufferAttribute(nodePosArr,   3));
+    nodeGeo.setAttribute('color',    new THREE.BufferAttribute(nodeColorArr, 3));
+ 
+    const nodeMat = new THREE.PointsMaterial({
+        size: 0.22, vertexColors: true,
+        transparent: true, opacity: 0.9,
+        blending: THREE.AdditiveBlending,
+    });
+    scene.add(new THREE.Points(nodeGeo, nodeMat));
+ 
+    // ── 4. 연결선(엣지) 렌더링 ──────────────────────────────────
+    // 최대 연결선 수 미리 잡아두기 (동적 업데이트용)
+    const MAX_LINES = NODE_COUNT * NODE_COUNT;
+    const lineGeo   = new THREE.BufferGeometry();
+    const linePosArr   = new Float32Array(MAX_LINES * 6); // 선 하나당 두 점 (x,y,z)*2
+    const lineColorArr = new Float32Array(MAX_LINES * 6);
+ 
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(linePosArr,   3));
+    lineGeo.setAttribute('color',    new THREE.BufferAttribute(lineColorArr, 3));
+ 
+    const lineMat = new THREE.LineSegments(
+        lineGeo,
+        new THREE.LineBasicMaterial({
+            vertexColors: true,
+            transparent: true, opacity: 0.35,
+            blending: THREE.AdditiveBlending,
+        })
+    );
+    scene.add(lineMat);
+ 
+    // ── 5. 마우스 3D 좌표 추적 ───────────────────────────────────
+    const raycaster   = new THREE.Raycaster();
+    const mouseNDC    = new THREE.Vector2(-9999, -9999); // 정규화 좌표 (-1~1)
+    let   mouse3D     = null; // 화면 평면 위의 실제 3D 좌표
+ 
+    const hitPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(200, 200),
+        new THREE.MeshBasicMaterial({ visible: false })
+    );
+    scene.add(hitPlane);
+ 
+    homeView.addEventListener('mousemove', (e) => {
+        mouseNDC.x =  (e.clientX / window.innerWidth)  * 2 - 1;
+        mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+    homeView.addEventListener('mouseleave', () => {
+        mouseNDC.set(-9999, -9999);
+        mouse3D = null;
+    });
+ 
+    // ── 6. 애니메이션 루프 ────────────────────────────────────────
+    let time = 0;
+ 
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.016;
+ 
+        // 마우스 3D 위치 갱신
+        raycaster.setFromCamera(mouseNDC, camera);
+        const hits = raycaster.intersectObject(hitPlane);
+        mouse3D = hits.length > 0 ? hits[0].point : null;
+ 
+        // 노드 이동 + 화면 경계 반사
+        nodes.forEach((n, i) => {
+            n.x += n.vx;
+            n.y += n.vy;
+            if (n.x >  W/2 || n.x < -W/2) n.vx *= -1;
+            if (n.y >  H/2 || n.y < -H/2) n.vy *= -1;
+ 
+            // ⭐️ 마우스 반발력: 가까이 오면 슬쩍 밀려남 (부드러운 물결 효과)
+            if (mouse3D) {
+                const dx = n.x - mouse3D.x;
+                const dy = n.y - mouse3D.y;
+                const d  = Math.sqrt(dx*dx + dy*dy);
+                const REPEL = 5.0; // 반발 반경
+                if (d < REPEL && d > 0.01) {
+                    const force = (1 - d / REPEL) * 0.04;
+                    n.x += (dx / d) * force;
+                    n.y += (dy / d) * force;
+                }
+            }
+ 
+            // 노드 위치 버퍼 업데이트
+            nodePosArr[i*3]   = n.x;
+            nodePosArr[i*3+1] = n.y;
+            nodePosArr[i*3+2] = n.z;
+ 
+            // ⭐️ 노드 색상: 다크모드 여부에 따라 기본 밝기 분기
+            const isDark = document.body.classList.contains('dark-mode');
+            let tr = isDark ? 0.18 : 0.06;
+            let tg = isDark ? 0.38 : 0.14;
+            let tb = isDark ? 0.65 : 0.28;
+            const pulse = 0.5 + 0.5 * Math.sin(time * 1.2 + n.phase); // 0~1 숨쉬는 값
+ 
+            if (mouse3D) {
+                const dx = n.x - mouse3D.x;
+                const dy = n.y - mouse3D.y;
+                const d  = Math.sqrt(dx*dx + dy*dy);
+                const GLOW = 9.0; // 발광 반경
+                if (d < GLOW) {
+                    const intensity = (1 - d / GLOW) * (0.6 + 0.4 * pulse);
+                    tr += 0.0  * intensity; // R: 거의 안 올림 (파란 계열 유지)
+                    tg += 0.85 * intensity; // G: 강하게 올려서 시안/민트 발광
+                    tb += 1.0  * intensity; // B: 풀로 올려서 네온 블루
+                }
+            }
+ 
+            // 호흡 효과: 평소에도 아주 살짝 반짝임
+            tr += 0.02 * pulse;
+            tg += 0.04 * pulse;
+            tb += 0.07 * pulse;
+ 
+            // Lerp (현재 색 → 목표 색)
+            nodeColorArr[i*3]   += (tr - nodeColorArr[i*3])   * 0.12;
+            nodeColorArr[i*3+1] += (tg - nodeColorArr[i*3+1]) * 0.12;
+            nodeColorArr[i*3+2] += (tb - nodeColorArr[i*3+2]) * 0.12;
+        });
+ 
+        nodeGeo.attributes.position.needsUpdate = true;
+        nodeGeo.attributes.color.needsUpdate    = true;
+ 
+        // ── 연결선 업데이트 ──────────────────────────────────────
+        let lineIdx = 0;
+        for (let a = 0; a < NODE_COUNT; a++) {
+            for (let b = a + 1; b < NODE_COUNT; b++) {
+                const dx = nodes[a].x - nodes[b].x;
+                const dy = nodes[a].y - nodes[b].y;
+                const dz = nodes[a].z - nodes[b].z;
+                const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+ 
+                if (dist < LINK_DIST) {
+                    // 거리가 가까울수록 선이 밝아짐
+                    const alpha = 1 - dist / LINK_DIST;
+                    const isDarkLine = document.body.classList.contains('dark-mode');
+ 
+                    // 마우스 근접 시 연결선도 함께 발광 (다크모드는 더 밝게)
+                    let lr = (isDarkLine ? 0.18 : 0.08) * alpha;
+                    let lg = (isDarkLine ? 0.38 : 0.15) * alpha;
+                    let lb = (isDarkLine ? 0.65 : 0.30) * alpha;
+                    if (mouse3D) {
+                        const mx = (nodes[a].x + nodes[b].x) / 2 - mouse3D.x;
+                        const my = (nodes[a].y + nodes[b].y) / 2 - mouse3D.y;
+                        const md = Math.sqrt(mx*mx + my*my);
+                        if (md < 8.0) {
+                            const mi = (1 - md / 8.0) * alpha;
+                            lg += 0.6 * mi;
+                            lb += 0.8 * mi;
+                        }
+                    }
+ 
+                    const base = lineIdx * 6;
+                    // 선의 시작점
+                    linePosArr[base]   = nodes[a].x;
+                    linePosArr[base+1] = nodes[a].y;
+                    linePosArr[base+2] = nodes[a].z;
+                    lineColorArr[base]   = lr;
+                    lineColorArr[base+1] = lg;
+                    lineColorArr[base+2] = lb;
+                    // 선의 끝점
+                    linePosArr[base+3] = nodes[b].x;
+                    linePosArr[base+4] = nodes[b].y;
+                    linePosArr[base+5] = nodes[b].z;
+                    lineColorArr[base+3] = lr;
+                    lineColorArr[base+4] = lg;
+                    lineColorArr[base+5] = lb;
+ 
+                    lineIdx++;
+                }
+            }
+        }
+ 
+        // 사용하지 않는 선 구간은 원점으로 숨기기
+        for (let k = lineIdx * 6; k < MAX_LINES * 6; k++) linePosArr[k] = 0;
+ 
+        lineGeo.setDrawRange(0, lineIdx * 2); // 실제 사용한 선만 렌더링
+        lineGeo.attributes.position.needsUpdate = true;
+        lineGeo.attributes.color.needsUpdate    = true;
+ 
+        renderer.render(scene, camera);
+    }
+    animate();
+ 
+    // ── 7. 반응형 리사이징 ────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
 }
+
+/**
+ * [Phase 11] Admin Control & Launch Sequence
+ */ // [Phase 11] 어드민 제어 및 시스템 가동 로직 구역입니다.
+
+// 1. 어드민 설정을 전역 객체로 선언하여 콘솔에서 접근 가능하게 합니다.
+window.adminConfig = { // 브라우저 창(window) 어디서든 부를 수 있는 설정 바구니를 만듭니다.
+    useLaunchSequence: true // 시스템 가동 시퀀스(로그 창) 사용 여부입니다. 기본값은 ON입니다.
+}; // 설정 객체 끝
+
+// 2. 콘솔에서 사용자가 직접 입력할 제어 함수를 정의합니다.
+window.toggleAdminMode = function(status) { // toggleAdminMode(false) 처럼 입력하여 끕니다.
+    if (typeof status === 'boolean') { // 입력값이 불리언(true/false) 형태인지 확인합니다.
+        window.adminConfig.useLaunchSequence = status; // 입력받은 값으로 설정을 덮어씁니다.
+        const msg = status ? "활성화" : "비활성화"; // 상태에 따른 메시지를 준비합니다.
+        console.log(`%c[ADMIN] 시스템 가동 시퀀스가 ${msg} 되었습니다.`, "color: #3182f6; font-weight: bold;"); // 콘솔에 결과를 예쁘게 출력합니다.
+    } else { // 잘못된 값을 입력했을 경우입니다.
+        console.warn("[ADMIN] true 또는 false 값을 입력해주세요."); // 경고 메시지를 띄웁니다.
+    } // 조건문 끝
+}; // 제어 함수 끝
+
+const bootMessages = [ // 시퀀스에 출력할 메시지 배열입니다.
+    "> INITIALIZING QA_TO_DEV_BRIDGE_SYSTEM...", // 초기화 메시지입니다.
+    "> SCANNING FOR BUGS... 0 FOUND.", // 버그 스캔 메시지입니다.
+    "> DEPLOYING INTERACTIVE_DASHBOARD...", // 배포 메시지입니다.
+    "> ACCESS GRANTED. WELCOME, YooBi." // 최종 승인 메시지입니다.
+]; // 메시지 끝
+
+if (goDashboardBtn) { // 버튼이 존재하는 경우에만 실행합니다.
+    goDashboardBtn.addEventListener('click', () => { // 버튼 클릭 이벤트를 등록합니다.
+        
+        // ⭐️ 핵심: 어드민 설정이 꺼져(false) 있다면 즉시 화면을 전환합니다.
+        if (!window.adminConfig.useLaunchSequence) { // 시퀀스 사용 안 함 설정인 경우입니다.
+            homeView.classList.remove('active'); // 홈 화면을 즉시 끕니다.
+            dashboardView.classList.add('active'); // 대시보드 화면을 즉시 켭니다.
+            return; // 이후의 로그 출력 로직은 실행하지 않고 종료합니다.
+        } // 조건문 끝
+
+        // --- 여기서부터는 기존의 로그 출력 로직입니다 ---
+        const overlay = document.createElement('div'); // 로그용 오버레이를 만듭니다.
+        overlay.classList.add('boot-overlay'); // 디자인을 입힙니다.
+        overlay.innerHTML = `<div class="log-container"></div><div class="cursor-blink"></div>`; // 구조를 잡습니다.
+        document.body.appendChild(overlay); // 화면에 붙입니다.
+        overlay.style.display = 'flex'; // 보이게 처리합니다.
+
+        const logBox = overlay.querySelector('.log-container'); // 로그 박스를 찾습니다.
+        let msgIndex = 0; // 메시지 번호를 초기화합니다.
+
+        const printLog = () => { // 한 줄씩 찍는 함수입니다.
+            if (msgIndex < bootMessages.length) { // 찍을 메시지가 남았다면 실행합니다.
+                const p = document.createElement('div'); // 새 로그 줄을 만듭니다.
+                p.innerText = bootMessages[msgIndex]; // 내용을 넣습니다.
+                logBox.appendChild(p); // 화면에 추가합니다.
+                msgIndex++; // 다음 순서로 넘깁니다.
+                setTimeout(printLog, 300); // 0.3초 간격으로 반복합니다.
+            } else { // 모든 메시지를 다 찍었다면 실행합니다.
+                setTimeout(() => { // 완료 후 대기 시간을 줍니다.
+                    overlay.style.opacity = '0'; // 투명하게 만듭니다.
+                    setTimeout(() => { // 완전히 사라지면 실행합니다.
+                        overlay.remove(); // 요소를 삭제합니다.
+                        homeView.classList.remove('active'); // 대문을 닫습니다.
+                        dashboardView.classList.add('active'); // 대시보드를 엽니다.
+                    }, 500); // 0.5초 대기합니다.
+                }, 500); // 0.5초 대기합니다.
+            } // 조건문 끝
+        }; // 함수 정의 끝
+        printLog(); // 로그 출력 시작입니다.
+    }); // 클릭 리스너 끝
+} // 전체 if문 끝

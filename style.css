@@ -957,47 +957,62 @@ body.dark-mode #modal-category-select {
 }
 
 /* ========================================= */
-/* ⭐️ 2. 세련된 IT 감성 버튼 (Shimmer Effect) */
+/* 🚀 2026 트렌드: Aura Glow 버튼 디자인 */
 /* ========================================= */
 
 .go-dashboard-btn {
-  position: relative;
-  padding: 16px 40px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #ffffff;
-  background: #191f28;
-  /* 시크한 다크 그레이 */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  /* 너무 둥글지 않은 모던한 곡률 */
-  cursor: pointer;
-  overflow: hidden;
-  /* 버튼 밖으로 나가는 빛 효과를 자름 */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  letter-spacing: 0.5px;
+    position: relative; /* 내부에 가상 요소를 배치하기 위해 상대 위치로 설정합니다. */
+    padding: 18px 44px; /* 버튼의 안쪽 여백을 넉넉하게 주어 클릭감을 높입니다. */
+    font-size: 16px; /* 가독성 좋은 폰트 크기를 설정합니다. */
+    font-weight: 700; /* 텍스트를 두껍게 하여 강조합니다. */
+    color: #ffffff; /* 텍스트 색상을 흰색으로 설정합니다. */
+    background: #111111; /* 깊이감 있는 진한 블랙 배경색을 적용합니다. */
+    border: none; /* 기본 테두리를 제거합니다. */
+    border-radius: 50px; /* 양 끝이 둥근 알약 모양으로 만듭니다. */
+    cursor: pointer; /* 마우스를 올렸을 때 포인터 모양으로 바꿉니다. */
+    overflow: visible; /* 뒤쪽의 글로우(Glow) 효과가 보이도록 넘침을 허용합니다. */
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); /* 모든 변화를 부드러운 가속도로 처리합니다. */
+    letter-spacing: 1px; /* 글자 사이 간격을 벌려 세련미를 더합니다. */
+    z-index: 5; /* 다른 배경 요소보다 위에 보이도록 설정합니다. */
 }
 
-/* ⭐️ 마우스 올리면 버튼 위로 빛이 쓱~ 지나가는 홀로그램 효과 */
+/* ⭐️ 버튼 뒤에서 퍼지는 은은한 오라(Aura) 효과 */
+.go-dashboard-btn::after {
+    content: ''; /* 가상 요소를 생성하기 위한 필수 속성입니다. */
+    position: absolute; /* 버튼을 기준으로 절대 위치를 잡습니다. */
+    top: 50%; left: 50%; /* 버튼의 정중앙에 배치합니다. */
+    transform: translate(-50%, -50%); /* 정확한 중앙 정렬을 위해 위치를 보정합니다. */
+    width: 100%; height: 100%; /* 초기에는 버튼과 같은 크기로 설정합니다. */
+    background: linear-gradient(135deg, #3182f6, #a855f7); /* 푸른색과 보라색의 그라데이션을 줍니다. */
+    filter: blur(20px); /* 테두리를 흐릿하게 뭉개서 빛이 번지는 효과를 냅니다. */
+    opacity: 0; /* 평소에는 보이지 않게 투명도를 0으로 둡니다. */
+    z-index: -1; /* 버튼 글자 뒤로 숨깁니다. */
+    transition: all 0.5s ease; /* 빛이 퍼지는 애니메이션을 부드럽게 합니다. */
+    border-radius: 50px; /* 버튼 모양과 맞게 둥글게 만듭니다. */
+}
+
+/* ⭐️ 버튼 테두리에 흐르는 미세한 빛 */
 .go-dashboard-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.5s ease;
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1.5px; /* 테두리 두께 */
+    border-radius: 50px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
 }
 
 .go-dashboard-btn:hover {
-  transform: translateY(-4px);
-  background: #3182f6;
-  /* 토스 블루 컬러로 반전! */
-  border-color: #3182f6;
-  box-shadow: 0 15px 30px rgba(49, 130, 246, 0.4);
+    transform: translateY(-5px) scale(1.05); /* 마우스를 올리면 위로 살짝 뜨면서 커집니다. */
+    letter-spacing: 2px; /* 글자 간격이 더 벌어지며 역동적인 느낌을 줍니다. */
+}
+
+.go-dashboard-btn:hover::after {
+    opacity: 0.7; /* 마우스를 올리면 뒤쪽의 빛이 선명하게 나타납니다. */
+    width: 115%; height: 140%; /* 버튼보다 더 크게 퍼져서 후광 효과를 만듭니다. */
 }
 
 .go-dashboard-btn:hover::before {
@@ -1012,72 +1027,101 @@ body.dark-mode #modal-category-select {
 }
 
 /* ========================================= */
-/* 💎 찐 3D 아크릴 블록 (얼음/유리 굴절 엣지 적용) */
+/* 🖥️ 시스템 가동(Booting) 로그 창 디자인 */
+/* ========================================= */
+
+.boot-overlay {
+    position: fixed; /* 화면 전체를 덮도록 고정 위치로 설정합니다. */
+    inset: 0; /* 상하좌우를 0으로 맞춰 꽉 채웁니다. */
+    background: rgba(0, 0, 0, 0.85); /* 반투명한 검은색 배경으로 몰입감을 줍니다. */
+    backdrop-filter: blur(10px); /* 뒤쪽 화면을 흐리게 처리합니다. */
+    z-index: 10000; /* 가장 최상단에 보이도록 층수를 높게 잡습니다. */
+    display: none; /* 평소에는 보이지 않게 숨겨둡니다. */
+    justify-content: center; /* 내용을 가로 중앙에 배치합니다. */
+    align-items: center; /* 내용을 세로 중앙에 배치합니다. */
+    flex-direction: column; /* 내용물들을 세로로 쌓습니다. */
+    color: #5ce1e6; /* 사이버틱한 민트색 글자색을 적용합니다. */
+    font-family: 'Courier New', Courier, monospace; /* 개발자 느낌의 등폭 폰트를 사용합니다. */
+}
+
+.log-container {
+    width: 80%; /* 로그 창의 가로 너비를 설정합니다. */
+    max-width: 500px; /* 최대 너비를 제한합니다. */
+    text-align: left; /* 로그 텍스트를 왼쪽으로 정렬합니다. */
+    line-height: 1.8; /* 줄 간격을 넓게 주어 가독성을 높입니다. */
+    font-size: 14px; /* 로그 텍스트 크기를 설정합니다. */
+}
+
+.cursor-blink {
+    display: inline-block; /* 텍스트 옆에 붙이기 위해 인라인 블록으로 설정합니다. */
+    width: 8px; height: 15px; /* 커서 모양의 사각형 크기를 정합니다. */
+    background: #5ce1e6; /* 글자색과 같은 색으로 칠합니다. */
+    margin-left: 5px; /* 글자와의 간격을 둡니다. */
+    animation: blink 0.8s infinite; /* 깜빡이는 애니메이션을 무한 반복합니다. */
+}
+
+@keyframes blink { 
+    50% { opacity: 0; } /* 애니메이션 중간에 투명하게 만들어 깜빡임을 구현합니다. */
+}
+
+/* ========================================= */
+/* 💎 더 맑고 투명해진 크리스탈 3D 아크릴 블록 */
 /* ========================================= */
 
 .glass-profile-card {
     width: 100%;
     max-width: 450px;
-    background: rgba(255, 255, 255, 0.15); 
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
     
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    /* 1. ⭐️ 투명도 UP: 흰색 물감을 5%에서 2%로 확 줄였습니다 */
+    background: rgba(255, 255, 255, 0.02); 
+    
+    /* 2. ⭐️ 선명도 UP: 블러를 8px에서 4px로 낮춰서 뒷배경이 훨씬 맑게 비칩니다 */
+    backdrop-filter: blur(4px) saturate(120%);
+    -webkit-backdrop-filter: blur(4px) saturate(120%);
+    
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 32px;
     padding: 40px;
     box-sizing: border-box;
     
-    transform: perspective(1000px) rotateY(-22deg) rotateX(12deg);
-    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform: perspective(1000px) rotateY(-15deg) rotateX(8deg);
+    transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 
-    /* ⭐️ 검은색 삭제! 맑고 영롱한 아이스 블루 빛이 맺히도록 설계했습니다. */
+    /* 측면 두께의 15겹 투명 크리스탈 섀도우 (기존 유지) */
     box-shadow: 
-        /* --- [앞면 광택] --- */
-        inset 0 0 20px rgba(255, 255, 255, 0.6),
-        inset 2px 2px 5px rgba(255, 255, 255, 0.9),
-        
-        /* --- [1~8px 측면] 하얗게 부서지는 유리 엣지 빛 반사 --- */
-        1px 1px 0 rgba(255, 255, 255, 0.5),
-        2px 2px 0 rgba(255, 255, 255, 0.4),
-        3px 3px 0 rgba(255, 255, 255, 0.3),
-        4px 4px 0 rgba(255, 255, 255, 0.2),
-        5px 5px 0 rgba(255, 255, 255, 0.15),
-        6px 6px 0 rgba(255, 255, 255, 0.1),
-        7px 7px 0 rgba(255, 255, 255, 0.08),
-        8px 8px 0 rgba(255, 255, 255, 0.05),
-        
-        /* --- [9~20px 측면] 두꺼운 유리 특유의 맑은 푸른빛 굴절 (Ice Blue) --- */
-        9px 9px 0 rgba(180, 220, 255, 0.05),
-        10px 10px 0 rgba(180, 220, 255, 0.05),
-        11px 11px 0 rgba(180, 220, 255, 0.06),
-        12px 12px 0 rgba(180, 220, 255, 0.06),
-        13px 13px 0 rgba(180, 220, 255, 0.07),
-        14px 14px 0 rgba(180, 220, 255, 0.07),
-        15px 15px 0 rgba(180, 220, 255, 0.08),
-        16px 16px 0 rgba(180, 220, 255, 0.08),
-        17px 17px 0 rgba(180, 220, 255, 0.09),
-        18px 18px 0 rgba(180, 220, 255, 0.09),
-        19px 19px 0 rgba(180, 220, 255, 0.1),
-        20px 20px 0 rgba(180, 220, 255, 0.1),
-        
-        /* --- [21~25px 측면] 가장 깊은 바닥면, 빛이 뭉쳐서 쨍한 토스 블루 엣지 발산 --- */
-        21px 21px 0 rgba(49, 130, 246, 0.12),
-        22px 22px 0 rgba(49, 130, 246, 0.14),
-        23px 23px 0 rgba(49, 130, 246, 0.16),
-        24px 24px 0 rgba(49, 130, 246, 0.18),
-        25px 25px 0 rgba(49, 130, 246, 0.2),
-
-        /* --- [전체 그림자] 공중에 붕 띄워주는 부드러운 그림자 --- */
-        35px 45px 50px rgba(0, 0, 0, 0.12);
+        inset 0 0 20px rgba(255, 255, 255, 0.2),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.4),
+        1px 1px 1px rgba(255, 255, 255, 0.03),
+        2px 2px 1px rgba(255, 255, 255, 0.02),
+        3px 3px 1px rgba(255, 255, 255, 0.01),
+        4px 4px 1px rgba(255, 255, 255, 0.01),
+        5px 5px 1px rgba(255, 255, 255, 0.01),
+        6px 6px 1px rgba(0, 0, 0, 0.01),
+        7px 7px 1px rgba(0, 0, 0, 0.01),
+        8px 8px 1px rgba(0, 0, 0, 0.01),
+        9px 9px 1px rgba(0, 0, 0, 0.01),
+        10px 10px 1px rgba(0, 0, 0, 0.01),
+        11px 11px 1px rgba(0, 0, 0, 0.02),
+        12px 12px 1px rgba(0, 0, 0, 0.02),
+        13px 13px 1px rgba(0, 0, 0, 0.02),
+        14px 14px 1px rgba(0, 0, 0, 0.02),
+        15px 15px 1px rgba(0, 0, 0, 0.03),
+        20px 30px 40px rgba(0, 0, 0, 0.1);
 }
 
 .glass-profile-card:hover {
     transform: perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(-10px);
-    background: rgba(255, 255, 255, 0.25);
+    /* 호버 시에도 더 맑게 */
+    background: rgba(255, 255, 255, 0.08); 
     box-shadow: 
-        inset 0 0 30px rgba(255, 255, 255, 0.6),
-        inset 2px 2px 5px rgba(255, 255, 255, 0.9),
-        0 20px 50px rgba(0, 0, 0, 0.15);
+        inset 0 0 30px rgba(255, 255, 255, 0.3),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.6),
+        0 0 0 rgba(255, 255, 255, 0), 0 0 0 rgba(255, 255, 255, 0), 0 0 0 rgba(255, 255, 255, 0),
+        0 0 0 rgba(255, 255, 255, 0), 0 0 0 rgba(255, 255, 255, 0), 0 0 0 rgba(0, 0, 0, 0),
+        0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0),
+        0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0),
+        0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0),
+        0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 .profile-header {
@@ -1152,32 +1196,43 @@ body.dark-mode .stat-box p {
   color: #94a3b8;
 }
 
-/* 🌙 다크모드: 네온 빛이 감도는 사이버펑크 아크릴 */
+/* 🌙 다크모드: 어두운 투명 유리 */
 body.dark-mode .glass-profile-card {
-    background: rgba(30, 41, 59, 0.4);
-    border-color: rgba(255, 255, 255, 0.3);
+    /* 3. ⭐️ 다크모드 투명도 UP: 기존 0.2에서 0.08로 확 낮춥니다 */
+    background: rgba(15, 23, 42, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
     box-shadow: 
-        inset 0 0 20px rgba(255, 255, 255, 0.1),
-        inset 1px 1px 2px rgba(255, 255, 255, 0.2),
-        
-        /* 다크모드는 유리 옆면이 어두운 네온 블루로 자체 발광하는 느낌을 줍니다 */
-        1px 1px 0 rgba(255, 255, 255, 0.1),
-        2px 2px 0 rgba(255, 255, 255, 0.05),
-        3px 3px 0 rgba(49, 130, 246, 0.1),
-        4px 4px 0 rgba(49, 130, 246, 0.15),
-        5px 5px 0 rgba(49, 130, 246, 0.2),
-        10px 10px 0 rgba(49, 130, 246, 0.25),
-        15px 15px 0 rgba(49, 130, 246, 0.3),
-        20px 20px 0 rgba(49, 130, 246, 0.35),
-        25px 25px 0 rgba(49, 130, 246, 0.4),
-        
-        30px 40px 50px rgba(0, 0, 0, 0.5);
+        inset 0 0 20px rgba(255, 255, 255, 0.05),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.1),
+        1px 1px 1px rgba(255, 255, 255, 0.05),
+        2px 2px 1px rgba(255, 255, 255, 0.02),
+        3px 3px 1px rgba(255, 255, 255, 0.01),
+        4px 4px 1px rgba(0, 0, 0, 0.02),
+        5px 5px 1px rgba(0, 0, 0, 0.05),
+        6px 6px 1px rgba(0, 0, 0, 0.08),
+        7px 7px 1px rgba(0, 0, 0, 0.1),
+        8px 8px 1px rgba(0, 0, 0, 0.12),
+        9px 9px 1px rgba(0, 0, 0, 0.14),
+        10px 10px 1px rgba(0, 0, 0, 0.16),
+        11px 11px 1px rgba(0, 0, 0, 0.18),
+        12px 12px 1px rgba(0, 0, 0, 0.2),
+        13px 13px 1px rgba(0, 0, 0, 0.22),
+        14px 14px 1px rgba(0, 0, 0, 0.24),
+        15px 15px 1px rgba(0, 0, 0, 0.26),
+        25px 35px 45px rgba(0, 0, 0, 0.4);
 }
 
 body.dark-mode .glass-profile-card:hover {
+    background: rgba(15, 23, 42, 0.15);
     box-shadow: 
-        inset 0 0 30px rgba(255, 255, 255, 0.2),
-        0 20px 50px rgba(0, 0, 0, 0.5);
+        inset 0 0 30px rgba(255, 255, 255, 0.1),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+        0 0 0 rgba(255, 255, 255, 0), 0 0 0 rgba(255, 255, 255, 0), 0 0 0 rgba(255, 255, 255, 0),
+        0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0),
+        0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0),
+        0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0),
+        0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0),
+        0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 body.dark-mode .profile-info h3 {
@@ -1192,65 +1247,47 @@ body.dark-mode .profile-header {
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ========================================= */
-/* 🔀 SPA 뷰(View) 전환 로직 (장막 제거 & 초간단 페이드) */
-/* ========================================= */
+/* ========================================= */ /* SPA 뷰 전환 파트 시작 구분선입니다. */
+/* 🔀 SPA 뷰(View) 전환 로직 (사르르 페이드) */ /* 사르르 페이드아웃 효과를 위한 주석입니다. */
+/* ========================================= */ /* 구분선입니다. */
 
-.app-view {
-  display: none;
-  width: 100vw;
-  height: 100vh;
-}
+.app-view { /* 모든 화면(대문, 대시보드)에 공통으로 적용되는 클래스입니다. */
+  position: absolute; /* 화면들을 같은 위치에 겹치게 만들기 위해 절대 위치를 씁니다. */
+  top: 0; left: 0; /* 화면의 왼쪽 맨 위 꼭지점에 딱 맞춥니다. */
+  width: 100vw; height: 100vh; /* 화면의 가로세로를 꽉 채웁니다. */
+  opacity: 0; /* 평소에는 투명도를 0으로 만들어서 안 보이게 숨깁니다. */
+  pointer-events: none; /* 투명할 때는 마우스 클릭이 안 먹히게 막아둡니다. */
+  transition: opacity 0.1s ease-in-out; /* ⭐️ 유비가 설정한 0.1초(100ms) 동안 아주 빠르게 사르르 변하게 만듭니다. */
+  display: flex; /* display: none 때문에 생기던 뚝 끊김을 방지하기 위해 항상 flex를 유지합니다. */
+  z-index: 1; /* 기본 층수(z-index)를 1층으로 설정합니다. */
+} /* .app-view 괄호를 닫습니다. */
 
-/* 대시보드는 바닥에 얌전히 깔립니다 (애니메이션 절대 없음) */
-#dashboard-view {
-  z-index: 1;
-}
+.app-view.active { /* 화면이 켜졌을 때(active) 적용되는 클래스입니다. */
+  opacity: 1; /* 투명도를 1(완전 불투명)로 만들어서 화면에 보여줍니다. */
+  pointer-events: auto; /* 마우스 클릭이 다시 정상적으로 작동하게 엽니다. */
+  z-index: 10; /* 활성화된 화면을 10층으로 확 끌어올려서 맨 앞에 보이게 합니다. */
+} /* .active 괄호를 닫습니다. */
 
-#dashboard-view.active {
-  display: flex;
-}
+/* ========================================= */ /* 대문 배경 스타일 구역을 시작합니다. */
+/* ⭐️ 1. 대문(Home) 배경 (라이트모드 퓨어 세팅) */ /* 라이트모드에서 그라데이션을 없애는 설정입니다. */
+/* ========================================= */ /* 구분선입니다. */
 
-/* 대문(Home)은 맨 위에 덮여있다가 투명해집니다 */
-#home-view {
-  z-index: 10;
-  position: fixed;
-  /* ⭐️ 이전 꼼수 버전에서 유지! */
-  top: 0;
-  left: 0;
-  /* ⭐️ 이전 꼼수 버전에서 유지! */
-  width: 100vw;
-  height: 100vh;
-  background-color: #f8fafc;
-  background-image:
-    radial-gradient(circle at 50% 0%, rgba(49, 130, 246, 0.15) 0%, transparent 70%),
-    linear-gradient(rgba(49, 130, 246, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(49, 130, 246, 0.04) 1px, transparent 1px);
-  background-size: 100% 100%, 32px 32px, 32px 32px;
-  background-position: center top, center center, center center;
-  transition: opacity 0.6s ease;
-  /* ⭐️ 이전 꼼수 버전의 부드러운 전환 속도 */
-}
+#home-view { /* 대문 화면을 덮고 있는 컨테이너를 지정합니다. */
+    background-color: #f8fafc; /* 라이트모드에서 뒤가 안 비치게 깔끔한 쿨그레이 단색으로 칠합니다. */
+    background-image: /* 라이트모드에서는 조명을 끄고 격자무늬만 남깁니다. */
+        linear-gradient(rgba(49, 130, 246, 0.04) 1px, transparent 1px), /* 가로 방향의 희미한 1px 선을 긋습니다. */
+        linear-gradient(90deg, rgba(49, 130, 246, 0.04) 1px, transparent 1px); /* 세로 방향의 희미한 1px 선을 긋습니다. */
+    background-size: 32px 32px, 32px 32px; /* 격자의 한 칸 크기를 32px 정사각형으로 설정합니다. */
+    background-position: center center, center center; /* 패턴이 화면 중앙을 기준으로 고르게 퍼지도록 맞춥니다. */
+} /* 라이트모드 대문 설정을 마칩니다. */
 
-#home-view.active {
-  display: flex;
-  opacity: 1;
-}
-
-/* 🚨 dissolving 대신 우리가 쓰기로 한 fade-out을 씁니다! */
-#home-view.fade-out {
-  opacity: 0;
-  pointer-events: none;
-  /* 💡 만약 예전처럼 사르륵 흩어지는 효과도 챙기고 싶다면 아래 주석을 푸세요! */
-  /* filter: blur(20px); transform: scale(1.05); */
-}
-
-/* 다크모드 대문: 해커톤/IDE 테마 같은 다크 그리드 */
-body.dark-mode #home-view {
-  background-color: #0f172a;
-  background-image:
-    radial-gradient(circle at 50% 0%, rgba(49, 130, 246, 0.2) 0%, transparent 70%),
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 100% 100%, 32px 32px, 32px 32px;
-}
+/* 🌙 다크모드 대문: 조명(그라데이션) 유지 및 배경색 방어 */ /* 다크모드용 덮어쓰기 설정입니다. */
+body.dark-mode #home-view { /* 다크모드가 켜졌을 때 대문의 디자인을 바꿉니다. */
+    background-color: #0f172a; /* 밝은 배경색을 딥한 네이비색으로 완전히 덮어줍니다. */
+    background-image: /* 다크모드 특유의 영롱한 분위기를 위해 조명과 격자를 모두 사용합니다. */
+        radial-gradient(circle at 50% 0%, rgba(49, 130, 246, 0.2) 0%, transparent 70%), /* 위쪽 중앙에서 쏘는 은은한 푸른 조명입니다. */
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), /* 밝은 가로 격자 선입니다. */
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); /* 밝은 세로 격자 선입니다. */
+    background-size: 100% 100%, 32px 32px, 32px 32px; /* 조명은 화면 전체(100%), 격자는 32px 크기로 맞춥니다. */
+    background-position: center top, center center, center center; /* 조명은 위쪽 중앙에, 격자는 정중앙을 기준으로 정렬합니다. */
+} /* 다크모드 대문 설정을 마칩니다. */
