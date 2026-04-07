@@ -102,7 +102,7 @@
             <section class="page">
                 <div class="progress-container">
                     <div class="progress-header">
-                        <span>2026년 한 해 달성률</span>
+                        <span>🛰️ 커리어 항해 달성률</span>
                         <span id="progress-text">0%</span>
                     </div>
                     <div class="progress-bar-bg">
@@ -111,36 +111,48 @@
                 </div>
 
                 <div class="roadmap-container">
-                    <h2 class="roadmap-title">유비의 2026 로드맵 🚀</h2>
-                    <div class="horizontal-timeline">
-                        <div class="timeline-line"></div>
-                        <div class="timeline-item">
-                            <div class="marker">👋</div>
-                            <div class="content">
-                                <h4>3월</h4>
-                                <p>24일 QA 업무 마무리 및 퇴사!<br>개인 포트폴리오 기획</p>
+                    <h2 class="roadmap-title">🛰️ Career Flight Path</h2>
+
+                    <div class="treasure-map-area">
+                        <svg class="path-svg" viewBox="0 0 1100 500">
+                            <defs>
+                                <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#3182f6" />
+                                    <stop offset="100%" stop-color="#a855f7" />
+                                </linearGradient>
+                            </defs>
+                            <path class="dotted-path" d="M 100 400 C 300 450, 500 100, 700 280 S 1000 120, 1000 120" />
+                        </svg>
+
+                        <div class="map-item" style="left: 100px; top: 400px;">
+                            <div class="map-marker">🛫</div>
+                            <div class="map-content">
+                                <h4>Phase 01</h4>
+                                <p>QA Engineer<br>시스템 안정성 확보</p>
                             </div>
                         </div>
-                        <div class="timeline-item">
-                            <div class="marker">🔥</div>
-                            <div class="content">
-                                <h4>5월</h4>
-                                <p>KDT 부트캠프 합류<br>본격적인 개발자 커리어 시작</p>
+
+                        <div class="map-item" style="left: 580px; top: 190px;">
+                            <div class="map-marker">🛠️</div>
+                            <div class="map-content">
+                                <h4>Phase 02</h4>
+                                <p>Tech Upgrade<br>프론트엔드 핵심 역량</p>
                             </div>
                         </div>
-                        <div class="timeline-item">
-                            <div class="marker">🚩</div>
-                            <div class="content">
-                                <h4>하반기</h4>
-                                <p>프론트엔드 개발자 취업 성공!<br>진짜 내 무대를 찾아서</p>
+
+                        <div class="map-item goal" style="left: 1000px; top: 120px;">
+                            <div class="map-marker">💎</div>
+                            <div class="map-content">
+                                <h4>Final Goal</h4>
+                                <p>Frontend Dev<br><strong>관제탑 가동</strong></p>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="scroll-down-indicator">
-                    <span>Scroll Down</span>
-                    <div class="arrow">↓</div>
+                    <div class="scroll-down-indicator" onclick="scrollToBoard()">
+                        <span>Scroll Down</span>
+                        <div class="arrow">↓</div>
+                    </div>
                 </div>
             </section>
 

@@ -1,29 +1,58 @@
 /**
- * [Phase 1] 초기 세팅 및 데이터 불러오기
- */ // [Phase 1] 초기 세팅 및 데이터 불러오기 구역입니다.
-document.addEventListener('DOMContentLoaded', () => { // HTML 문서가 완전히 로드되면 내부 코드를 실행합니다.
-    loadTasks(); // 저장된 할 일 데이터가 있다면 불러오는 함수를 실행합니다.
+ * [Phase 1 수정] 로드맵 달성도 기반 진행률 엔진
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. 필요한 요소들을 가져옵니다.
+    const roadmapItems = document.querySelectorAll('.map-item'); // 모든 로드맵 지점들을 가져옵니다.
+    const fill = document.getElementById('progress-fill'); // 게이지바의 채워지는 부분입니다.
+    const text = document.getElementById('progress-text'); // 퍼센트 숫자가 적힐 텍스트입니다.
 
-    function updateYearProgress() { // 2026년 진행률을 계산하는 함수를 정의합니다.
-        const now = new Date(); // 현재 시간과 날짜 정보를 가져옵니다.
-        const year = now.getFullYear(); // 현재 연도(예: 2026)를 가져옵니다.
-        const start = new Date(year, 0, 1); // 올해 1월 1일의 날짜 객체를 생성합니다.
-        const end = new Date(year + 1, 0, 1); // 내년 1월 1일의 날짜 객체를 생성합니다.
-        const progress = ((now - start) / (end - start)) * 100; // 1년 중 현재까지 지난 시간을 백분율(%)로 계산합니다.
+    // 2. [핵심] 달성률을 계산하고 UI를 업데이트하는 함수입니다.
+    function updateVoyageProgress() {
+        const total = roadmapItems.length; // 전체 단계 수 (예: 3개)
+        const completed = document.querySelectorAll('.map-item.completed').length; // 완료된(클릭된) 단계 수
+        
+        // 퍼센트 계산: (완료된 수 / 전체 수) * 100
+        const percentage = total > 0 ? (completed / total) * 100 : 0;
+        const finalPercent = percentage.toFixed(1); // 소수점 첫째 자리까지 표시합니다.
 
-        const fill = document.getElementById('progress-fill'); // 게이지바의 채워지는 부분을 담당하는 HTML 요소를 가져옵니다.
-        const text = document.getElementById('progress-text'); // 진행률 숫자가 적히는 HTML 요소를 가져옵니다.
+        if (fill && text) {
+            text.innerText = finalPercent + '%'; // 텍스트 업데이트
+            fill.style.width = finalPercent + '%'; // 게이지바 길이 업데이트
+        }
 
-        if (fill && text) { // 게이지바와 텍스트 요소가 화면에 정상적으로 존재한다면 내부 코드를 실행합니다.
-            text.innerText = progress.toFixed(1) + '%'; // 진행률을 소수점 첫째 자리까지 잘라서 텍스트로 띄워줍니다.
-            setTimeout(() => { // 0.1초(100밀리초) 뒤에 애니메이션을 시작하도록 타이머를 설정합니다.
-                fill.style.width = progress.toFixed(1) + '%'; // 계산된 진행률만큼 게이지바의 가로 길이를 늘려줍니다.
-            }, 100); // 타이머 지연 시간을 100밀리초로 설정합니다.
-        } // if문 끝
-    } // updateYearProgress 함수 끝
+        // ⭐️ 현재 완료 상태를 브라우저(localStorage)에 저장합니다.
+        const completedPhases = Array.from(document.querySelectorAll('.map-item.completed'))
+                                     .map(item => item.getAttribute('data-phase'));
+        localStorage.setItem('roadmap_status', JSON.stringify(completedPhases));
+    }
 
-    updateYearProgress(); // 방금 만든 진행률 계산 함수를 즉시 한 번 실행시킵니다.
-}); // DOMContentLoaded 이벤트 리스너 끝
+    // 3. 로드맵 아이템들에 클릭 이벤트를 심고, 저장된 데이터를 불러옵니다.
+    if (roadmapItems.length > 0) {
+        // 이전에 저장된 완료 데이터가 있는지 확인합니다.
+        const savedStatus = JSON.parse(localStorage.getItem('roadmap_status') || '[]');
+
+        roadmapItems.forEach((item, index) => {
+            // HTML에 data-phase가 없다면 순서대로 ID를 부여합니다.
+            const phaseId = item.getAttribute('data-phase') || `phase-${index}`;
+            item.setAttribute('data-phase', phaseId);
+
+            // 저장된 데이터에 이 단계가 포함되어 있다면 미리 'completed' 클래스를 붙여줍니다.
+            if (savedStatus.includes(phaseId)) {
+                item.classList.add('completed');
+            }
+
+            // 아이콘이나 박스를 클릭하면 완료 상태를 토글(껐다 켰다) 합니다.
+            item.addEventListener('click', () => {
+                item.classList.toggle('completed'); // 'completed' 클래스를 추가/제거합니다.
+                updateVoyageProgress(); // 클릭할 때마다 상단 게이지를 다시 계산합니다.
+            });
+        });
+    }
+
+    // 4. 페이지가 처음 열렸을 때 게이지를 한 번 세팅합니다.
+    updateVoyageProgress();
+});
 
 const scrollDownBtn = document.querySelector('.scroll-down-indicator'); // 화면 아래로 내려가는 화살표 버튼을 찾습니다.
 // ⭐️ 핵심: 전체 페이지가 아니라, '대시보드 뷰' 안에서의 두 번째 페이지(칸반 보드)를 콕 집어옵니다!
@@ -625,3 +654,56 @@ if (goDashboardBtn) { // 버튼이 존재하는 경우에만 실행합니다.
         printLog(); // 로그 출력 시작입니다.
     }); // 클릭 리스너 끝
 } // 전체 if문 끝
+
+/**
+ * [Phase 11] 스크롤 다운 기능 보정
+ */
+function scrollToBoard() {
+    // ⭐️ 다음 화면인 board-container 섹션을 찾습니다.
+    const target = document.querySelector('.board-container');
+    
+    if (target) {
+        // 스냅 스크롤 환경에서도 부드럽게 이동하도록 설정합니다.
+        target.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+    } else {
+        // 만약 클래스명이 다를 경우를 대비해 두 번째 'page'로 이동합니다.
+        const pages = document.querySelectorAll('.page');
+        if (pages.length > 1) {
+            pages[1].scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+}
+
+/**
+ * [Phase 12] 딥 다이내믹 쉐도우 (Deep Lighting)
+ */
+const mapItems = document.querySelectorAll('.map-item');
+
+mapItems.forEach(item => {
+    const content = item.querySelector('.map-content');
+    
+    item.addEventListener('mousemove', (e) => {
+        const rect = content.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const moveX = (e.clientX - centerX) / (rect.width / 2);
+        const moveY = (e.clientY - centerY) / (rect.height / 2);
+        
+        // ⭐️ 그림자를 조금 더 멀리 밀어서(30px) 진한 그림자의 깊이감을 살립니다.
+        const shX = moveX * -15; 
+        const shY = (moveY * -15) + 10; // 기본 Y축 깊이 20px
+        
+        content.style.setProperty('--sh-x', `${shX}px`);
+        content.style.setProperty('--sh-y', `${shY}px`);
+    });
+
+    item.addEventListener('mouseleave', () => {
+        // 원래 위치로 복구 (부드러운 복귀를 위해 transition 활용)
+        content.style.setProperty('--sh-x', '0px');
+        content.style.setProperty('--sh-y', '20px');
+    });
+});

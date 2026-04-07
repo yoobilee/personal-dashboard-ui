@@ -222,147 +222,208 @@ body.dark-mode .scroll-container::-webkit-scrollbar-thumb:hover {
   position: relative;
 }
 
-/* 로드맵 화면 */
+/* ========================================= */
+/* 🛸 2026 트렌드: Borderless 홀로그램 항로 */
+/* ========================================= */
+
 .roadmap-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  padding: 0 40px;
-  box-sizing: border-box;
+    display: flex; /* 요소들을 정렬하기 위해 플렉스 박스를 사용합니다. */
+    flex-direction: column; /* 세로로 배치합니다. */
+    justify-content: center; /* 중앙 정렬을 수행합니다. */
+    align-items: center; /* 가로 중앙 정렬입니다. */
+    height: 100%; /* 부모 높이를 채웁니다. */
+    width: 100%; /* 부모 너비를 채웁니다. */
+    padding: 0 40px; /* 좌우 여백입니다. */
+    box-sizing: border-box; /* 패딩 포함 너비를 계산합니다. */
 }
 
-.roadmap-title {
-  font-size: 32px;
-  color: #333d4b;
-  margin-bottom: 80px;
+.treasure-map-area {
+    position: relative; /* 마커 배치의 기준점입니다. */
+    width: 100%; /* 전체 너비를 사용합니다. */
+    max-width: 1100px; /* 최대 너비 제한입니다. */
+    height: 500px; /* 지도의 세로 높이입니다. */
+    background: none; /* 배경을 제거하여 Borderless를 구현합니다. */
 }
 
-.horizontal-timeline {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  width: 100%;
-  max-width: 1000px;
+/* 🗺️ 1. 은은하게 흐르는 네온 항로 */
+.path-svg {
+    position: absolute; /* 영역에 꽉 차게 배치합니다. */
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1; /* 마커보다 뒤로 보냅니다. */
+    filter: drop-shadow(0 0 5px rgba(49, 130, 246, 0.3)); /* 선에 미세한 발광 효과를 줍니다. */
 }
 
-.timeline-line {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background-color: #e5e8eb;
-  z-index: 0;
-  border-radius: 4px;
+.dotted-path {
+    fill: none; /* 내부를 채우지 않습니다. */
+    stroke: url(#line-gradient); /* 그라데이션 선을 입힙니다. */
+    stroke-width: 4; /* 선 두께를 설정합니다. */
+    stroke-dasharray: 12, 12; /* 점선 스타일입니다. */
+    stroke-linecap: round; /* 선 끝을 둥글게 합니다. */
+    /* ⭐️ 항로가 흐르는 듯한 애니메이션 복구 */
+    animation: flight-flow 30s linear infinite; /* 30초 동안 천천히 흐르게 설정합니다. */
 }
 
-.timeline-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  z-index: 1;
-  padding: 0 10px;
+@keyframes flight-flow {
+    from { stroke-dashoffset: 240; } /* 점선을 뒤로 밀어냅니다. */
+    to { stroke-dashoffset: 0; } /* 처음 위치로 당겨오며 흐르는 느낌을 냅니다. */
 }
 
-.marker {
-  width: 44px;
-  height: 44px;
-  background-color: white;
-  border: 4px solid #3182f6;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+/* 📍 2. 마커 & 박스 정밀 싱크 */
+.map-item {
+    position: absolute; /* 좌표 기반 배치를 수행합니다. */
+    z-index: 5; /* 경로선보다 위로 올립니다. */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    transform: translate(-50%, -50%); /* ⭐️ 마커 정중앙이 좌표에 오도록 보정하여 싱크를 맞춥니다. */
+    cursor: pointer; /* 마우스를 올리면 클릭 가능하다는 신호를 줍니다. */
 }
 
-.content {
-  background-color: white;
-  padding: 24px 20px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #f2f4f6;
-  transition: all 0.2s ease;
+/* ⭐️ 완료된 마커: 테두리가 초록색으로 변하고 후광이 비칩니다. */
+.map-item.completed .map-marker {
+    background: #e7f7ed; /* 연한 초록색 배경 */
+    border-color: #00d082; /* 완료를 상징하는 그린 컬러 */
+    box-shadow: 0 0 20px rgba(0, 208, 130, 0.4); 
+    color: #00d082;
 }
 
-.timeline-item:hover .marker {
-  transform: scale(1.2);
+/* ⭐️ 완료된 텍스트 박스: 테두리에 강조를 줍니다. */
+.map-item.completed .map-content {
+    border-color: rgba(0, 208, 130, 0.3);
+    background: rgba(231, 247, 237, 0.1);
 }
 
-.timeline-item:hover .content {
-  transform: translateY(-8px);
-  border-color: #3182f6;
+/* 완료 시 마커 안에 체크 아이콘을 띄우기 위한 가상 요소 */
+.map-item.completed .map-marker::after {
+    content: '✓'; 
+    position: absolute;
+    font-weight: 900;
+    font-size: 16px;
+    top: -10px; right: -5px;
+    background: #00d082;
+    color: white;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
 }
 
-.content h4 {
-  margin: 0 0 12px 0;
-  color: #3182f6;
-  font-size: 18px;
-  font-weight: 700;
+.map-marker {
+    width: 44px; height: 44px; /* 마커 크기를 유지합니다. */
+    background: rgba(255, 255, 255, 0.1); /* ⭐️ 더 투명한 마커 배경 */
+    backdrop-filter: blur(10px); /* 뒤쪽을 쫀득하게 투명 처리합니다. */
+    border: 2px solid rgba(49, 130, 246, 0.5); /* 블루 테두리도 투명하게 조절 */
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center; 
+    font-size: 20px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+    
+    /* ⭐️ 박스와의 충돌 방지를 위해 기본 하단 여백을 대폭 늘립니다. */
+    margin-bottom: 25px; 
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* 마커 애니메이션 설정 */
 }
 
-.content p {
-  margin: 0;
-  color: #4e5968;
-  font-size: 14px;
-  line-height: 1.5;
+/* ========================================= */
+/* 💎 [Phase 13] 제로 그래비티 초투명 글래스 */
+/* ========================================= */
+
+.map-content {
+    /* ⭐️ 투명도 극대화: 배경색을 아예 0(transparent)으로 설정합니다. */
+    background: rgba(255, 255, 255, 0); 
+    /* 뒤쪽 요소가 확연히 보이도록 블러 강도를 15px로 살짝 낮춰 투명도를 높입니다. */
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(15px);
+    
+    padding: 16px 22px; 
+    border-radius: 20px; 
+    /* 테두리도 최소한의 존재감만 남깁니다. */
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    text-align: center; 
+    min-width: 160px;
+
+    /* ⭐️ 그림자 농도 강화: 투명도를 0.07에서 0.25로 높여 훨씬 진하게 바꿉니다. */
+    box-shadow: 
+        var(--sh-x, 0px) var(--sh-y, 15px) 30px rgba(0, 0, 0, 0.25),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    
+    /* ⭐️ 확대 비율 하향 조정: 1.08 -> 1.03으로 더 절제된 느낌을 줍니다. */
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                box-shadow 0.1s ease-out; 
 }
 
-/* 스크롤 유도 화살표 */
+/* ⭐️ 호버 시 아이콘과 박스 모두 '절제된' 확대 적용 */
+.map-item:hover .map-content {
+    transform: translateY(-8px) scale(1.03); /* 1.08 -> 1.03으로 축소 */
+    background: rgba(255, 255, 255, 0.03); /* 아주 미세한 유막 느낌만 부여 */
+    border-color: rgba(49, 130, 246, 0.3);
+}
+
+/* ⭐️ [핵심] 호버 시 아이콘과 박스를 동시에 위로 밀어올려 간격을 유지합니다. */
+.map-item:hover .map-marker {
+    /* 아이콘 확대도 1.2 -> 1.1로 자연스럽게 줄입니다. */
+    transform: translateY(-8px) scale(1.1); 
+}
+
+/* 🏁 Final Goal 전용: 평소에는 뛰고, 호버 시에는 확대 */
+.map-item.goal .map-marker {
+    border-color: rgba(168, 85, 247, 0.8); 
+    /* ⭐️ 평소에 선이 커졌다 작아졌다 하는 애니메이션 유지 */
+    animation: goal-pulse 2s infinite ease-in-out;
+}
+
+/* ⭐️ 호버 시 애니메이션을 멈추지 않고, 확대된 상태에서 계속 뛰도록 설정 */
+.map-item.goal:hover .map-marker {
+    animation: goal-pulse-hover 2s infinite ease-in-out;
+}
+
+@keyframes goal-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+    50% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(168, 85, 247, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+}
+
+/* 호버 시에는 확대된 기준(1.1)에서 맥박이 뜁니다. */
+@keyframes goal-pulse-hover {
+    0% { transform: translateY(-8px) scale(1.1); }
+    50% { transform: translateY(-8px) scale(1.2); }
+    100% { transform: translateY(-8px) scale(1.1); }
+}
+
+/* ⬇️ 4. 스크롤 다운 가이드 (모던 테마 복구) */
 .scroll-down-indicator {
   position: absolute;
-  bottom: 40px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #8b95a1;
-  font-size: 14px;
   font-weight: 600;
+  font-size: 13px;
   cursor: pointer;
   z-index: 10;
-  opacity: 0.7;
-  transition: opacity 0.3s;
+  opacity: 0.6;
+  transition: opacity 0.3s, transform 0.3s;
 }
 
 .scroll-down-indicator:hover {
   opacity: 1;
+  transform: translateX(-50%) translateY(-5px); /* 호버 시 살짝 들림 */
 }
 
-@keyframes bounce {
-
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-
-  40% {
-    transform: translateY(-10px);
-  }
-
-  60% {
-    transform: translateY(-5px);
-  }
+/* ⭐️ 가끔씩 통통 튀는 유휴 애니메이션 */
+@keyframes idle-bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-12px); } /* 툭 튀어 오름 */
+  60% { transform: translateY(-6px); }  /* 살짝 더 튐 */
 }
 
 .scroll-down-indicator .arrow {
   font-size: 24px;
   margin-top: 8px;
-  animation: bounce 2s infinite;
+  /* 3초마다 한 번씩 통통 튀도록 설정합니다. */
+  animation: idle-bounce 3s ease-in-out infinite; 
 }
 
 /* 할 일 추가 & 삭제 버튼 */
