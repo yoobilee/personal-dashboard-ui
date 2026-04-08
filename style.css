@@ -26,6 +26,8 @@ body {
   justify-content: space-between;
   height: 100vh;
   box-shadow: 10px 0 40px rgba(0, 0, 0, 0.02);
+  position: relative; /* z-index를 작동시키기 위한 기준점 */
+  z-index: 50; /* 메인 콘텐츠(.page)보다 훨씬 높은 층수로 고정 */
 }
 
 .profile-section {
@@ -1630,27 +1632,93 @@ body.dark-mode .github-tooltip::before {
 }
 
 /* ⭐️ 붕괴 방지: 잔디밭 격자 절대 크기 지정 */
+/* 레이아웃 정렬 */
+.github-layout {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+}
+
+.github-days {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 9px;
+    color: #8b95a1;
+    margin-bottom: 2px;
+}
+
+/* ⭐️ 잔디가 12px로 커진 만큼, 요일 글자의 높이도 12px로 똑같이 맞춰줍니다. */
+.github-days span {
+    height: 12px; 
+    display: flex;
+    align-items: center;
+}
+
+.github-grid-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.github-month {
+    font-size: 10px;
+    color: #8b95a1;
+    margin-bottom: 4px;
+    margin-left: 2px;
+}
+
+/* ⭐️ 메인 잔디밭 크기 확대 (10px -> 12px) */
 .github-grid {
     display: grid;
-    grid-template-columns: repeat(12, 10px); /* 10px짜리 12칸 고정 */
-    grid-auto-rows: 10px; /* 높이도 10px 고정 */
+    grid-template-rows: repeat(7, 12px); /* 세로 7칸 고정, 높이 12px */
+    grid-auto-flow: column; /* 세로로 다 채우면 가로로 넘어감 */
     gap: 3px;
 }
 
+/* ⭐️ 메인 잔디 큐브 크기 */
 .git-cube {
-    width: 10px;
-    height: 10px;
+    width: 12px; 
+    height: 12px; 
     border-radius: 2px;
-    background: #ebedf0; /* 깃허브 기본 회색 (잔디 없음) */
+    background: #ebedf0;
 }
 
+/* ⭐️ 하단 범례 (Less - More) 크기 축소 */
+.github-legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    margin-top: 10px;
+    font-size: 9px; /* 글씨를 더 작고 앙증맞게 */
+    color: #8b95a1;
+}
+
+/* ⭐️ 범례용 잔디는 미니 사이즈(8px)로 따로 축소합니다. */
+.github-legend .git-cube {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+}
+
+.github-legend span {
+    margin: 0 4px;
+}
+
+/* 🌙 다크모드 빈 칸 */
 body.dark-mode .git-cube { background: rgba(255, 255, 255, 0.05); }
 
-/* 잔디 레벨별 색상 (진하기) */
+/* 💎 토스 블루 컬러 복구 (Light Mode) */
 .git-lv-1 { background: rgba(49, 130, 246, 0.3) !important; }
 .git-lv-2 { background: rgba(49, 130, 246, 0.6) !important; }
 .git-lv-3 { background: rgba(49, 130, 246, 0.8) !important; }
 .git-lv-4 { background: rgba(49, 130, 246, 1.0) !important; }
+
+/* 💎 토스 블루 컬러 복구 (Dark Mode: 검은 배경에 맞춰 살짝 더 밝은 파란색) */
+body.dark-mode .git-lv-1 { background: rgba(96, 165, 250, 0.3) !important; }
+body.dark-mode .git-lv-2 { background: rgba(96, 165, 250, 0.6) !important; }
+body.dark-mode .git-lv-3 { background: rgba(96, 165, 250, 0.8) !important; }
+body.dark-mode .git-lv-4 { background: rgba(96, 165, 250, 1.0) !important; }
 
 /* ========================================= */
 /* 💎 메인 하단 중앙 토스트 팝업 (완전체) */

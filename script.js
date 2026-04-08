@@ -794,16 +794,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // ==========================================
-// [Phase 13 수정] GitHub 수동 잔디 데이터 설정
+// [Phase 13 수정] GitHub 수동 잔디 데이터 설정 (월 자동화 포함)
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => { // 페이지가 켜지면 확실하게 실행되도록 보호
+document.addEventListener('DOMContentLoaded', () => { 
     const githubGrid = document.getElementById('github-grid');
+    const githubMonth = document.querySelector('.github-month'); // ⭐️ 추가: 월 글씨가 들어갈 요소를 찾습니다.
+
     if (githubGrid) {
-        // 유비만의 잔디밭 패턴 배열
+        // ⭐️ 추가: 현실의 달을 영문 3글자로 변환해서 자동으로 꽂아줍니다.
+        if (githubMonth) {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const currentMonthIndex = new Date().getMonth(); // 0(1월) ~ 11(12월)
+            githubMonth.innerText = monthNames[currentMonthIndex];
+        }
+
+        // 유비만의 잔디밭 패턴 배열 (5주 치)
         const myContributions = [
-            1, 2, 0, 4, 3, 0, 1, 2, 4, 0, 1, 3,
-            0, 1, 2, 0, 4, 2, 1, 0, 3, 4, 1, 2,
-            2, 0, 1, 3, 0, 4, 1, 2, 0, 1, 3, 4
+            0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 1, 2, 3, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0, 
+            0, 0, 0, 0, 0, 0, 0  
         ];
 
         myContributions.forEach(level => {
