@@ -1352,3 +1352,239 @@ body.dark-mode #home-view { /* 다크모드가 켜졌을 때 대문의 디자인
     background-size: 100% 100%, 32px 32px, 32px 32px; /* 조명은 화면 전체(100%), 격자는 32px 크기로 맞춥니다. */
     background-position: center top, center center, center center; /* 조명은 위쪽 중앙에, 격자는 정중앙을 기준으로 정렬합니다. */
 } /* 다크모드 대문 설정을 마칩니다. */
+
+/* ========================================= */
+/* 🟢 Status 드롭다운 (글래스모피즘) */
+/* ========================================= */
+.status-dropdown-container {
+    position: relative;
+    margin-top: 16px;
+    display: inline-block;
+}
+
+.status-toggle {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #3182f6;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.status-toggle:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.status-menu {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: 140px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    padding: 8px 0;
+    margin: 0;
+    list-style: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 100;
+}
+
+.status-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.status-menu li {
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4e5968;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: left;
+}
+
+.status-menu li:hover {
+    background: rgba(49, 130, 246, 0.1);
+    color: #3182f6;
+}
+
+/* ========================================= */
+/* 💎 뾰족한 말풍선형 깃허브 툴팁 (라이트/다크 완벽 대응) */
+/* ========================================= */
+.github-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(49, 130, 246, 0.1); /* 토스 블루 연하게 */
+    border: 1px solid rgba(49, 130, 246, 0.2);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #3182f6;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.github-link:hover {
+    background: rgba(49, 130, 246, 0.2);
+    box-shadow: 0 4px 10px rgba(49, 130, 246, 0.1);
+}
+
+.github-icon { font-size: 16px; opacity: 0.8; }
+.github-text { letter-spacing: -0.3px; }
+.link-arrow { font-size: 14px; opacity: 0.5; transition: transform 0.2s; }
+.github-link:hover .link-arrow { transform: translate(2px, -2px); opacity: 1; }
+
+.github-tooltip {
+    position: absolute;
+    top: 50%; 
+    left: 100%; 
+    transform: translateY(-50%) translateX(20px); 
+    width: max-content; /* 내부 잔디밭 크기에 딱 맞춤 */
+    background: rgba(255, 255, 255, 0.95); /* ⭐️ 라이트 모드에서 확실히 보이게 불투명 화이트 */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.08); /* ⭐️ 뚜렷한 테두리 */
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* 그림자 강화 */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1000;
+}
+
+/* ⭐️ 뾰족한 말풍선 꼬리 */
+.github-tooltip::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 100%; /* 말풍선의 왼쪽 바깥에 붙임 */
+    transform: translateY(-50%);
+    border-width: 8px;
+    border-style: solid;
+    /* ⭐️ 오른쪽 테두리에만 색을 줘서 왼쪽을 가리키는 삼각형을 만듭니다 */
+    border-color: transparent rgba(255, 255, 255, 0.95) transparent transparent;
+}
+
+.github-wrapper:hover .github-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(10px);
+}
+
+/* 다크모드 대응 */
+body.dark-mode .github-tooltip { 
+    background: rgba(30, 41, 59, 0.95); 
+    border-color: rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .github-tooltip::before { 
+    border-color: transparent rgba(30, 41, 59, 0.95) transparent transparent; 
+}
+
+/* ⭐️ 붕괴 방지: 잔디밭 격자 절대 크기 지정 */
+.github-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 10px); /* 10px짜리 12칸 고정 */
+    grid-auto-rows: 10px; /* 높이도 10px 고정 */
+    gap: 3px;
+}
+
+.git-cube {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: #ebedf0; /* 깃허브 기본 회색 (잔디 없음) */
+}
+
+body.dark-mode .git-cube { background: rgba(255, 255, 255, 0.05); }
+
+/* 잔디 레벨별 색상 (진하기) */
+.git-lv-1 { background: rgba(49, 130, 246, 0.3) !important; }
+.git-lv-2 { background: rgba(49, 130, 246, 0.6) !important; }
+.git-lv-3 { background: rgba(49, 130, 246, 0.8) !important; }
+.git-lv-4 { background: rgba(49, 130, 246, 1.0) !important; }
+
+/* ========================================= */
+/* 💎 메인 하단 중앙 토스트 팝업 (완전체) */
+/* ========================================= */
+.toast-center-container {
+    position: fixed !important;
+    bottom: 40px !important; 
+    left: calc(50% + 140px) !important; 
+    transform: translateX(-50%) !important;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    width: max-content;
+    gap: 10px;
+    z-index: 99999 !important;
+    pointer-events: none;
+}
+
+/* 팝업 자체 디자인 (초투명 맑은 유리) */
+.toast-msg {
+    /* ⭐️ 1. 배경 투명도 극대화: 0.2 -> 0.05 로 거의 투명하게 */
+    background: rgba(255, 255, 255, 0.05); 
+    
+    /* ⭐️ 2. 블러 강도 하향: 25px -> 8px 로 낮춰서 뒷배경이 맑게 비치도록 수정 */
+    backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px);
+    
+    /* 테두리도 조금 더 투명하게 조절 */
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    border-radius: 16px; 
+    padding: 16px 24px;
+    
+    /* 그림자는 유지하여 투명해도 화면에서 붕 떠보이게 만듭니다 */
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.08),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05); 
+        
+    font-size: 14px;
+    font-weight: 600;
+    color: #191f28; 
+    
+    /* 애니메이션 효과 */
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast-msg.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* ⭐️ 다크모드 전용 초투명 유리 */
+body.dark-mode .toast-msg {
+    /* 다크모드도 0.25 -> 0.1 로 투명도 대폭 상향 */
+    background: rgba(15, 23, 42, 0.1); 
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}

@@ -707,3 +707,127 @@ mapItems.forEach(item => {
         content.style.setProperty('--sh-y', '20px');
     });
 });
+
+// ==========================================
+// [사이드바 구체화] 1. Status 드롭다운 로직
+// ==========================================
+const statusToggle = document.getElementById('status-toggle'); // 토글 버튼 HTML 요소를 가져옵니다.
+const statusMenu = document.getElementById('status-menu'); // 드롭다운 메뉴 HTML 요소를 가져옵니다.
+const statusIcon = document.getElementById('status-icon'); // 아이콘이 들어갈 HTML 요소를 가져옵니다.
+const statusText = document.getElementById('status-text'); // 텍스트가 들어갈 HTML 요소를 가져옵니다.
+
+if (statusToggle && statusMenu) { // 토글 버튼과 메뉴가 화면에 잘 렌더링 되었는지 확인합니다.
+    statusToggle.addEventListener('click', (e) => { // 토글 버튼을 마우스로 클릭했을 때 이벤트를 엽니다.
+        e.stopPropagation(); // 클릭 이벤트가 다른 곳으로 번지는 것을 막아줍니다.
+        statusMenu.classList.toggle('show'); // 드롭다운 메뉴에 'show' 클래스를 넣었다 뺐다 합니다.
+    }); // 토글 클릭 이벤트 리스너를 닫습니다.
+
+    const statusItems = statusMenu.querySelectorAll('li'); // 드롭다운 안의 항목(li)들을 모두 찾아옵니다.
+    statusItems.forEach(item => { // 찾은 항목들을 하나씩 순서대로 확인합니다.
+        item.addEventListener('click', () => { // 각 항목을 클릭했을 때 이벤트를 엽니다.
+            const icon = item.getAttribute('data-icon'); // 클릭한 항목에 숨겨진 아이콘 데이터를 가져옵니다.
+            const text = item.getAttribute('data-text'); // 클릭한 항목에 숨겨진 텍스트 데이터를 가져옵니다.
+            
+            statusIcon.innerText = icon; // 화면의 아이콘을 내가 고른 아이콘으로 바꿉니다.
+            statusText.innerText = text; // 화면의 텍스트를 내가 고른 텍스트로 바꿉니다.
+            statusMenu.classList.remove('show'); // 선택을 마쳤으니 드롭다운 메뉴를 닫습니다.
+            
+            showToast(`${text} 상태로 변경되었습니다.`); // 상태가 바뀌었다는 토스트 팝업을 화면 하단에 띄웁니다!
+        }); // 개별 항목 클릭 이벤트를 닫습니다.
+    }); // 항목 순회 반복문을 닫습니다.
+
+    document.addEventListener('click', () => { // 화면의 아무 곳이나 클릭했을 때 이벤트를 엽니다.
+        statusMenu.classList.remove('show'); // 열려있는 드롭다운 메뉴가 있다면 닫아버립니다.
+    }); // 바탕 클릭 이벤트를 닫습니다.
+} // Status 제어 조건문을 닫습니다.
+
+
+// ==========================================
+// [Phase 13 수정] GitHub 수동 잔디 데이터 설정
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => { // 페이지가 켜지면 확실하게 실행되도록 보호
+    const githubGrid = document.getElementById('github-grid');
+    if (githubGrid) {
+        // 유비만의 잔디밭 패턴 배열
+        const myContributions = [
+            1, 2, 0, 4, 3, 0, 1, 2, 4, 0, 1, 3,
+            0, 1, 2, 0, 4, 2, 1, 0, 3, 4, 1, 2,
+            2, 0, 1, 3, 0, 4, 1, 2, 0, 1, 3, 4
+        ];
+
+        myContributions.forEach(level => {
+            const cube = document.createElement('div');
+            cube.classList.add('git-cube');
+            if (level > 0) cube.classList.add(`git-lv-${level}`);
+            githubGrid.appendChild(cube);
+        });
+    }
+});
+
+/**
+ * [Phase 14 수정] 전역 중앙 토스트 시스템 (Toast Notification)
+ */
+function showToast(message) {
+    // 컨테이너 ID를 중앙 배치용으로 변경합니다.
+    const container = document.getElementById('toast-center-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-msg';
+    toast.innerText = message;
+
+    container.appendChild(toast);
+
+    // 강제 리플로우를 발생시켜 애니메이션이 트리거되도록 합니다.
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400); // 0.4초 뒤 요소 삭제
+    }, 3000); // 3초 뒤 숨김 시작
+}
+
+// ==========================================
+// ⭐️ 토스트 팝업 6가지 상황 연동 ⭐️
+// ==========================================
+
+// 1. 로드맵 항목 완료 및 취소
+// (기존 updateVoyageProgress 함수 내 클래스 추가/제거 로직에 삽입)
+roadmapItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const isCompleting = !item.classList.contains('completed');
+        const phaseName = item.querySelector('h4').innerText;
+        showToast(isCompleting ? `${phaseName} 단계를 완료했습니다!` : `${phaseName} 단계가 취소되었습니다.`);
+    });
+});
+
+// 2. 할 일 생성 (Add Task)
+modalAddBtn.addEventListener('click', () => {
+    const taskText = document.getElementById('modal-task-input').value;
+    if (taskText.trim() !== '') {
+        showToast('새로운 할 일이 추가되었습니다.');
+    }
+});
+
+// 3. 할 일 삭제 (Delete Task)
+deleteConfirmBtn.addEventListener('click', () => {
+    if (cardToDelete) {
+        showToast('할 일이 목록에서 삭제되었습니다.');
+    }
+});
+
+// 4. 할 일 위치 이동 (Drag & Drop)
+// dragend 이벤트 리스너를 찾아서 추가해줘.
+function addDragEndListener(card) {
+    card.addEventListener('dragend', () => {
+        showToast('업무 순서가 변경되었습니다.');
+    });
+}
+
+// 5. 캘린더 일정 등록
+saveMemoBtn.addEventListener('click', () => {
+    const memoKey = saveMemoBtn.getAttribute('data-key');
+    if (memoKey) {
+        showToast('선택한 날짜의 일정이 저장되었습니다.');
+    }
+});
