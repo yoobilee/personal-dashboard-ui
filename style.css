@@ -29,8 +29,9 @@ body {
 }
 
 .profile-section {
-  text-align: center;
-  margin-bottom: 40px;
+    text-align: center;
+    /* ⭐️ 기존 40px에서 10px로 줄여 메뉴와 밀착시킵니다. */
+    margin-bottom: 10px !important; 
 }
 
 .profile-image {
@@ -231,27 +232,43 @@ body.dark-mode .scroll-container::-webkit-scrollbar-thumb:hover {
     flex-direction: column; /* 세로로 배치합니다. */
     justify-content: center; /* 중앙 정렬을 수행합니다. */
     align-items: center; /* 가로 중앙 정렬입니다. */
-    height: 100%; /* 부모 높이를 채웁니다. */
+    height: 100%; /* 부모 높움을 채웁니다. */
     width: 100%; /* 부모 너비를 채웁니다. */
     padding: 0 40px; /* 좌우 여백입니다. */
     box-sizing: border-box; /* 패딩 포함 너비를 계산합니다. */
 }
 
 .treasure-map-area {
-    position: relative; /* 마커 배치의 기준점입니다. */
-    width: 100%; /* 전체 너비를 사용합니다. */
-    max-width: 1100px; /* 최대 너비 제한입니다. */
-    height: 500px; /* 지도의 세로 높이입니다. */
-    background: none; /* 배경을 제거하여 Borderless를 구현합니다. */
+    position: relative; 
+    width: 100%; 
+    max-width: 1100px; 
+    height: 500px; 
+    background: none; 
+    /* ⭐️ 추가: 브라우저에게 "이 안의 요소들은 밖이랑 섞이지 않는 독립된 층이다"라고 못 박아둡니다. */
+    isolation: isolate; 
 }
 
 /* 🗺️ 1. 은은하게 흐르는 네온 항로 */
 .path-svg {
-    position: absolute; /* 영역에 꽉 차게 배치합니다. */
+    position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    z-index: 1; /* 마커보다 뒤로 보냅니다. */
-    filter: drop-shadow(0 0 5px rgba(49, 130, 246, 0.3)); /* 선에 미세한 발광 효과를 줍니다. */
+    /* ⭐️ 1. 최하단 층수(-1) 고정 및 아예 숨김 처리 */
+    z-index: -1; 
+    opacity: 0;
+    visibility: hidden; 
+    filter: drop-shadow(0 0 5px rgba(49, 130, 246, 0.3));
+}
+
+/* ⭐️ 2. 선 등장 타이밍 재계산 (JS 300ms + CSS 350ms = 총 650ms 지점) */
+#dashboard-view.active .path-svg {
+    /* 0.35초 대기: 박스가 90% 이상 나타났을 때 선이 시작되도록 설정합니다. */
+    animation: path-absolute-sync 0.3s ease-out 0.35s forwards; 
+}
+
+@keyframes path-absolute-sync {
+    from { opacity: 0; visibility: hidden; }
+    to { opacity: 1; visibility: visible; }
 }
 
 .dotted-path {
@@ -272,7 +289,7 @@ body.dark-mode .scroll-container::-webkit-scrollbar-thumb:hover {
 /* 📍 2. 마커 & 박스 정밀 싱크 */
 .map-item {
     position: absolute; /* 좌표 기반 배치를 수행합니다. */
-    z-index: 5; /* 경로선보다 위로 올립니다. */
+    z-index: 100 !important; /* 경로선보다 위로 올립니다. */
     display: flex; 
     flex-direction: column; 
     align-items: center; 
@@ -349,6 +366,10 @@ body.dark-mode .scroll-container::-webkit-scrollbar-thumb:hover {
     /* ⭐️ 확대 비율 하향 조정: 1.08 -> 1.03으로 더 절제된 느낌을 줍니다. */
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
                 box-shadow 0.1s ease-out; 
+
+    /* ⭐️ 추가: 브라우저 GPU에게 "이 유리는 무거우니까 미리 렌더링 준비해둬!" 라고 강제 명령을 내립니다 */
+    will-change: transform, backdrop-filter;
+    transform: translateZ(0);
 }
 
 /* ⭐️ 호버 시 아이콘과 박스 모두 '절제된' 확대 적용 */
@@ -932,6 +953,54 @@ body.dark-mode #modal-category-select {
   border-color: rgba(255, 255, 255, 0.1);
 }
 
+/* ========================================= */
+/* 📝 데일리 메모 모달 전용 스타일            */
+/* ========================================= */
+.daily-memo-content {
+    max-width: 480px;
+    text-align: left;
+}
+.daily-memo-content h2 { text-align: center; }
+
+.memo-modal-date {
+    text-align: center;
+    font-size: 13px;
+    color: #8b95a1;
+    font-weight: 600;
+    margin: -12px 0 20px;
+}
+
+#daily-memo-input {
+    width: 100%;
+    height: 160px;
+    padding: 14px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    line-height: 1.7;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.6);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+#daily-memo-input:focus {
+    border-color: #3182f6;
+    box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.12);
+}
+#daily-memo-save-btn { background: #3182f6; color: white; }
+#daily-memo-save-btn:hover { background: #1b64da; }
+#daily-memo-cancel-btn { background: #e5e8eb; color: #4e5968; }
+
+body.dark-mode #daily-memo-input {
+    background: rgba(0, 0, 0, 0.2);
+    color: #f1f5f9;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .memo-modal-date { color: #64748b; }
+
 /* 대문(Hero) 페이지 전용 스타일 */
 .hero-page {
   position: relative;
@@ -950,6 +1019,8 @@ body.dark-mode #modal-category-select {
   width: 100%;
   max-width: 1300px;
   transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 10; /* 신경망 노드들이 글자 뒤에서 움직이게 합니다. */
 }
 
 .hero-text-area {
@@ -1312,16 +1383,17 @@ body.dark-mode .profile-header {
 /* 🔀 SPA 뷰(View) 전환 로직 (사르르 페이드) */ /* 사르르 페이드아웃 효과를 위한 주석입니다. */
 /* ========================================= */ /* 구분선입니다. */
 
-.app-view { /* 모든 화면(대문, 대시보드)에 공통으로 적용되는 클래스입니다. */
-  position: absolute; /* 화면들을 같은 위치에 겹치게 만들기 위해 절대 위치를 씁니다. */
-  top: 0; left: 0; /* 화면의 왼쪽 맨 위 꼭지점에 딱 맞춥니다. */
-  width: 100vw; height: 100vh; /* 화면의 가로세로를 꽉 채웁니다. */
-  opacity: 0; /* 평소에는 투명도를 0으로 만들어서 안 보이게 숨깁니다. */
-  pointer-events: none; /* 투명할 때는 마우스 클릭이 안 먹히게 막아둡니다. */
-  transition: opacity 0.1s ease-in-out; /* ⭐️ 유비가 설정한 0.1초(100ms) 동안 아주 빠르게 사르르 변하게 만듭니다. */
-  display: flex; /* display: none 때문에 생기던 뚝 끊김을 방지하기 위해 항상 flex를 유지합니다. */
-  z-index: 1; /* 기본 층수(z-index)를 1층으로 설정합니다. */
-} /* .app-view 괄호를 닫습니다. */
+.app-view {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  opacity: 0;
+  pointer-events: none;
+  /* ⭐️ 부드러운 0.3초 전환 효과 */
+  transition: opacity 0.3s ease-in-out; 
+  display: flex;
+  z-index: 1;
+}
 
 .app-view.active { /* 화면이 켜졌을 때(active) 적용되는 클래스입니다. */
   opacity: 1; /* 투명도를 1(완전 불투명)로 만들어서 화면에 보여줍니다. */
@@ -1340,6 +1412,7 @@ body.dark-mode .profile-header {
         linear-gradient(90deg, rgba(49, 130, 246, 0.04) 1px, transparent 1px); /* 세로 방향의 희미한 1px 선을 긋습니다. */
     background-size: 32px 32px, 32px 32px; /* 격자의 한 칸 크기를 32px 정사각형으로 설정합니다. */
     background-position: center center, center center; /* 패턴이 화면 중앙을 기준으로 고르게 퍼지도록 맞춥니다. */
+    position: relative;
 } /* 라이트모드 대문 설정을 마칩니다. */
 
 /* 🌙 다크모드 대문: 조명(그라데이션) 유지 및 배경색 방어 */ /* 다크모드용 덮어쓰기 설정입니다. */
@@ -1364,14 +1437,18 @@ body.dark-mode #home-view { /* 다크모드가 켜졌을 때 대문의 디자인
 
 .status-toggle {
     padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.2);
+    /* ⭐️ 배경 투명도를 0.05로 낮추고 테두리를 제거합니다. */
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: none !important; 
+    
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 12px;
     font-size: 13px;
     font-weight: 700;
     color: #3182f6;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    /* ⭐️ 연한 그림자를 추가하여 입체감을 줍니다. */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04); 
+    
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1587,4 +1664,108 @@ body.dark-mode .toast-msg {
     box-shadow: 
         0 15px 35px rgba(0, 0, 0, 0.3),
         inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+/* ========================================= */
+/* 💎 QUICK ACTIONS 스타일 완벽 수정 */
+/* ========================================= */
+
+.menu-category {
+    font-size: 11px;
+    font-weight: 700;
+    color: #8b95a1;
+    /* ⭐️ 위쪽 마진을 32px에서 10px로 줄여 상태 버튼 바로 아래 배치합니다. */
+    margin: 10px 20px 8px 20px !important; 
+    letter-spacing: 1px;
+}
+
+.quick-action-list { /* 리스트 컨테이너 스타일입니다. */
+    list-style: none; /* 기본으로 생기는 점(bullet)을 없앱니다. */
+    padding: 0; /* 내부 여백을 0으로 초기화합니다. */
+    margin: 0; /* 외부 여백을 0으로 초기화합니다. */
+} /* 리스트 컨테이너 스타일을 닫습니다. */
+
+/* ⭐️ 버튼들 슬림하고 핏하게 다듬기 */
+.action-btn, 
+.sidebar-external-link {
+    /* ⭐️ 테두리를 완전히 없애서 배경과 부드럽게 연결합니다. */
+    border: none !important;
+    
+    /* ⭐️ 평소에도 아주 연한 그림자를 줘서 버튼의 위치를 슬쩍 알려줍니다. */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04); 
+    
+    /* 배경은 배경 그라데이션이 투영되도록 아주 투명하게 설정합니다. */
+    background: rgba(255, 255, 255, 0.05) !important;
+    
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    margin: 6px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #4e5968;
+}
+
+.action-btn .text, /* 일반 버튼 텍스트와 */
+.sidebar-external-link .text { /* 링크 버튼 텍스트에 공통으로 적용됩니다. */
+    font-size: 14px; /* 글자 크기를 14px로 설정합니다. */
+    font-weight: 600; /* 글자를 약간 굵게 만듭니다. */
+    white-space: nowrap; /* ⭐️ 글자가 길어져도 절대 줄바꿈이 되지 않도록 강제합니다. */
+} /* 텍스트 스타일을 닫습니다. */
+
+/* ⭐️ 우측 화살표/플러스 기호 정렬 (버튼 통일성) */
+.action-arrow, /* 플러스 기호와 */
+.link-arrow { /* 화살표 기호에 공통으로 적용됩니다. */
+    margin-left: auto; /* ⭐️ 이 속성이 요소를 오른쪽 끝으로 쫙 밀어버립니다. */
+    font-size: 14px; /* 기호의 크기를 14px로 설정합니다. */
+    opacity: 0.3; /* 평소에는 반투명하게 숨겨둡니다. */
+    transition: transform 0.2s, opacity 0.2s; /* 움직임과 투명도 변화를 부드럽게 줍니다. */
+    font-weight: 800; /* 기호를 굵고 선명하게 만듭니다. */
+} /* 우측 아이콘 스타일을 닫습니다. */
+
+.nav-divider { /* 버튼 사이의 구분선 스타일입니다. */
+    height: 1px; /* 선의 두께를 1px로 만듭니다. */
+    background: rgba(0, 0, 0, 0.05); /* 아주 연한 검은색으로 칠합니다. */
+    margin: 12px 20px; /* 위아래 간격을 주고 양옆 여백을 맞춥니다. */
+} /* 구분선 스타일을 닫습니다. */
+
+/* ========================================= */
+/* 🛠️ [버그 픽스] 이전 메뉴 CSS 잔재 차단 (원상복구 및 추가) */
+/* ========================================= */
+
+/* 1. ⭐️ [방해 요소 제거] 기존에 모든 li의 움직임을 막고 있던 코드를 삭제하거나 아래처럼 수정해줘. */
+.sidebar-menu ul li:not(.action-btn):not(.nav-divider) {
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+/* action-btn 클래스가 있는 요소만 호버 효과를 가지도록 권한을 줍니다 */
+.action-btn:hover,
+.sidebar-external-link:hover {
+    background: rgba(49, 130, 246, 0.1) !important;
+    color: #3182f6 !important;
+    transform: translateY(-2px) !important; /* 위로 들썩 */
+    
+    /* ⭐️ 호버 시 그림자를 띄워 버튼이 떠오르는 느낌을 줍니다. */
+    box-shadow: 0 8px 16px rgba(49, 130, 246, 0.12) !important; 
+}
+
+.action-btn:hover .action-arrow { 
+    opacity: 1 !important; 
+    transform: scale(1.2) !important; 
+}
+
+.sidebar-external-link:hover .link-arrow { 
+    opacity: 1 !important; 
+    transform: translateX(3px) !important; 
+}
+
+/* a 태그가 단독으로 버튼 형태를 유지하도록 수정 */
+a.action-btn {
+    text-decoration: none;
+    display: flex; /* flex 속성이 풀리지 않도록 재차 강조 */
 }

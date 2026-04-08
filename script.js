@@ -1,24 +1,32 @@
+// ==========================================
+// [전역 변수] Phase 9/10에서 공통으로 쓰이는 변수들
+// ==========================================
+const homeView       = document.getElementById('home-view');
+const dashboardView  = document.getElementById('dashboard-view');
+const goDashboardBtn = document.getElementById('go-to-dashboard-btn');
+const goToHomeBtn    = document.getElementById('go-to-home-btn');
+let   routeTimeout   = null;
+
 /**
- * [Phase 1 수정] 로드맵 달성도 기반 진행률 엔진
+ * [Phase 1] 로드맵 달성도 기반 진행률 엔진 (유비 원본 보존)
  */
 document.addEventListener('DOMContentLoaded', () => {
     // 1. 필요한 요소들을 가져옵니다.
-    const roadmapItems = document.querySelectorAll('.map-item'); // 모든 로드맵 지점들을 가져옵니다.
-    const fill = document.getElementById('progress-fill'); // 게이지바의 채워지는 부분입니다.
-    const text = document.getElementById('progress-text'); // 퍼센트 숫자가 적힐 텍스트입니다.
+    const roadmapItems = document.querySelectorAll('.map-item'); 
+    const fill = document.getElementById('progress-fill'); 
+    const text = document.getElementById('progress-text'); 
 
     // 2. [핵심] 달성률을 계산하고 UI를 업데이트하는 함수입니다.
     function updateVoyageProgress() {
-        const total = roadmapItems.length; // 전체 단계 수 (예: 3개)
-        const completed = document.querySelectorAll('.map-item.completed').length; // 완료된(클릭된) 단계 수
+        const total = roadmapItems.length; 
+        const completed = document.querySelectorAll('.map-item.completed').length; 
         
-        // 퍼센트 계산: (완료된 수 / 전체 수) * 100
         const percentage = total > 0 ? (completed / total) * 100 : 0;
-        const finalPercent = percentage.toFixed(1); // 소수점 첫째 자리까지 표시합니다.
+        const finalPercent = percentage.toFixed(1); 
 
         if (fill && text) {
-            text.innerText = finalPercent + '%'; // 텍스트 업데이트
-            fill.style.width = finalPercent + '%'; // 게이지바 길이 업데이트
+            text.innerText = finalPercent + '%'; 
+            fill.style.width = finalPercent + '%'; 
         }
 
         // ⭐️ 현재 완료 상태를 브라우저(localStorage)에 저장합니다.
@@ -29,29 +37,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. 로드맵 아이템들에 클릭 이벤트를 심고, 저장된 데이터를 불러옵니다.
     if (roadmapItems.length > 0) {
-        // 이전에 저장된 완료 데이터가 있는지 확인합니다.
         const savedStatus = JSON.parse(localStorage.getItem('roadmap_status') || '[]');
 
         roadmapItems.forEach((item, index) => {
-            // HTML에 data-phase가 없다면 순서대로 ID를 부여합니다.
             const phaseId = item.getAttribute('data-phase') || `phase-${index}`;
             item.setAttribute('data-phase', phaseId);
 
-            // 저장된 데이터에 이 단계가 포함되어 있다면 미리 'completed' 클래스를 붙여줍니다.
             if (savedStatus.includes(phaseId)) {
                 item.classList.add('completed');
             }
 
-            // 아이콘이나 박스를 클릭하면 완료 상태를 토글(껐다 켰다) 합니다.
             item.addEventListener('click', () => {
-                item.classList.toggle('completed'); // 'completed' 클래스를 추가/제거합니다.
-                updateVoyageProgress(); // 클릭할 때마다 상단 게이지를 다시 계산합니다.
+                item.classList.toggle('completed'); 
+                updateVoyageProgress(); 
             });
         });
     }
 
     // 4. 페이지가 처음 열렸을 때 게이지를 한 번 세팅합니다.
     updateVoyageProgress();
+
+    // ==========================================
+    // 🔀 [라우팅 추가] 뒤로가기 대응 해시 시스템
+    // ==========================================
+    function handleRouting() {
+        const hash = window.location.hash || '#home';
+        const homeView = document.getElementById('home-view');
+        const dashboardView = document.getElementById('dashboard-view');
+
+        if (hash === '#dashboard') {
+            homeView.classList.remove('active'); //
+            dashboardView.classList.add('active'); //
+        } else {
+            dashboardView.classList.remove('active'); //
+            homeView.classList.add('active'); //
+        }
+    }
+
+    window.addEventListener('hashchange', handleRouting);
+    handleRouting(); // 초기 실행
+
+    // 버튼 클릭 시 주소만 바꿔주면 위 handleRouting이 자동으로 감지합니다.
+    const goDashboardBtn = document.getElementById('go-to-dashboard-btn');
+    const goToHomeBtn = document.getElementById('go-to-home-btn');
+
+    if (goDashboardBtn) goDashboardBtn.addEventListener('click', () => window.location.hash = 'dashboard');
+    if (goToHomeBtn) goToHomeBtn.addEventListener('click', () => window.location.hash = 'home');
 });
 
 const scrollDownBtn = document.querySelector('.scroll-down-indicator'); // 화면 아래로 내려가는 화살표 버튼을 찾습니다.
@@ -316,35 +347,54 @@ if(saveMemoBtn) {
     }); // 메모 저장 버튼 리스너 끝
 }
 
-/**
- * [Phase 9 최종] SPA 라우팅 (사르르 크로스 페이드)
- */ /* 라우팅 섹션 주석입니다. */
-const goDashboardBtn = document.getElementById('go-to-dashboard-btn'); /* 대시보드로 가는 버튼 요소를 찾아 변수에 넣습니다. */
-const goToHomeBtn = document.getElementById('go-to-home-btn'); /* 홈으로 돌아가는 버튼 요소를 찾아 변수에 넣습니다. */
-const homeView = document.getElementById('home-view'); /* 대문(Home) 화면 껍데기를 찾아옵니다. */
-const dashboardView = document.getElementById('dashboard-view'); /* 대시보드 화면 껍데기를 찾아옵니다. */
+// ==========================================
+// 🔀 [Phase 9] 세이프 해시 라우팅 (초기 로드 최적화)
+// ==========================================
 
-if (goDashboardBtn && goToHomeBtn && homeView && dashboardView) { /* 4개의 요소가 화면에 전부 잘 렌더링되었는지 확인합니다. */
-    
-    // ➡️ [1] 대문 -> 대시보드 전환
-    goDashboardBtn.addEventListener('click', () => { /* 버튼을 클릭했을 때 이 안의 코드가 실행됩니다. */
-        homeView.classList.remove('active'); /* 대문의 불을 꺼서 사르르 투명하게 만듭니다. */
-        
-        setTimeout(() => { /* 일정 시간이 지난 후에 코드를 실행하는 타이머입니다. */
-            dashboardView.classList.add('active'); /* 0.3초 대기 후 대시보드의 불을 켜서 사르르 나타나게 합니다. */
-        }, 150); /* 150밀리초(0.15초) 동안 대기합니다. (잔상 겹침 방지!) */
-    }); /* 대문 -> 대시보드 이벤트 리스너를 닫습니다. */
+let isInitialLoad = true; // ⭐️ 첫 로드인지 확인하는 깃발(Flag)을 만듭니다.
 
-    // ⬅️ [2] 대시보드 -> 대문 전환
-    goToHomeBtn.addEventListener('click', () => { /* 홈 버튼을 클릭했을 때 실행됩니다. */
-        dashboardView.classList.remove('active'); /* 대시보드의 불을 먼저 꺼서 스르륵 사라지게 합니다. */
-        
-        setTimeout(() => { /* 겹치지 않게 타이머를 줍니다. */
-            homeView.classList.add('active'); /* 0.3초 대기 후 대문 화면을 다시 사르르 나타나게 켭니다. */
-        }, 150); /* 150밀리초(0.15초)를 기다립니다. */
-    }); /* 대시보드 -> 대문 이벤트 리스너를 닫습니다. */
+function handleRouting() {
+    const hash = window.location.hash || '#home';
+    const homeView = document.getElementById('home-view'); //
+    const dashboardView = document.getElementById('dashboard-view'); //
 
-} /* 전체 if문을 닫습니다. */
+    if (routeTimeout) clearTimeout(routeTimeout);
+
+    // 1. [초기 로드 대응] 첫 실행일 때는 사르르 효과 없이 즉시 화면을 세팅합니다.
+    if (isInitialLoad) {
+        if (hash === '#dashboard') {
+            if (homeView) homeView.classList.remove('active'); //
+            if (dashboardView) dashboardView.classList.add('active'); //
+        } else {
+            if (dashboardView) dashboardView.classList.remove('active'); //
+            if (homeView) homeView.classList.add('active'); //
+        }
+        isInitialLoad = false; // ⭐️ 첫 로드가 끝났으므로 깃발을 내립니다.
+        return; // 이후의 setTimeout 로직을 실행하지 않고 여기서 종료합니다.
+    }
+
+    // 2. [이후 클릭 시] 기존의 '사르르' 효과(300ms)를 그대로 유지합니다.
+    if (homeView) homeView.classList.remove('active'); //
+    if (dashboardView) dashboardView.classList.remove('active'); //
+
+    routeTimeout = setTimeout(() => {
+        if (hash === '#dashboard') {
+            if (dashboardView) dashboardView.classList.add('active'); //
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' }); //
+            if (homeView) homeView.classList.add('active'); //
+        }
+        routeTimeout = null;
+    }, 300); // ⭐️ 페이지 이동 시에는 부드러운 전환을 위해 300ms 대기
+}
+
+// 브라우저 이벤트 연결
+window.addEventListener('hashchange', handleRouting);
+document.addEventListener('DOMContentLoaded', handleRouting);
+
+// 버튼 클릭 시 해시값만 변경
+if (goDashboardBtn) goDashboardBtn.addEventListener('click', () => { window.location.hash = 'dashboard'; });
+if (goToHomeBtn) goToHomeBtn.addEventListener('click', () => { window.location.hash = 'home'; });
 
 /**
  * [Phase 10 최종] Three.js WebGL: Neural Network Field
@@ -361,8 +411,11 @@ if (homeView && window.THREE) {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 성능 과부하 방지
     Object.assign(renderer.domElement.style, {
-        position: 'absolute', top: '0', left: '0',
-        zIndex: '-1', pointerEvents: 'none'
+        position: 'absolute', // 부모인 home-view를 기준으로 배치합니다.
+        top: '0', left: '0',
+        width: '100%', height: '100%',
+        zIndex: '0',         // ⭐️ 배경색보다는 위, 글자(10)보다는 아래에 둡니다.
+        pointerEvents: 'none' // 클릭 방해 방지
     });
     homeView.appendChild(renderer.domElement);
     camera.position.z = 42;
@@ -588,72 +641,9 @@ if (homeView && window.THREE) {
 
 /**
  * [Phase 11] Admin Control & Launch Sequence
- */ // [Phase 11] 어드민 제어 및 시스템 가동 로직 구역입니다.
-
-// 1. 어드민 설정을 전역 객체로 선언하여 콘솔에서 접근 가능하게 합니다.
-window.adminConfig = { // 브라우저 창(window) 어디서든 부를 수 있는 설정 바구니를 만듭니다.
-    useLaunchSequence: true // 시스템 가동 시퀀스(로그 창) 사용 여부입니다. 기본값은 ON입니다.
-}; // 설정 객체 끝
-
-// 2. 콘솔에서 사용자가 직접 입력할 제어 함수를 정의합니다.
-window.toggleAdminMode = function(status) { // toggleAdminMode(false) 처럼 입력하여 끕니다.
-    if (typeof status === 'boolean') { // 입력값이 불리언(true/false) 형태인지 확인합니다.
-        window.adminConfig.useLaunchSequence = status; // 입력받은 값으로 설정을 덮어씁니다.
-        const msg = status ? "활성화" : "비활성화"; // 상태에 따른 메시지를 준비합니다.
-        console.log(`%c[ADMIN] 시스템 가동 시퀀스가 ${msg} 되었습니다.`, "color: #3182f6; font-weight: bold;"); // 콘솔에 결과를 예쁘게 출력합니다.
-    } else { // 잘못된 값을 입력했을 경우입니다.
-        console.warn("[ADMIN] true 또는 false 값을 입력해주세요."); // 경고 메시지를 띄웁니다.
-    } // 조건문 끝
-}; // 제어 함수 끝
-
-const bootMessages = [ // 시퀀스에 출력할 메시지 배열입니다.
-    "> INITIALIZING QA_TO_DEV_BRIDGE_SYSTEM...", // 초기화 메시지입니다.
-    "> SCANNING FOR BUGS... 0 FOUND.", // 버그 스캔 메시지입니다.
-    "> DEPLOYING INTERACTIVE_DASHBOARD...", // 배포 메시지입니다.
-    "> ACCESS GRANTED. WELCOME, YooBi." // 최종 승인 메시지입니다.
-]; // 메시지 끝
-
-if (goDashboardBtn) { // 버튼이 존재하는 경우에만 실행합니다.
-    goDashboardBtn.addEventListener('click', () => { // 버튼 클릭 이벤트를 등록합니다.
-        
-        // ⭐️ 핵심: 어드민 설정이 꺼져(false) 있다면 즉시 화면을 전환합니다.
-        if (!window.adminConfig.useLaunchSequence) { // 시퀀스 사용 안 함 설정인 경우입니다.
-            homeView.classList.remove('active'); // 홈 화면을 즉시 끕니다.
-            dashboardView.classList.add('active'); // 대시보드 화면을 즉시 켭니다.
-            return; // 이후의 로그 출력 로직은 실행하지 않고 종료합니다.
-        } // 조건문 끝
-
-        // --- 여기서부터는 기존의 로그 출력 로직입니다 ---
-        const overlay = document.createElement('div'); // 로그용 오버레이를 만듭니다.
-        overlay.classList.add('boot-overlay'); // 디자인을 입힙니다.
-        overlay.innerHTML = `<div class="log-container"></div><div class="cursor-blink"></div>`; // 구조를 잡습니다.
-        document.body.appendChild(overlay); // 화면에 붙입니다.
-        overlay.style.display = 'flex'; // 보이게 처리합니다.
-
-        const logBox = overlay.querySelector('.log-container'); // 로그 박스를 찾습니다.
-        let msgIndex = 0; // 메시지 번호를 초기화합니다.
-
-        const printLog = () => { // 한 줄씩 찍는 함수입니다.
-            if (msgIndex < bootMessages.length) { // 찍을 메시지가 남았다면 실행합니다.
-                const p = document.createElement('div'); // 새 로그 줄을 만듭니다.
-                p.innerText = bootMessages[msgIndex]; // 내용을 넣습니다.
-                logBox.appendChild(p); // 화면에 추가합니다.
-                msgIndex++; // 다음 순서로 넘깁니다.
-                setTimeout(printLog, 300); // 0.3초 간격으로 반복합니다.
-            } else { // 모든 메시지를 다 찍었다면 실행합니다.
-                setTimeout(() => { // 완료 후 대기 시간을 줍니다.
-                    overlay.style.opacity = '0'; // 투명하게 만듭니다.
-                    setTimeout(() => { // 완전히 사라지면 실행합니다.
-                        overlay.remove(); // 요소를 삭제합니다.
-                        homeView.classList.remove('active'); // 대문을 닫습니다.
-                        dashboardView.classList.add('active'); // 대시보드를 엽니다.
-                    }, 500); // 0.5초 대기합니다.
-                }, 500); // 0.5초 대기합니다.
-            } // 조건문 끝
-        }; // 함수 정의 끝
-        printLog(); // 로그 출력 시작입니다.
-    }); // 클릭 리스너 끝
-} // 전체 if문 끝
+ * ⭐️ 딜레이 없이 스킵 처리 완료 ⭐️
+ */ 
+// 어드민 제어 및 시스템 가동 로직 구역입니다. (이전 코드는 주석 처리 및 삭제됨)
 
 /**
  * [Phase 11] 스크롤 다운 기능 보정
@@ -708,38 +698,38 @@ mapItems.forEach(item => {
     });
 });
 
+
 // ==========================================
 // [사이드바 구체화] 1. Status 드롭다운 로직
 // ==========================================
-const statusToggle = document.getElementById('status-toggle'); // 토글 버튼 HTML 요소를 가져옵니다.
-const statusMenu = document.getElementById('status-menu'); // 드롭다운 메뉴 HTML 요소를 가져옵니다.
-const statusIcon = document.getElementById('status-icon'); // 아이콘이 들어갈 HTML 요소를 가져옵니다.
-const statusText = document.getElementById('status-text'); // 텍스트가 들어갈 HTML 요소를 가져옵니다.
+document.addEventListener('DOMContentLoaded', () => {
+    const statusToggle = document.getElementById('status-toggle');
+    const statusMenu   = document.getElementById('status-menu');
+    const statusIcon   = document.getElementById('status-icon');
+    const statusText   = document.getElementById('status-text');
 
-if (statusToggle && statusMenu) { // 토글 버튼과 메뉴가 화면에 잘 렌더링 되었는지 확인합니다.
-    statusToggle.addEventListener('click', (e) => { // 토글 버튼을 마우스로 클릭했을 때 이벤트를 엽니다.
-        e.stopPropagation(); // 클릭 이벤트가 다른 곳으로 번지는 것을 막아줍니다.
-        statusMenu.classList.toggle('show'); // 드롭다운 메뉴에 'show' 클래스를 넣었다 뺐다 합니다.
-    }); // 토글 클릭 이벤트 리스너를 닫습니다.
+    if (statusToggle && statusMenu) {
+        statusToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            statusMenu.classList.toggle('show');
+        });
 
-    const statusItems = statusMenu.querySelectorAll('li'); // 드롭다운 안의 항목(li)들을 모두 찾아옵니다.
-    statusItems.forEach(item => { // 찾은 항목들을 하나씩 순서대로 확인합니다.
-        item.addEventListener('click', () => { // 각 항목을 클릭했을 때 이벤트를 엽니다.
-            const icon = item.getAttribute('data-icon'); // 클릭한 항목에 숨겨진 아이콘 데이터를 가져옵니다.
-            const text = item.getAttribute('data-text'); // 클릭한 항목에 숨겨진 텍스트 데이터를 가져옵니다.
-            
-            statusIcon.innerText = icon; // 화면의 아이콘을 내가 고른 아이콘으로 바꿉니다.
-            statusText.innerText = text; // 화면의 텍스트를 내가 고른 텍스트로 바꿉니다.
-            statusMenu.classList.remove('show'); // 선택을 마쳤으니 드롭다운 메뉴를 닫습니다.
-            
-            showToast(`${text} 상태로 변경되었습니다.`); // 상태가 바뀌었다는 토스트 팝업을 화면 하단에 띄웁니다!
-        }); // 개별 항목 클릭 이벤트를 닫습니다.
-    }); // 항목 순회 반복문을 닫습니다.
+        statusMenu.querySelectorAll('li').forEach(item => {
+            item.addEventListener('click', () => {
+                const icon = item.getAttribute('data-icon');
+                const text = item.getAttribute('data-text');
+                if (statusIcon) statusIcon.innerText = icon;
+                if (statusText) statusText.innerText = text;
+                statusMenu.classList.remove('show');
+                showToast(`${text} 상태로 변경되었습니다.`);
+            });
+        });
 
-    document.addEventListener('click', () => { // 화면의 아무 곳이나 클릭했을 때 이벤트를 엽니다.
-        statusMenu.classList.remove('show'); // 열려있는 드롭다운 메뉴가 있다면 닫아버립니다.
-    }); // 바탕 클릭 이벤트를 닫습니다.
-} // Status 제어 조건문을 닫습니다.
+        document.addEventListener('click', () => {
+            statusMenu.classList.remove('show');
+        });
+    }
+});
 
 
 // ==========================================
@@ -802,19 +792,23 @@ roadmapItems.forEach(item => {
 });
 
 // 2. 할 일 생성 (Add Task)
-modalAddBtn.addEventListener('click', () => {
-    const taskText = document.getElementById('modal-task-input').value;
-    if (taskText.trim() !== '') {
-        showToast('새로운 할 일이 추가되었습니다.');
-    }
-});
+if (modalAddBtn) {
+    modalAddBtn.addEventListener('click', () => {
+        const taskText = document.getElementById('modal-task-input').value;
+        if (taskText.trim() !== '') {
+            showToast('새로운 할 일이 추가되었습니다.');
+        }
+    });
+}
 
 // 3. 할 일 삭제 (Delete Task)
-deleteConfirmBtn.addEventListener('click', () => {
-    if (cardToDelete) {
-        showToast('할 일이 목록에서 삭제되었습니다.');
-    }
-});
+if (deleteConfirmBtn) {
+    deleteConfirmBtn.addEventListener('click', () => {
+        if (cardToDelete) {
+            showToast('할 일이 목록에서 삭제되었습니다.');
+        }
+    });
+}
 
 // 4. 할 일 위치 이동 (Drag & Drop)
 // dragend 이벤트 리스너를 찾아서 추가해줘.
@@ -825,9 +819,87 @@ function addDragEndListener(card) {
 }
 
 // 5. 캘린더 일정 등록
-saveMemoBtn.addEventListener('click', () => {
-    const memoKey = saveMemoBtn.getAttribute('data-key');
-    if (memoKey) {
-        showToast('선택한 날짜의 일정이 저장되었습니다.');
-    }
-});
+if (saveMemoBtn) {
+    saveMemoBtn.addEventListener('click', () => {
+        const memoKey = saveMemoBtn.getAttribute('data-key');
+        if (memoKey) {
+            showToast('선택한 날짜의 일정이 저장되었습니다.');
+        }
+    });
+}
+
+// [사이드바 액션 제어 - 실제 구현 버전]
+const btnQuickTask = document.getElementById('btn-quick-task');
+const btnQuickNote = document.getElementById('btn-quick-note');
+
+// 1. 새로운 할 일: 모달 열기
+if (btnQuickTask) {
+    btnQuickTask.addEventListener('click', () => {
+        if (taskModal) {
+            taskModal.style.display = 'flex';
+            const modalInput = document.getElementById('modal-task-input');
+            if (modalInput) modalInput.focus();
+        }
+    });
+}
+
+// 2. 데일리 메모: 전용 팝업 → 오늘 날짜 key로 바로 저장
+const dailyMemoModal     = document.getElementById('daily-memo-modal');
+const dailyMemoInput     = document.getElementById('daily-memo-input');
+const dailyMemoCancelBtn = document.getElementById('daily-memo-cancel-btn');
+const dailyMemoSaveBtn   = document.getElementById('daily-memo-save-btn');
+const memoModalDate      = document.getElementById('memo-modal-date');
+
+// 오늘 날짜 포맷 + localStorage key 생성 (캘린더와 동일한 규칙)
+function getTodayInfo() {
+    const now   = new Date();
+    const year  = now.getFullYear();
+    const month = now.getMonth();   // 0-indexed
+    const day   = now.getDate();
+    const label = `${year}년 ${month + 1}월 ${day}일`;
+    const key   = `yoobiMemo_${year}_${month}_${day}`;
+    return { label, key };
+}
+
+if (btnQuickNote) {
+    btnQuickNote.addEventListener('click', () => {
+        const { label, key } = getTodayInfo();
+        if (memoModalDate) memoModalDate.innerText = `📅 ${label}`;
+        // 이미 저장된 메모가 있으면 불러오기
+        if (dailyMemoInput) dailyMemoInput.value = localStorage.getItem(key) || '';
+        if (dailyMemoModal) {
+            dailyMemoModal.style.display = 'flex';
+            if (dailyMemoInput) dailyMemoInput.focus();
+        }
+    });
+}
+
+// 취소 버튼
+if (dailyMemoCancelBtn) {
+    dailyMemoCancelBtn.addEventListener('click', () => {
+        if (dailyMemoModal) dailyMemoModal.style.display = 'none';
+        if (dailyMemoInput) dailyMemoInput.value = '';
+    });
+}
+
+// 저장 버튼
+if (dailyMemoSaveBtn) {
+    dailyMemoSaveBtn.addEventListener('click', () => {
+        const { label, key } = getTodayInfo();
+        const text = dailyMemoInput ? dailyMemoInput.value.trim() : '';
+        if (!text) {
+            showToast('내용을 입력해 주세요! ✏️');
+            return;
+        }
+        localStorage.setItem(key, dailyMemoInput.value);
+        if (dailyMemoModal) dailyMemoModal.style.display = 'none';
+        showToast(`${label} 메모가 저장되었습니다. 📝`);
+    });
+}
+
+// 모달 바깥 클릭 시 닫기
+if (dailyMemoModal) {
+    dailyMemoModal.addEventListener('click', (e) => {
+        if (e.target === dailyMemoModal) dailyMemoModal.style.display = 'none';
+    });
+}

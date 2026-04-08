@@ -19,7 +19,7 @@
         </span>
     </label>
 
-    <div id="home-view" class="app-view active">
+    <div id="home-view" class="app-view">
         <section class="page hero-page">
             <div class="hero-container">
                 <div class="hero-text-area">
@@ -88,13 +88,35 @@
             </div>
 
             <nav class="sidebar-menu">
-                <ul>
-                    <li id="go-to-home-btn">🏠 대시보드 (Dashboard)</li>
+                <div class="menu-category">QUICK ACTIONS</div>
+                <ul class="quick-action-list">
+                    <li id="go-to-home-btn" class="action-btn">
+                        <span class="icon">🏠</span>
+                        <span class="text">대시보드 (Home)</span>
+                        <span class="action-arrow">↑</span>
+                    </li>
+
                     <li class="nav-divider"></li>
-                    <li class="active">📋 칸반 보드 (Kanban)</li>
-                    <li>📅 일정 관리 (Schedule)</li>
-                    <li>📚 학습 기록 (Study Log)</li>
-                    <li>🔗 이력서 (Resume)</li>
+
+                    <li id="btn-quick-task" class="action-btn">
+                        <span class="icon">➕</span>
+                        <span class="text">새로운 할 일</span>
+                        <span class="action-arrow">＋</span>
+                    </li>
+
+                    <li id="btn-quick-note" class="action-btn">
+                        <span class="icon">📝</span>
+                        <span class="text">데일리 메모</span>
+                        <span class="action-arrow">＋</span>
+                    </li>
+
+                    <li class="nav-divider"></li>
+
+                    <a href="resume.html" class="action-btn sidebar-external-link">
+                        <span class="icon">📄</span>
+                        <span class="text">내 이력서 보기</span>
+                        <span class="link-arrow">→</span>
+                    </a>
                 </ul>
             </nav>
 
@@ -240,6 +262,19 @@
             <p>정말 이 일정을 삭제하시겠습니까?</p> <br />
             <div class="modal-buttons"> <button id="delete-cancel-btn">취소</button> <button
                     id="delete-confirm-btn">삭제하기</button> </div>
+        </div>
+    </div>
+
+    <!-- 데일리 메모 모달 -->
+    <div id="daily-memo-modal" class="modal-overlay">
+        <div class="modal-content daily-memo-content">
+            <h2>📝 데일리 메모</h2>
+            <p class="memo-modal-date" id="memo-modal-date"></p>
+            <textarea id="daily-memo-input" placeholder="오늘 하루를 기록해 보세요...&#10;(배운 것, 느낀 것, 할 일 등)"></textarea>
+            <div class="modal-buttons">
+                <button id="daily-memo-cancel-btn">취소</button>
+                <button id="daily-memo-save-btn">저장하기 💾</button>
+            </div>
         </div>
     </div>
 
