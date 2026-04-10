@@ -346,6 +346,40 @@
             </div>
         </div>
     </div>
+
+    <div id="card-detail-modal" class="modal-overlay">
+        <div class="modal-content card-detail-content">
+            <h2>🧐 할 일 상세 설정</h2>
+            <input type="hidden" id="edit-card-id"> 
+            
+            <label>제목</label>
+            <input type="text" id="edit-card-title" placeholder="할 일 제목">
+            
+            <label>상세 설명</label>
+            <textarea id="edit-card-desc" placeholder="상세한 내용을 적어주세요..."></textarea>
+            
+            <div class="modal-row">
+                <div>
+                    <label>우선순위</label>
+                    <select id="edit-card-priority">
+                        <option value="low">낮음 (Low)</option>
+                        <option value="medium">보통 (Medium)</option>
+                        <option value="high">긴급 (High)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>마감일</label>
+                    <input type="date" id="edit-card-date">
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button id="detail-cancel-btn">취소</button>
+                <button id="detail-save-btn">저장하기 💾</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toast-center-container" class="toast-center-container"></div>
     <script src="script.js"></script>
 
