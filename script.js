@@ -706,8 +706,8 @@ mapItems.forEach(item => {
         const moveY = (e.clientY - centerY) / (rect.height / 2);
 
         // ⭐️ 그림자를 조금 더 멀리 밀어서(30px) 진한 그림자의 깊이감을 살립니다.
-        const shX = moveX * -15;
-        const shY = (moveY * -15) + 10; // 기본 Y축 깊이 20px
+        const shX = moveX * -5;
+        const shY = (moveY * -5) + 10; // 기본 Y축 깊이 20px
 
         content.style.setProperty('--sh-x', `${shX}px`);
         content.style.setProperty('--sh-y', `${shY}px`);
