@@ -1973,3 +1973,115 @@ body.dark-mode .memo-item {
     border-color: rgba(255, 255, 255, 0.1);
     color: #f1f5f9;
 }
+
+.planner-tabs { /* 탭 버튼들을 가로로 나란히 정렬하기 위한 컨테이너 클래스입니다. */
+    display: flex; /* 자식 요소(버튼)들을 플렉스 박스 모델로 배치합니다. */
+    gap: 10px; /* 버튼과 버튼 사이의 간격을 10px로 일정하게 띄웁니다. */
+    margin-bottom: 15px; /* 탭 버튼 아래에 위치할 리스트와의 간격을 확보합니다. */
+} /* planner-tabs 스타일 정의를 종료합니다. */
+
+.planner-tabs button { /* 탭 안에 있는 버튼들의 공통 디자인을 정의합니다. */
+    background: rgba(255, 255, 255, 0.2); /* 반투명한 흰색을 배경색으로 깔아 유리 질감을 냅니다. */
+    border: none; /* 브라우저 기본 버튼 테두리를 제거하여 깔끔하게 만듭니다. */
+    padding: 6px 14px; /* 버튼 안쪽의 위아래, 좌우 여백을 설정하여 클릭 영역을 확보합니다. */
+    border-radius: 20px; /* 버튼의 양끝 모서리를 완전히 둥근 캡슐 형태로 깎습니다. */
+    color: #4e5968; /* 버튼 텍스트의 색상을 어두운 회색으로 설정하여 가독성을 높입니다. */
+    cursor: pointer; /* 마우스 커서를 올렸을 때 클릭 가능한 손가락 모양으로 변경합니다. */
+    font-size: 13px; /* 탭 버튼의 글씨 크기를 13px로 조정합니다. */
+    font-weight: 600; /* 버튼 글씨의 굵기를 약간 두껍게 설정합니다. */
+    transition: all 0.2s ease; /* 호버 및 활성화 상태 변환 시 애니메이션을 부드럽게 0.2초 동안 적용합니다. */
+} /* 버튼 기본 스타일 정의를 종료합니다. */
+
+.planner-tabs button.active { /* 사용자가 클릭하여 현재 활성화된 탭 버튼의 스타일입니다. */
+    background: #3182f6; /* 토스 디자인 시스템과 일치하는 메인 블루 컬러로 배경을 변경합니다. */
+    color: white; /* 파란 배경 위에서 잘 보이도록 글자색을 완전한 흰색으로 변경합니다. */
+    box-shadow: 0 4px 10px rgba(49, 130, 246, 0.3); /* 버튼 아래에 파란색 그림자를 은은하게 깔아 입체감을 줍니다. */
+} /* 활성 탭 스타일 정의를 종료합니다. */
+
+body.dark-mode .planner-tabs button { /* 다크모드 상태일 때의 비활성 탭 버튼 스타일을 덮어씁니다. */
+    color: #cbd5e1; /* 어두운 배경에 맞게 텍스트 색상을 밝은 쿨그레이 톤으로 변경합니다. */
+    background: rgba(255, 255, 255, 0.1); /* 다크모드 대비 배경 투명도를 조금 더 낮춥니다. */
+} /* 다크모드 비활성 탭 스타일 정의를 종료합니다. */
+
+.planner-timeline { /* 타임라인 항목들이 세로로 쌓이게 될 메인 기둥 영역입니다. */
+    flex: 1; /* 메모 컨테이너 안에서 남는 세로 공간을 모두 채우도록 확장합니다. */
+    overflow-y: auto; /* 타임라인 항목이 길어져 공간을 넘어가면 세로 스크롤을 생성합니다. */
+    margin-bottom: 15px; /* 하단 입력창 영역과의 간격을 15px 띄워 시각적으로 분리합니다. */
+    padding: 10px 10px 10px 20px; /* 타임라인 선을 그리기 위해 왼쪽 여백을 충분히(20px) 줍니다. */
+    border-left: 2px solid rgba(49, 130, 246, 0.3); /* 항목 전체를 관통하는 파란색 세로 가이드라인 선을 그립니다. */
+    margin-left: 15px; /* 세로선이 벽에 너무 붙지 않도록 컨테이너 안쪽으로 15px 밀어 넣습니다. */
+    display: flex; /* 항목 정렬을 위해 플렉스 박스를 켭니다. */
+    flex-direction: column; /* 타임라인의 각 항목들을 위에서 아래로 차례대로 쌓습니다. */
+    gap: 20px; /* 개별 타임라인 항목 사이의 상하 간격을 20px로 여유롭게 벌립니다. */
+} /* 타임라인 컨테이너 스타일 정의를 종료합니다. */
+
+.planner-timeline::-webkit-scrollbar { width: 6px; } /* 타임라인 영역 전용 스크롤바의 너비를 6px로 얇게 지정합니다. */
+.planner-timeline::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; } /* 스크롤바 손잡이를 연한 검은색으로 칠하고 둥글게 깎습니다. */
+body.dark-mode .planner-timeline::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); } /* 다크모드 시 스크롤바 손잡이를 밝은 색상으로 반전시킵니다. */
+
+.timeline-item { /* 개별 일정 한 칸을 구성하는 래퍼(Wrapper) 박스입니다. */
+    position: relative; /* 자식 요소인 '점(Dot)'을 절대 좌표로 배치하기 위한 기준점이 됩니다. */
+    padding-left: 15px; /* 내용 텍스트가 왼쪽 세로선 및 점과 겹치지 않도록 안쪽으로 밀어줍니다. */
+} /* 개별 타임라인 항목 스타일 정의를 종료합니다. */
+
+.timeline-item::before { /* 일정 박스 왼쪽에 타임라인 노드 역할을 하는 가상의 원형 점을 생성합니다. */
+    content: ''; /* 가상 요소를 렌더링하기 위해 필수적인 빈 콘텐츠 속성입니다. */
+    position: absolute; /* 텍스트의 흐름을 벗어나 원하는 위치에 점을 박기 위해 절대 좌표를 사용합니다. */
+    left: -27px; /* 텍스트 시작점에서 왼쪽으로 이동시켜 세로선과 정확히 겹치게 만듭니다. */
+    top: 3px; /* 점이 텍스트 라인의 살짝 아래쪽 중앙에 오도록 높이를 미세 조정합니다. */
+    width: 10px; /* 점의 가로 폭을 10px로 설정합니다. */
+    height: 10px; /* 점의 세로 높이를 10px로 설정합니다. */
+    background: #3182f6; /* 점의 내부 색상을 메인 토스 블루 컬러로 채색합니다. */
+    border-radius: 50%; /* 가로세로가 동일한 네모를 둥글게 깎아 완벽한 원형으로 만듭니다. */
+    border: 2px solid white; /* 파란 점 주위에 하얀색 띠를 둘러 세로선과 구분되는 여백을 줍니다. */
+    box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.15); /* 점 바깥쪽으로 은은한 파란색 빛번짐 효과(후광)를 추가합니다. */
+} /* 타임라인 점 모양 스타일 정의를 종료합니다. */
+
+body.dark-mode .timeline-item::before { /* 다크모드 환경에서 타임라인 점의 테두리를 방어합니다. */
+    border-color: #1e293b; /* 어두운 패널 배경색에 맞춰 하얀 테두리를 짙은 네이비색으로 바꿉니다. */
+} /* 다크모드 점 테두리 스타일 정의를 종료합니다. */
+
+.timeline-time { /* 14:00 과 같이 일정이 시작되는 시간을 나타내는 텍스트 스타일입니다. */
+    font-size: 13px; /* 시간 정보 글씨 크기를 13px로 조절합니다. */
+    font-weight: 800; /* 시간을 눈에 띄게 강조하기 위해 폰트 두께를 매우 굵게 설정합니다. */
+    color: #3182f6; /* 시간 텍스트 역시 통일성을 위해 블루 컬러로 지정합니다. */
+    display: block; /* 시간 옆으로 글자가 오지 않고 한 줄을 온전히 차지하도록 블록화합니다. */
+    margin-bottom: 4px; /* 시간 텍스트 바로 아래에 나오는 일정 내용과의 간격을 4px로 벌립니다. */
+} /* 타임라인 시간 텍스트 스타일 정의를 종료합니다. */
+
+.timeline-text { /* 사용자가 입력한 순수한 일정 내용 부분의 텍스트 스타일입니다. */
+    font-size: 14px; /* 본문 가독성을 위해 내용 글자 크기를 14px로 설정합니다. */
+    color: #333d4b; /* 글자 색상을 너무 새까맣지 않은 진한 회색으로 맞춰 부드러운 인상을 줍니다. */
+    line-height: 1.5; /* 글자가 여러 줄이 될 경우 줄 간격을 1.5배수로 벌려 시원하게 보여줍니다. */
+    word-break: break-word; /* 긴 영단어나 텍스트가 박스 밖으로 튀어나가지 않도록 강제 줄바꿈 처리를 합니다. */
+} /* 타임라인 일정 내용 스타일 정의를 종료합니다. */
+
+body.dark-mode .timeline-text { /* 다크모드 활성화 시 일정 내용의 텍스트 가독성을 보정합니다. */
+    color: #f1f5f9; /* 어두운 배경에 대비되도록 텍스트를 아주 밝은 회색 계열로 변경합니다. */
+} /* 다크모드 내용 텍스트 스타일 정의를 종료합니다. */
+
+.timeline-dot {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%; 
+    height: 3px; 
+    /* ⭐️ 양끝이 투명하게 스며드는 영롱한 블루 그라데이션 */
+    background: linear-gradient(90deg, transparent, rgba(49, 130, 246, 0.8), transparent);
+    border-radius: 0 0 10px 10px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* 🌙 다크모드 대응: 살짝 더 밝은 네온 블루 그라데이션 */
+body.dark-mode .timeline-dot {
+    background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.8), transparent);
+}
+
+/* ⭐️ 오늘 날짜(파란 배경) 전용: 이질감 완벽 제거 */
+.today .timeline-dot {
+    /* 파란 배경 위에서는 하얀색 그라데이션 빛으로 변신! */
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    /* 아래에서 위로 은은하게 퍼지는 하얀 후광 추가 */
+    box-shadow: 0 -2px 10px rgba(255, 255, 255, 0.3);
+}

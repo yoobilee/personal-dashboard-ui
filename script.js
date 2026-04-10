@@ -322,26 +322,25 @@ function renderCalendar() {
                 const memoDateTitle = document.getElementById('memo-date-title');
                 if(memoDateTitle) memoDateTitle.innerText = `${currentCalYear}년 ${currentCalMonth + 1}월 ${day}일 일정`; 
 
-                const memoKey = `yoobiMemo_${currentCalYear}_${currentCalMonth}_${day}`; 
-                const savedMemo = localStorage.getItem(memoKey); 
-                
                 // ⭐️ 클릭할 때마다 입력창을 깔끔하게 비워줍니다.
                 const memoInput = document.getElementById('memo-input');
                 if(memoInput) memoInput.value = ''; 
 
-                // ⭐️ 저장된 데이터를 배열로 바꿔서 리스트를 그려줍니다.
-                let memoArray = [];
-                try {
-                    memoArray = savedMemo ? JSON.parse(savedMemo) : [];
-                } catch(e) {
-                    memoArray = savedMemo ? [savedMemo] : [];
-                }
-                renderMemoList(memoArray, memoKey);
-
+                // ⭐️ 기존의 memoKey 대신 공통 baseKey를 사용합니다.
+                const baseKey = `${currentCalYear}_${currentCalMonth}_${day}`; 
                 const saveBtn = document.getElementById('save-memo-btn');
-                if(saveBtn) saveBtn.setAttribute('data-key', memoKey); 
+                if(saveBtn) saveBtn.setAttribute('data-base-key', baseKey); 
+
+                // ⭐️ 현재 활성화된 탭에 맞춰서 데이터를 뿌려줍니다.
+                if (document.getElementById('btn-view-timeline').classList.contains('active')) {
+                    const timeArray = JSON.parse(localStorage.getItem(`yoobiTimeline_${baseKey}`) || '[]');
+                    renderTimeline(timeArray, `yoobiTimeline_${baseKey}`);
+                } else {
+                    const memoArray = JSON.parse(localStorage.getItem(`yoobiMemo_${baseKey}`) || '[]');
+                    renderMemoList(memoArray, `yoobiMemo_${baseKey}`);
+                }
             } 
-        }); 
+        });  
 
         datesElement.appendChild(dateSlot); 
     } 
@@ -367,44 +366,6 @@ if (nextMonthBtn) {
         currentCalMonth++;
         if (currentCalMonth > 11) { currentCalMonth = 0; currentCalYear++; }
         renderCalendar();
-    });
-}
-
-const saveMemoBtn = document.getElementById('save-memo-btn');
-
-if (saveMemoBtn) {
-    saveMemoBtn.addEventListener('click', () => {
-        const memoKey = saveMemoBtn.getAttribute('data-key'); // 고유 열쇠를 읽어옵니다.
-
-        if (!memoKey) { // 날짜를 안 골랐다면
-            alert('왼쪽 달력에서 날짜를 먼저 선택해주세요! 📅');
-            return;
-        }
-
-        const memoInput = document.getElementById('memo-input');
-        const memoText = memoInput.value.trim();
-
-        if (!memoText) {
-            showToast('내용을 입력해 주세요! ✏️');
-            return;
-        }
-
-        let memoArray = [];
-        try {
-            memoArray = JSON.parse(localStorage.getItem(memoKey) || '[]');
-        } catch (e) {
-            memoArray = localStorage.getItem(memoKey) ? [localStorage.getItem(memoKey)] : [];
-        }
-
-        // ⭐️ 새로운 메모를 배열 맨 끝에 밀어 넣고 다시 저장!
-        memoArray.push(memoText);
-        localStorage.setItem(memoKey, JSON.stringify(memoArray));
-        
-        renderMemoList(memoArray, memoKey); // 목록 새로고침
-        memoInput.value = ''; // 입력창 비우기
-        showToast('새로운 메모가 추가되었습니다. 📝');
-        
-        window.updateCalendarBadges(); // 👈 ⭐️ 이 줄이 들어가야 즉시 배지가 생깁니다!
     });
 }
 
@@ -880,16 +841,6 @@ function addDragEndListener(card) {
     });
 }
 
-// 5. 캘린더 일정 등록
-if (saveMemoBtn) {
-    saveMemoBtn.addEventListener('click', () => {
-        const memoKey = saveMemoBtn.getAttribute('data-key');
-        if (memoKey) {
-            showToast('선택한 날짜의 일정이 저장되었습니다.');
-        }
-    });
-}
-
 // [사이드바 액션 제어 - 실제 구현 버전]
 const btnQuickTask = document.getElementById('btn-quick-task');
 const btnQuickNote = document.getElementById('btn-quick-note');
@@ -987,7 +938,7 @@ if (dailyMemoModal) {
     });
 }
 
-// [script.js 맨 하단] ⭐️ 무적의 캘린더 배지 업데이트 함수
+// [script.js 교체] ⭐️ 무적의 캘린더 알림 업데이트 (메모는 빨간 배지, 타임라인은 파란 점)
 window.updateCalendarBadges = function() {
     const dateSlots = document.querySelectorAll('.calendar-dates div:not(.empty)');
     
@@ -995,35 +946,30 @@ window.updateCalendarBadges = function() {
         const day = slot.getAttribute('data-date');
         if(!day) return;
         
-        // 현재 달력의 연/월과 해당 날짜의 Key를 만듭니다.
-        const memoKey = `yoobiMemo_${currentCalYear}_${currentCalMonth}_${day}`;
-        const savedData = localStorage.getItem(memoKey);
-        let memoCount = 0;
+        const baseKey = `${currentCalYear}_${currentCalMonth}_${day}`;
+        const memoArr = JSON.parse(localStorage.getItem(`yoobiMemo_${baseKey}`) || '[]');
+        const timeArr = JSON.parse(localStorage.getItem(`yoobiTimeline_${baseKey}`) || '[]');
         
-        if(savedData) {
-            try {
-                const parsed = JSON.parse(savedData);
-                // ⭐️ 빈 배열([])이면 0개, 데이터가 있으면 그 개수만큼 측정
-                if (Array.isArray(parsed)) {
-                    memoCount = parsed.length;
-                } else if (savedData.trim() !== "") {
-                    memoCount = 1;
-                }
-            } catch(e) {
-                memoCount = 1;
-            }
-        }
-
-        // 기존 배지 초기화
+        // 1. 기존에 그려진 배지와 도트를 일단 싹 청소합니다.
         const existingBadge = slot.querySelector('.event-badge');
         if(existingBadge) existingBadge.remove();
 
-        // 메모가 1개 이상일 때만 빨간 배지 부착!
-        if (memoCount > 0) {
+        const existingDot = slot.querySelector('.timeline-dot');
+        if(existingDot) existingDot.remove();
+
+        // 2. [메모]가 1개 이상 있다면 기존처럼 우측 상단에 빨간 숫자 배지를 답니다.
+        if (memoArr.length > 0) {
             const badge = document.createElement('span');
             badge.className = 'event-badge';
-            badge.innerText = memoCount;
+            badge.innerText = memoArr.length;
             slot.appendChild(badge);
+        }
+
+        // 3. ⭐️ [타임라인] 일정이 1개라도 있다면 하단 중앙에 파란 점을 콕 찍어줍니다. (개수 무관)
+        if (timeArr.length > 0) {
+            const dot = document.createElement('span');
+            dot.className = 'timeline-dot';
+            slot.appendChild(dot);
         }
     });
 };
@@ -1075,4 +1021,140 @@ function renderMemoList(memoArray, memoKey) {
         item.appendChild(delBtn);
         listContainer.appendChild(item);
     });
+}
+
+// ==========================================
+// 🗓️ [Phase 7 업그레이드] 타임라인 & 메모 분리 제어 로직
+// ==========================================
+
+const saveMemoBtn = document.getElementById('save-memo-btn'); // 저장 버튼
+const memoInput = document.getElementById('memo-input'); // 텍스트 입력창
+const btnViewMemo = document.getElementById('btn-view-memo'); // 메모 탭
+const btnViewTimeline = document.getElementById('btn-view-timeline'); // 타임라인 탭
+const memoListArea = document.getElementById('memo-list'); // 메모 리스트 영역
+const plannerTimelineArea = document.getElementById('planner-timeline'); // 타임라인 영역
+
+// ⭐️ 1. 탭 전환 로직 (UI 변경 및 각각의 DB 불러오기)
+if (btnViewMemo && btnViewTimeline) { 
+    btnViewMemo.addEventListener('click', () => { 
+        memoListArea.style.display = 'flex'; 
+        plannerTimelineArea.style.display = 'none'; 
+        btnViewMemo.classList.add('active'); 
+        btnViewTimeline.classList.remove('active'); 
+        
+        // UI 변경: 메모 모드
+        if(memoInput) memoInput.placeholder = "새로운 메모를 추가해보세요...";
+        if(saveMemoBtn) saveMemoBtn.innerText = "메모 추가하기 💾";
+
+        const baseKey = saveMemoBtn.getAttribute('data-base-key'); 
+        if (baseKey) {
+            const memoArray = JSON.parse(localStorage.getItem(`yoobiMemo_${baseKey}`) || '[]');
+            renderMemoList(memoArray, `yoobiMemo_${baseKey}`); // 메모 렌더링
+        }
+    }); 
+
+    btnViewTimeline.addEventListener('click', () => { 
+        memoListArea.style.display = 'none'; 
+        plannerTimelineArea.style.display = 'flex'; 
+        btnViewTimeline.classList.add('active'); 
+        btnViewMemo.classList.remove('active'); 
+        
+        // UI 변경: 타임라인 모드
+        if(memoInput) memoInput.placeholder = "일정을 입력하세요 (예: 14:00 미팅)";
+        if(saveMemoBtn) saveMemoBtn.innerText = "일정 추가하기 ⏰";
+
+        const baseKey = saveMemoBtn.getAttribute('data-base-key'); 
+        if (baseKey) {
+            const timeArray = JSON.parse(localStorage.getItem(`yoobiTimeline_${baseKey}`) || '[]');
+            renderTimeline(timeArray, `yoobiTimeline_${baseKey}`);  // 타임라인 렌더링
+        } 
+    }); 
+} 
+
+// ⭐️ 2. 스마트 저장 버튼 로직 (어느 탭이냐에 따라 다른 금고에 저장)
+if (saveMemoBtn) {
+    saveMemoBtn.addEventListener('click', () => {
+        const baseKey = saveMemoBtn.getAttribute('data-base-key'); 
+        if (!baseKey) return alert('왼쪽 달력에서 날짜를 먼저 선택해주세요! 📅');
+
+        const text = memoInput.value.trim();
+        if (!text) return showToast('내용을 입력해 주세요! ✏️');
+
+        const isTimelineMode = btnViewTimeline.classList.contains('active');
+
+        if (isTimelineMode) {
+            // [타임라인 저장] 시간 포맷(00:00)이 있는지 검사!
+            if (!/(\d{1,2}:\d{2})/.test(text)) {
+                return showToast('시간을 포함해주세요! (예: 14:00 미팅) ⏰');
+            }
+            const timeKey = `yoobiTimeline_${baseKey}`;
+            const timeArray = JSON.parse(localStorage.getItem(timeKey) || '[]');
+            timeArray.push(text);
+            localStorage.setItem(timeKey, JSON.stringify(timeArray));
+            
+            renderTimeline(timeArray, timeKey); // 타임라인 즉시 새로고침
+            showToast('타임라인 일정이 추가되었습니다. ⏰'); // 알림 1개!
+        } else {
+            // [일반 메모 저장]
+            const memoKey = `yoobiMemo_${baseKey}`;
+            const memoArray = JSON.parse(localStorage.getItem(memoKey) || '[]');
+            memoArray.push(text);
+            localStorage.setItem(memoKey, JSON.stringify(memoArray));
+            
+            renderMemoList(memoArray, memoKey); // 메모 즉시 새로고침
+            showToast('새로운 메모가 추가되었습니다. 📝'); // 알림 1개!
+        }
+
+        memoInput.value = ''; // 입력창 비우기
+        if (window.updateCalendarBadges) window.updateCalendarBadges(); // 배지 즉시 갱신
+    });
+}
+
+// ⭐️ 3. 완전히 새롭게 추가되는 타임라인 렌더링 함수!
+function renderTimeline(timeArray, timeKey) { 
+    if (!plannerTimelineArea) return; 
+    plannerTimelineArea.innerHTML = ''; 
+
+    const timelineData = timeArray 
+        .map((text, index) => { 
+            const timeMatch = text.match(/(\d{1,2}:\d{2})/); 
+            return { 
+                originalIndex: index, // 나중에 지울 때를 대비해 진짜 순서를 기억해둠
+                time: timeMatch ? timeMatch[0] : '00:00', 
+                content: text.replace(/(\d{1,2}:\d{2})/, '').trim() 
+            }; 
+        }) 
+        .sort((a, b) => a.time.localeCompare(b.time)); // 시간순 정렬
+
+    if (timelineData.length === 0) { 
+        plannerTimelineArea.innerHTML = '<p style="text-align:center; color:#8b95a1; font-size:13px; margin-top: 20px;">등록된 일정이 없습니다.</p>'; 
+        return; 
+    } 
+
+    timelineData.forEach(item => { 
+        const div = document.createElement('div'); 
+        div.className = 'timeline-item'; 
+        div.innerHTML = ` 
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                <div>
+                    <span class="timeline-time">${item.time}</span> 
+                    <span class="timeline-text">${item.content}</span> 
+                </div>
+                <button class="delete-memo-btn" style="padding-top:0;">×</button>
+            </div>
+        `; 
+        
+        // ❌ X 버튼 누르면 타임라인 개별 삭제
+        const delBtn = div.querySelector('.delete-memo-btn');
+        delBtn.addEventListener('click', () => {
+            let currentArr = JSON.parse(localStorage.getItem(timeKey) || '[]');
+            currentArr.splice(item.originalIndex, 1); 
+            localStorage.setItem(timeKey, JSON.stringify(currentArr)); 
+            renderTimeline(currentArr, timeKey); 
+            showToast('일정이 삭제되었습니다. 🗑️');
+            if (window.updateCalendarBadges) window.updateCalendarBadges();
+        });
+
+        plannerTimelineArea.appendChild(div); 
+    }); 
 }

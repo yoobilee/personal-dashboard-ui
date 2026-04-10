@@ -264,14 +264,16 @@
 
                     <div class="memo-container">
                         <h3 id="memo-date-title">날짜를 선택해주세요 📅</h3>
-
-                        <div id="memo-list" class="memo-list">
-                            <p style="text-align:center; color:#8b95a1; font-size:13px; margin-top: 20px;">등록된 메모가 없습니다.
-                            </p>
+                        <div class="planner-tabs">
+                            <button id="btn-view-memo" class="active">메모</button> 
+                            <button id="btn-view-timeline">타임라인</button>
                         </div>
-
+                        <div id="memo-list" class="memo-list">
+                            <p style="text-align:center; color:#8b95a1; font-size:13px; margin-top: 20px;">등록된 메모가 없습니다.</p>
+                        </div>
+                        <div id="planner-timeline" class="planner-timeline" style="display: none;"></div>
                         <div class="memo-input-area">
-                            <textarea id="memo-input" placeholder="새로운 일정을 추가해보세요..."></textarea>
+                            <textarea id="memo-input" placeholder="새로운 일정을 추가해보세요... (예: 14:00 미팅)"></textarea>
                             <button id="save-memo-btn">메모 추가하기 💾</button>
                         </div>
                     </div>
