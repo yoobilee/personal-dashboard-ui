@@ -5,6 +5,11 @@ const homeView = document.getElementById('home-view');
 const dashboardView = document.getElementById('dashboard-view');
 const goDashboardBtn = document.getElementById('go-to-dashboard-btn');
 const goToHomeBtn = document.getElementById('go-to-home-btn');
+const deleteModal = document.getElementById('delete-modal'); 
+const deleteConfirmBtn = document.getElementById('delete-confirm-btn'); 
+const deleteCancelBtn = document.getElementById('delete-cancel-btn'); 
+
+let cardToDeleteId = null; // ⭐️ 삭제할 카드의 ID를 임시로 담아둘 공간
 let routeTimeout = null;
 
 /**
@@ -73,11 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const dashboardView = document.getElementById('dashboard-view');
 
         if (hash === '#dashboard') {
-            homeView.classList.remove('active'); //
-            dashboardView.classList.add('active'); //
+            homeView.classList.remove('active'); 
+            dashboardView.classList.add('active'); 
         } else {
-            dashboardView.classList.remove('active'); //
-            homeView.classList.add('active'); //
+            dashboardView.classList.remove('active'); 
+            homeView.classList.add('active'); 
         }
     }
 
@@ -149,15 +154,22 @@ function createCardElement(cardObj) {
         ${cardObj.dueDate ? `<span class="task-date">📅 ${cardObj.dueDate}</span>` : ''}
     `;
 
-    // 드래그 시 투명도 애니메이션
-    card.addEventListener('dragstart', () => {
-        card.classList.add('dragging');
-        setTimeout(() => card.style.opacity = '0.5', 0);
+    // 드래그 시 쫀득한 플레이스홀더 전환
+    card.addEventListener('dragstart', (e) => {
+        card.classList.add('dragging'); // (기둥 사이 위치 계산용)
+        
+        // 브라우저가 예쁜 카드 모양을 복사(Ghost)해 가도록 아주 찰나의 시간을 준 뒤,
+        // 남은 원본 카드를 '점선 박스(placeholder)'로 변신시킵니다!
+        setTimeout(() => {
+            card.classList.add('placeholder');
+            card.style.opacity = '1'; // 투명해지지 않고 점선을 유지합니다.
+        }, 0);
     });
 
     card.addEventListener('dragend', () => {
+        // 드롭하는 순간 원래의 예쁜 카드로 샥! 돌아옵니다.
+        card.classList.remove('placeholder');
         card.classList.remove('dragging');
-        card.style.opacity = '1';
     });
 
     // 클릭 시 상세 모달 열기
@@ -166,11 +178,10 @@ function createCardElement(cardObj) {
         openDetailModal(cardObj);
     });
 
-    // 삭제 버튼
+    // 삭제 버튼 누르면 즉시 삭제하지 않고 확인 모달 띄우기
     card.querySelector('.delete-btn').addEventListener('click', () => {
-        kanbanData = kanbanData.filter(c => c.id !== cardObj.id);
-        renderBoard();
-        showToast('일정이 삭제되었습니다. 🗑️');
+        cardToDeleteId = cardObj.id; // 삭제할 ID를 타겟으로 지정
+        if(deleteModal) deleteModal.style.display = 'flex'; // 모달 열기
     });
 
     return card;
@@ -182,46 +193,106 @@ function openDetailModal(cardObj) {
     document.getElementById('edit-card-title').value = cardObj.title;
     document.getElementById('edit-card-desc').value = cardObj.desc || '';
     document.getElementById('edit-card-priority').value = cardObj.priority;
+    const pText = cardObj.priority === 'high' ? '긴급 (High)' : cardObj.priority === 'medium' ? '보통 (Medium)' : '낮음 (Low)';
+    document.getElementById('detail-priority-selected').innerText = pText; // ⭐️ 여기도 삭제
     document.getElementById('edit-card-date').value = cardObj.dueDate || '';
     detailModal.style.display = 'flex';
 }
 
 // --- 이벤트 리스너 (모달 제어) ---
 
+// 1. 빠른 할 일 추가 로직 (사이드바)
 if(modalAddBtn) {
     modalAddBtn.addEventListener('click', () => {
         const input = document.getElementById('modal-task-input');
-        if(!input.value.trim()) return;
+        const priorityInput = document.getElementById('modal-task-priority'); // ⭐️ 새로 추가된 드롭다운
+        
+        if(!input.value.trim()) return showToast('할 일을 입력해 주세요! ✏️');
+        
         kanbanData.push({
-            id: Date.now(), title: input.value, desc: '',
-            priority: 'low', dueDate: '', status: 'todo'
+            id: Date.now(), 
+            title: input.value, 
+            desc: '',
+            priority: priorityInput ? priorityInput.value : 'low', // ⭐️ 선택된 중요도 값 가져오기
+            dueDate: '', 
+            status: 'todo'
         });
+        
         renderBoard();
         input.value = '';
+        if(priorityInput) priorityInput.value = 'low'; // 다음을 위해 '낮음'으로 초기화
         taskModal.style.display = 'none';
-        showToast('새로운 할 일이 추가되었습니다. 📋');
+        showToast('빠른 할 일이 추가되었습니다. ⚡');
     });
 }
 
 // ⭐️ 상세 저장: 실시간 색상 반영 핵심!
+// 3. 상세 저장 로직: '새로 추가'와 '기존 수정' 완벽 구분!
 if(detailSaveBtn) {
     detailSaveBtn.addEventListener('click', () => {
-        const id = parseInt(document.getElementById('edit-card-id').value);
-        const cardObj = kanbanData.find(c => c.id === id);
-        if(cardObj) {
-            cardObj.title = document.getElementById('edit-card-title').value;
-            cardObj.desc = document.getElementById('edit-card-desc').value;
-            cardObj.priority = document.getElementById('edit-card-priority').value;
-            cardObj.dueDate = document.getElementById('edit-card-date').value;
-            renderBoard(); // 즉시 다시 그려서 색상 반영!
-            detailModal.style.display = 'none';
-            showToast('변경 사항이 저장되었습니다. ✨');
+        const idValue = document.getElementById('edit-card-id').value; // 숨겨진 ID 가져오기
+        const titleInput = document.getElementById('edit-card-title').value;
+        const descInput = document.getElementById('edit-card-desc').value;
+        const priorityInput = document.getElementById('edit-card-priority').value;
+        const dateInput = document.getElementById('edit-card-date').value;
+
+        if(!titleInput.trim()) return showToast('제목을 입력해 주세요! ✏️');
+
+        if (idValue === '') {
+            // ⭐️ ID가 비어있다 = 칸반 보드에서 새로 만들기를 눌렀다!
+            kanbanData.push({
+                id: Date.now(),
+                title: titleInput,
+                desc: descInput,
+                priority: priorityInput,
+                dueDate: dateInput,
+                status: 'todo' // 무조건 To Do 기둥으로 들어감
+            });
+            showToast('상세한 할 일이 추가되었습니다. 📋');
+        } else {
+            // ⭐️ ID가 있다 = 기존 카드를 클릭해서 수정 중이다!
+            const id = parseInt(idValue);
+            const cardObj = kanbanData.find(c => c.id === id);
+            if(cardObj) {
+                cardObj.title = titleInput;
+                cardObj.desc = descInput;
+                cardObj.priority = priorityInput;
+                cardObj.dueDate = dateInput;
+                showToast('변경 사항이 저장되었습니다. ✨');
+            }
         }
+        
+        renderBoard(); 
+        detailModal.style.display = 'none';
     });
 }
 
 if(modalCancelBtn) modalCancelBtn.addEventListener('click', () => { taskModal.style.display = 'none'; });
 if(detailCancelBtn) detailCancelBtn.addEventListener('click', () => { detailModal.style.display = 'none'; });
+
+// ==========================================
+// ⭐️ 삭제 확인 팝업 버튼 로직
+// ==========================================
+if(deleteConfirmBtn) {
+    deleteConfirmBtn.addEventListener('click', () => {
+        if (cardToDeleteId !== null) {
+            // 진짜로 데이터 삭제!
+            kanbanData = kanbanData.filter(c => c.id !== cardToDeleteId);
+            renderBoard(); // 화면 다시 그리기
+            
+            deleteModal.style.display = 'none'; // 팝업 닫기
+            showToast('일정이 안전하게 삭제되었습니다. 🗑️');
+            cardToDeleteId = null; // 임시 타겟 초기화
+        }
+    });
+}
+
+if(deleteCancelBtn) {
+    deleteCancelBtn.addEventListener('click', () => {
+        deleteModal.style.display = 'none'; // 취소 시 팝업만 닫기
+        cardToDeleteId = null; // 임시 타겟 초기화
+    });
+}
 
 // ⭐️ [부드러운 드래그] 기둥 사이 위치 계산 로직
 columns.forEach((column, index) => {
@@ -278,34 +349,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /**
  * [Phase 5] 스타일리시 다크 모드 스위치 연동
- */ // [Phase 5] 다크 모드 스위치 연동 구역입니다.
-const themeCheckbox = document.getElementById('theme-checkbox'); // 화면 우측 상단의 다크모드 스위치를 찾아옵니다.
-const body = document.body; // 전체 화면 배경색을 바꾸기 위해 body 태그를 통째로 가져옵니다.
-const savedTheme = localStorage.getItem('yoobiTheme'); // 사용자가 이전에 다크모드를 켰는지 기록을 찾아봅니다.
+ */ 
+const themeCheckbox = document.getElementById('theme-checkbox'); 
+const body = document.body; 
+const savedTheme = localStorage.getItem('yoobiTheme'); 
 
-if (savedTheme === 'dark') { // 찾아본 기록이 'dark'라면
-    body.classList.add('dark-mode'); // 화면 전체 요소에 'dark-mode' 옷을 입혀서 까맣게 만듭니다.
-    if (themeCheckbox) themeCheckbox.checked = true; // 스위치를 물리적으로 켠 상태로 변경합니다.
-} // if문 끝
+if (savedTheme === 'dark') { 
+    body.classList.add('dark-mode'); 
+    if (themeCheckbox) themeCheckbox.checked = true; 
+} 
 
-if (themeCheckbox) { // 다크모드 스위치 요소가 존재하는 경우에만 이벤트를 붙입니다.
-    themeCheckbox.addEventListener('change', () => { // 스위치가 켜지거나 꺼지는 변화가 생겼을 때 실행됩니다.
-        if (themeCheckbox.checked) { // 켜진 상태라면
-            body.classList.add('dark-mode'); // 까맣게 만듭니다.
-            localStorage.setItem('yoobiTheme', 'dark'); // 금고에 저장합니다.
-        } else { // 꺼진 상태라면
-            body.classList.remove('dark-mode'); // 하얗게 만듭니다.
-            localStorage.setItem('yoobiTheme', 'light'); // 금고에 저장합니다.
-        } // 조건문 끝
-    }); // 스위치 change 이벤트 리스너 끝
-} // if문 끝
+if (themeCheckbox) { 
+    themeCheckbox.addEventListener('change', () => { 
+        if (themeCheckbox.checked) { 
+            body.classList.add('dark-mode'); 
+            localStorage.setItem('yoobiTheme', 'dark'); 
+        } else { 
+            body.classList.remove('dark-mode'); 
+            localStorage.setItem('yoobiTheme', 'light'); 
+        } 
+    }); 
+} 
 
 /**
  * [Phase 7] 3페이지 유비의 캘린더 & 메모장 구동 로직
- */ // [Phase 7] 캘린더 구동 구역입니다.
-const todayDate = new Date(); // 오늘 날짜를 가져옵니다.
-let currentCalYear = todayDate.getFullYear(); // 캘린더 헤더에 띄울 연도를 저장합니다.
-let currentCalMonth = todayDate.getMonth(); // 캘린더 헤더에 띄울 월을 저장합니다.
+ */ 
+const todayDate = new Date(); 
+let currentCalYear = todayDate.getFullYear(); 
+let currentCalMonth = todayDate.getMonth(); 
 
 function renderCalendar() { 
     const titleElement = document.getElementById('calendar-title'); 
@@ -324,26 +395,25 @@ function renderCalendar() {
     const realToday = new Date(); 
     const isThisMonth = (currentCalYear === realToday.getFullYear() && currentCalMonth === realToday.getMonth()); 
 
-    // 🚨 ⭐️ 여기가 사라졌던 마의 구간! 요일 시작점을 맞춰주는 투명 빈칸 채우기!
+    // 요일 시작점을 맞춰주는 투명 빈칸 채우기
     for (let i = 0; i < startDayOfWeek; i++) { 
         const emptySlot = document.createElement('div'); 
         emptySlot.classList.add('empty'); 
         datesElement.appendChild(emptySlot); 
     } 
 
-    // ⭐️ 실제 날짜 채우기 (여기에 배지용 data-date가 들어갑니다)
+    // 실제 날짜 채우기 (배지용 data-date 포함)
     for (let day = 1; day <= totalDaysInMonth; day++) { 
         const dateSlot = document.createElement('div'); 
         dateSlot.innerText = day; 
         
-        // ⭐️ 배지 기능을 위해 날짜 번호를 심어줍니다.
         dateSlot.setAttribute('data-date', day); 
 
         if (isThisMonth && day === realToday.getDate()) { 
             dateSlot.classList.add('today'); 
         } 
 
-        // ⭐️ 날짜 클릭 시 동작 (메모 입력창 클리어 + 리스트 렌더링)
+        // 날짜 클릭 시 동작 (메모 입력창 클리어 + 리스트 렌더링)
         dateSlot.addEventListener('click', () => { 
             const isAlreadySelected = dateSlot.classList.contains('selected'); 
             if (isAlreadySelected) { 
@@ -357,16 +427,13 @@ function renderCalendar() {
                 const memoDateTitle = document.getElementById('memo-date-title');
                 if(memoDateTitle) memoDateTitle.innerText = `${currentCalYear}년 ${currentCalMonth + 1}월 ${day}일 일정`; 
 
-                // ⭐️ 클릭할 때마다 입력창을 깔끔하게 비워줍니다.
                 const memoInput = document.getElementById('memo-input');
                 if(memoInput) memoInput.value = ''; 
 
-                // ⭐️ 기존의 memoKey 대신 공통 baseKey를 사용합니다.
                 const baseKey = `${currentCalYear}_${currentCalMonth}_${day}`; 
                 const saveBtn = document.getElementById('save-memo-btn');
                 if(saveBtn) saveBtn.setAttribute('data-base-key', baseKey); 
 
-                // ⭐️ 현재 활성화된 탭에 맞춰서 데이터를 뿌려줍니다.
                 if (document.getElementById('btn-view-timeline').classList.contains('active')) {
                     const timeArray = JSON.parse(localStorage.getItem(`yoobiTimeline_${baseKey}`) || '[]');
                     renderTimeline(timeArray, `yoobiTimeline_${baseKey}`);
@@ -380,15 +447,15 @@ function renderCalendar() {
         datesElement.appendChild(dateSlot); 
     } 
     
-    // ⭐️ 달력을 다 그린 후 마지막에 메모 개수 배지를 달아줍니다!
-    updateCalendarBadges(); 
+    // 달력을 다 그린 후 마지막에 메모 개수 배지 달기
+    if(window.updateCalendarBadges) window.updateCalendarBadges(); 
 }
 
-document.addEventListener('DOMContentLoaded', () => { renderCalendar(); }); // 페이지가 열리면 달력을 1번 그립니다.
+document.addEventListener('DOMContentLoaded', () => { renderCalendar(); }); 
 
 const prevMonthBtn = document.getElementById('prev-month');
 if (prevMonthBtn) {
-    prevMonthBtn.addEventListener('click', () => { // 이전 달 버튼입니다.
+    prevMonthBtn.addEventListener('click', () => { 
         currentCalMonth--;
         if (currentCalMonth < 0) { currentCalMonth = 11; currentCalYear--; }
         renderCalendar();
@@ -397,7 +464,7 @@ if (prevMonthBtn) {
 
 const nextMonthBtn = document.getElementById('next-month');
 if (nextMonthBtn) {
-    nextMonthBtn.addEventListener('click', () => { // 다음 달 버튼입니다.
+    nextMonthBtn.addEventListener('click', () => { 
         currentCalMonth++;
         if (currentCalMonth > 11) { currentCalMonth = 0; currentCalYear++; }
         renderCalendar();
@@ -407,92 +474,80 @@ if (nextMonthBtn) {
 // ==========================================
 // 🔀 [Phase 9] 세이프 해시 라우팅 (초기 로드 최적화)
 // ==========================================
-
-let isInitialLoad = true; // ⭐️ 첫 로드인지 확인하는 깃발(Flag)을 만듭니다.
+let isInitialLoad = true; 
 
 function handleRouting() {
     const hash = window.location.hash || '#home';
-    const homeView = document.getElementById('home-view'); //
-    const dashboardView = document.getElementById('dashboard-view'); //
+    const homeView = document.getElementById('home-view'); 
+    const dashboardView = document.getElementById('dashboard-view'); 
 
     if (routeTimeout) clearTimeout(routeTimeout);
 
-    // 1. [초기 로드 대응] 첫 실행일 때는 사르르 효과 없이 즉시 화면을 세팅합니다.
     if (isInitialLoad) {
         if (hash === '#dashboard') {
-            if (homeView) homeView.classList.remove('active'); //
-            if (dashboardView) dashboardView.classList.add('active'); //
+            if (homeView) homeView.classList.remove('active'); 
+            if (dashboardView) dashboardView.classList.add('active'); 
         } else {
-            if (dashboardView) dashboardView.classList.remove('active'); //
-            if (homeView) homeView.classList.add('active'); //
+            if (dashboardView) dashboardView.classList.remove('active'); 
+            if (homeView) homeView.classList.add('active'); 
         }
-        isInitialLoad = false; // ⭐️ 첫 로드가 끝났으므로 깃발을 내립니다.
-        return; // 이후의 setTimeout 로직을 실행하지 않고 여기서 종료합니다.
+        isInitialLoad = false; 
+        return; 
     }
 
-    // 2. [이후 클릭 시] 기존의 '사르르' 효과(300ms)를 그대로 유지합니다.
-    if (homeView) homeView.classList.remove('active'); //
-    if (dashboardView) dashboardView.classList.remove('active'); //
+    if (homeView) homeView.classList.remove('active'); 
+    if (dashboardView) dashboardView.classList.remove('active'); 
 
     routeTimeout = setTimeout(() => {
         if (hash === '#dashboard') {
-            if (dashboardView) dashboardView.classList.add('active'); //
+            if (dashboardView) dashboardView.classList.add('active'); 
         } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' }); //
-            if (homeView) homeView.classList.add('active'); //
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+            if (homeView) homeView.classList.add('active'); 
         }
         routeTimeout = null;
-    }, 300); // ⭐️ 페이지 이동 시에는 부드러운 전환을 위해 300ms 대기
+    }, 300); 
 }
 
-// 브라우저 이벤트 연결
 window.addEventListener('hashchange', handleRouting);
 document.addEventListener('DOMContentLoaded', handleRouting);
 
-// 버튼 클릭 시 해시값만 변경
 if (goDashboardBtn) goDashboardBtn.addEventListener('click', () => { window.location.hash = 'dashboard'; });
 if (goToHomeBtn) goToHomeBtn.addEventListener('click', () => { window.location.hash = 'home'; });
 
 /**
  * [Phase 10 최종] Three.js WebGL: Neural Network Field
- * - 살아 숨쉬는 노드 연결망이 배경에 깔리고
- * - 마우스가 지나갈 때 근처 노드들이 네온으로 활성화되는 인터랙션
- * - 2026 포트폴리오 트렌드: Fluid Particle + Mouse Reactive
  */
 if (homeView && window.THREE) {
-    // ── 1. 씬 / 카메라 / 렌더러 ──────────────────────────────────
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 500);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 성능 과부하 방지
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
     Object.assign(renderer.domElement.style, {
-        position: 'absolute', // 부모인 home-view를 기준으로 배치합니다.
+        position: 'absolute', 
         top: '0', left: '0',
         width: '100%', height: '100%',
-        zIndex: '0',         // ⭐️ 배경색보다는 위, 글자(10)보다는 아래에 둡니다.
-        pointerEvents: 'none' // 클릭 방해 방지
+        zIndex: '0',         
+        pointerEvents: 'none' 
     });
     homeView.appendChild(renderer.domElement);
     camera.position.z = 42;
 
-    // ── 2. 노드 데이터 정의 ───────────────────────────────────────
-    const NODE_COUNT = 180;  // 노드 수 늘려서 넓게 펼쳐도 촘촘하게
-    const LINK_DIST = 9.0;  // 연결 거리도 넓혀서 선이 화면 가득 연결되게
-    const W = 98, H = 47;     // 화면 전체를 덮는 범위로 대폭 확장
+    const NODE_COUNT = 180;  
+    const LINK_DIST = 9.0;  
+    const W = 98, H = 47;     
 
-    // 각 노드의 위치, 속도, 호흡 위상을 저장
     const nodes = Array.from({ length: NODE_COUNT }, () => ({
         x: (Math.random() - 0.5) * W,
         y: (Math.random() - 0.5) * H,
         z: (Math.random() - 0.5) * 8,
-        vx: (Math.random() - 0.5) * 0.012, // 이동 속도 (매우 느림)
+        vx: (Math.random() - 0.5) * 0.012, 
         vy: (Math.random() - 0.5) * 0.008,
-        phase: Math.random() * Math.PI * 2, // 호흡 애니메이션 위상
+        phase: Math.random() * Math.PI * 2, 
     }));
 
-    // ── 3. 노드(점) 렌더링 ───────────────────────────────────────
     const nodeGeo = new THREE.BufferGeometry();
     const nodePosArr = new Float32Array(NODE_COUNT * 3);
     const nodeColorArr = new Float32Array(NODE_COUNT * 3);
@@ -516,11 +571,9 @@ if (homeView && window.THREE) {
     });
     scene.add(new THREE.Points(nodeGeo, nodeMat));
 
-    // ── 4. 연결선(엣지) 렌더링 ──────────────────────────────────
-    // 최대 연결선 수 미리 잡아두기 (동적 업데이트용)
     const MAX_LINES = NODE_COUNT * NODE_COUNT;
     const lineGeo = new THREE.BufferGeometry();
-    const linePosArr = new Float32Array(MAX_LINES * 6); // 선 하나당 두 점 (x,y,z)*2
+    const linePosArr = new Float32Array(MAX_LINES * 6); 
     const lineColorArr = new Float32Array(MAX_LINES * 6);
 
     lineGeo.setAttribute('position', new THREE.BufferAttribute(linePosArr, 3));
@@ -536,10 +589,9 @@ if (homeView && window.THREE) {
     );
     scene.add(lineMat);
 
-    // ── 5. 마우스 3D 좌표 추적 ───────────────────────────────────
     const raycaster = new THREE.Raycaster();
-    const mouseNDC = new THREE.Vector2(-9999, -9999); // 정규화 좌표 (-1~1)
-    let mouse3D = null; // 화면 평면 위의 실제 3D 좌표
+    const mouseNDC = new THREE.Vector2(-9999, -9999); 
+    let mouse3D = null; 
 
     const hitPlane = new THREE.Mesh(
         new THREE.PlaneGeometry(200, 200),
@@ -556,31 +608,27 @@ if (homeView && window.THREE) {
         mouse3D = null;
     });
 
-    // ── 6. 애니메이션 루프 ────────────────────────────────────────
     let time = 0;
 
     function animate() {
         requestAnimationFrame(animate);
         time += 0.016;
 
-        // 마우스 3D 위치 갱신
         raycaster.setFromCamera(mouseNDC, camera);
         const hits = raycaster.intersectObject(hitPlane);
         mouse3D = hits.length > 0 ? hits[0].point : null;
 
-        // 노드 이동 + 화면 경계 반사
         nodes.forEach((n, i) => {
             n.x += n.vx;
             n.y += n.vy;
             if (n.x > W / 2 || n.x < -W / 2) n.vx *= -1;
             if (n.y > H / 2 || n.y < -H / 2) n.vy *= -1;
 
-            // ⭐️ 마우스 반발력: 가까이 오면 슬쩍 밀려남 (부드러운 물결 효과)
             if (mouse3D) {
                 const dx = n.x - mouse3D.x;
                 const dy = n.y - mouse3D.y;
                 const d = Math.sqrt(dx * dx + dy * dy);
-                const REPEL = 5.0; // 반발 반경
+                const REPEL = 5.0; 
                 if (d < REPEL && d > 0.01) {
                     const force = (1 - d / REPEL) * 0.04;
                     n.x += (dx / d) * force;
@@ -588,37 +636,33 @@ if (homeView && window.THREE) {
                 }
             }
 
-            // 노드 위치 버퍼 업데이트
             nodePosArr[i * 3] = n.x;
             nodePosArr[i * 3 + 1] = n.y;
             nodePosArr[i * 3 + 2] = n.z;
 
-            // ⭐️ 노드 색상: 다크모드 여부에 따라 기본 밝기 분기
             const isDark = document.body.classList.contains('dark-mode');
             let tr = isDark ? 0.18 : 0.06;
             let tg = isDark ? 0.38 : 0.14;
             let tb = isDark ? 0.65 : 0.28;
-            const pulse = 0.5 + 0.5 * Math.sin(time * 1.2 + n.phase); // 0~1 숨쉬는 값
+            const pulse = 0.5 + 0.5 * Math.sin(time * 1.2 + n.phase); 
 
             if (mouse3D) {
                 const dx = n.x - mouse3D.x;
                 const dy = n.y - mouse3D.y;
                 const d = Math.sqrt(dx * dx + dy * dy);
-                const GLOW = 9.0; // 발광 반경
+                const GLOW = 9.0; 
                 if (d < GLOW) {
                     const intensity = (1 - d / GLOW) * (0.6 + 0.4 * pulse);
-                    tr += 0.0 * intensity; // R: 거의 안 올림 (파란 계열 유지)
-                    tg += 0.85 * intensity; // G: 강하게 올려서 시안/민트 발광
-                    tb += 1.0 * intensity; // B: 풀로 올려서 네온 블루
+                    tr += 0.0 * intensity; 
+                    tg += 0.85 * intensity; 
+                    tb += 1.0 * intensity; 
                 }
             }
 
-            // 호흡 효과: 평소에도 아주 살짝 반짝임
             tr += 0.02 * pulse;
             tg += 0.04 * pulse;
             tb += 0.07 * pulse;
 
-            // Lerp (현재 색 → 목표 색)
             nodeColorArr[i * 3] += (tr - nodeColorArr[i * 3]) * 0.12;
             nodeColorArr[i * 3 + 1] += (tg - nodeColorArr[i * 3 + 1]) * 0.12;
             nodeColorArr[i * 3 + 2] += (tb - nodeColorArr[i * 3 + 2]) * 0.12;
@@ -627,7 +671,6 @@ if (homeView && window.THREE) {
         nodeGeo.attributes.position.needsUpdate = true;
         nodeGeo.attributes.color.needsUpdate = true;
 
-        // ── 연결선 업데이트 ──────────────────────────────────────
         let lineIdx = 0;
         for (let a = 0; a < NODE_COUNT; a++) {
             for (let b = a + 1; b < NODE_COUNT; b++) {
@@ -637,11 +680,9 @@ if (homeView && window.THREE) {
                 const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
                 if (dist < LINK_DIST) {
-                    // 거리가 가까울수록 선이 밝아짐
                     const alpha = 1 - dist / LINK_DIST;
                     const isDarkLine = document.body.classList.contains('dark-mode');
 
-                    // 마우스 근접 시 연결선도 함께 발광 (다크모드는 더 밝게)
                     let lr = (isDarkLine ? 0.18 : 0.08) * alpha;
                     let lg = (isDarkLine ? 0.38 : 0.15) * alpha;
                     let lb = (isDarkLine ? 0.65 : 0.30) * alpha;
@@ -657,14 +698,12 @@ if (homeView && window.THREE) {
                     }
 
                     const base = lineIdx * 6;
-                    // 선의 시작점
                     linePosArr[base] = nodes[a].x;
                     linePosArr[base + 1] = nodes[a].y;
                     linePosArr[base + 2] = nodes[a].z;
                     lineColorArr[base] = lr;
                     lineColorArr[base + 1] = lg;
                     lineColorArr[base + 2] = lb;
-                    // 선의 끝점
                     linePosArr[base + 3] = nodes[b].x;
                     linePosArr[base + 4] = nodes[b].y;
                     linePosArr[base + 5] = nodes[b].z;
@@ -677,10 +716,9 @@ if (homeView && window.THREE) {
             }
         }
 
-        // 사용하지 않는 선 구간은 원점으로 숨기기
         for (let k = lineIdx * 6; k < MAX_LINES * 6; k++) linePosArr[k] = 0;
 
-        lineGeo.setDrawRange(0, lineIdx * 2); // 실제 사용한 선만 렌더링
+        lineGeo.setDrawRange(0, lineIdx * 2); 
         lineGeo.attributes.position.needsUpdate = true;
         lineGeo.attributes.color.needsUpdate = true;
 
@@ -688,7 +726,6 @@ if (homeView && window.THREE) {
     }
     animate();
 
-    // ── 7. 반응형 리사이징 ────────────────────────────────────────
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
@@ -696,27 +733,11 @@ if (homeView && window.THREE) {
     });
 }
 
-/**
- * [Phase 11] Admin Control & Launch Sequence
- * ⭐️ 딜레이 없이 스킵 처리 완료 ⭐️
- */
-// 어드민 제어 및 시스템 가동 로직 구역입니다. (이전 코드는 주석 처리 및 삭제됨)
-
-/**
- * [Phase 11] 스크롤 다운 기능 보정
- */
 function scrollToBoard() {
-    // ⭐️ 다음 화면인 board-container 섹션을 찾습니다.
     const target = document.querySelector('.board-container');
-
     if (target) {
-        // 스냅 스크롤 환경에서도 부드럽게 이동하도록 설정합니다.
-        target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-        // 만약 클래스명이 다를 경우를 대비해 두 번째 'page'로 이동합니다.
         const pages = document.querySelectorAll('.page');
         if (pages.length > 1) {
             pages[1].scrollIntoView({ behavior: 'smooth' });
@@ -728,33 +749,25 @@ function scrollToBoard() {
  * [Phase 12] 딥 다이내믹 쉐도우 (Deep Lighting)
  */
 const mapItems = document.querySelectorAll('.map-item');
-
 mapItems.forEach(item => {
     const content = item.querySelector('.map-content');
-
     item.addEventListener('mousemove', (e) => {
         const rect = content.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-
         const moveX = (e.clientX - centerX) / (rect.width / 2);
         const moveY = (e.clientY - centerY) / (rect.height / 2);
 
-        // ⭐️ 그림자를 조금 더 멀리 밀어서(30px) 진한 그림자의 깊이감을 살립니다.
         const shX = moveX * -5;
-        const shY = (moveY * -5) + 10; // 기본 Y축 깊이 20px
-
+        const shY = (moveY * -5) + 10; 
         content.style.setProperty('--sh-x', `${shX}px`);
         content.style.setProperty('--sh-y', `${shY}px`);
     });
-
     item.addEventListener('mouseleave', () => {
-        // 원래 위치로 복구 (부드러운 복귀를 위해 transition 활용)
         content.style.setProperty('--sh-x', '0px');
         content.style.setProperty('--sh-y', '20px');
     });
 });
-
 
 // ==========================================
 // [사이드바 구체화] 1. Status 드롭다운 로직
@@ -770,7 +783,6 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             statusMenu.classList.toggle('show');
         });
-
         statusMenu.querySelectorAll('li').forEach(item => {
             item.addEventListener('click', () => {
                 const icon = item.getAttribute('data-icon');
@@ -781,30 +793,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast(`${text} 상태로 변경되었습니다.`);
             });
         });
-
         document.addEventListener('click', () => {
             statusMenu.classList.remove('show');
         });
     }
 });
 
-
 // ==========================================
-// [Phase 13 수정] GitHub 수동 잔디 데이터 설정 (월 자동화 포함)
+// [Phase 13 수정] GitHub 수동 잔디 데이터 설정
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => { 
     const githubGrid = document.getElementById('github-grid');
-    const githubMonth = document.querySelector('.github-month'); // ⭐️ 추가: 월 글씨가 들어갈 요소를 찾습니다.
+    const githubMonth = document.querySelector('.github-month'); 
 
     if (githubGrid) {
-        // ⭐️ 추가: 현실의 달을 영문 3글자로 변환해서 자동으로 꽂아줍니다.
         if (githubMonth) {
             const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const currentMonthIndex = new Date().getMonth(); // 0(1월) ~ 11(12월)
+            const currentMonthIndex = new Date().getMonth(); 
             githubMonth.innerText = monthNames[currentMonthIndex];
         }
 
-        // 유비만의 잔디밭 패턴 배열 (5주 치)
         const myContributions = [
             0, 0, 0, 0, 0, 0, 0, 
             0, 0, 1, 2, 3, 0, 0, 
@@ -823,10 +831,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * [Phase 14 수정] 전역 중앙 토스트 시스템 (Toast Notification)
+ * [Phase 14 수정] 전역 중앙 토스트 시스템
  */
 function showToast(message) {
-    // 컨테이너 ID를 중앙 배치용으로 변경합니다.
     const container = document.getElementById('toast-center-container');
     if (!container) return;
 
@@ -835,52 +842,20 @@ function showToast(message) {
     toast.innerText = message;
 
     container.appendChild(toast);
-
-    // 강제 리플로우를 발생시켜 애니메이션이 트리거되도록 합니다.
     setTimeout(() => toast.classList.add('show'), 10);
-
     setTimeout(() => {
         toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 400); // 0.4초 뒤 요소 삭제
-    }, 3000); // 3초 뒤 숨김 시작
+        setTimeout(() => toast.remove(), 400); 
+    }, 3000); 
 }
 
 // ==========================================
-// ⭐️ 토스트 팝업 6가지 상황 연동 ⭐️
+// 🚀 [사이드바 & 칸반 액션 제어: 모든 무감 버튼 해결 및 동기화]
 // ==========================================
-
-// 2. 할 일 생성 (Add Task)
-if (modalAddBtn) {
-    modalAddBtn.addEventListener('click', () => {
-        const taskText = document.getElementById('modal-task-input').value;
-        if (taskText.trim() !== '') {
-            showToast('새로운 할 일이 추가되었습니다.');
-        }
-    });
-}
-
-// 3. 할 일 삭제 (Delete Task)
-if (deleteConfirmBtn) {
-    deleteConfirmBtn.addEventListener('click', () => {
-        if (cardToDelete) {
-            showToast('할 일이 목록에서 삭제되었습니다.');
-        }
-    });
-}
-
-// 4. 할 일 위치 이동 (Drag & Drop)
-// dragend 이벤트 리스너를 찾아서 추가해줘.
-function addDragEndListener(card) {
-    card.addEventListener('dragend', () => {
-        showToast('업무 순서가 변경되었습니다.');
-    });
-}
-
-// [사이드바 액션 제어 - 실제 구현 버전]
 const btnQuickTask = document.getElementById('btn-quick-task');
 const btnQuickNote = document.getElementById('btn-quick-note');
 
-// 1. 새로운 할 일: 모달 열기
+// 1. 새로운 할 일: 모달 열기 (사이드바 버튼)
 if (btnQuickTask) {
     btnQuickTask.addEventListener('click', () => {
         if (taskModal) {
@@ -891,18 +866,35 @@ if (btnQuickTask) {
     });
 }
 
-// 2. 데일리 메모: 전용 팝업 → 오늘 날짜 key로 바로 저장
+// 2. 칸반 보드 안의 '+ 새로운 할 일' 버튼 연결
+const addBtn = document.querySelector('.add-btn');
+if (addBtn) {
+    addBtn.addEventListener('click', () => {
+        // ⭐️ 칸반 보드에서 누르면 '상세 설정 모달'을 빈칸으로 엽니다!
+        document.getElementById('edit-card-id').value = ''; // 핵심: ID를 비워서 '수정'이 아니라 '새 카드'임을 알림
+        document.getElementById('edit-card-title').value = '';
+        document.getElementById('edit-card-desc').value = '';
+        document.getElementById('edit-card-priority').value = 'low';
+        document.getElementById('edit-card-date').value = '';
+        
+        if (detailModal) {
+            detailModal.style.display = 'flex';
+            document.getElementById('edit-card-title')?.focus(); // 제목 칸에 커서 바로 놓기
+        }
+    });
+}
+
+// 3. 데일리 메모: 전용 팝업 → 오늘 날짜 key로 바로 저장
 const dailyMemoModal = document.getElementById('daily-memo-modal');
 const dailyMemoInput = document.getElementById('daily-memo-input');
 const dailyMemoCancelBtn = document.getElementById('daily-memo-cancel-btn');
 const dailyMemoSaveBtn = document.getElementById('daily-memo-save-btn');
 const memoModalDate = document.getElementById('memo-modal-date');
 
-// 오늘 날짜 포맷 + localStorage key 생성 (캘린더와 동일한 규칙)
 function getTodayInfo() {
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth();   // 0-indexed
+    const month = now.getMonth();   
     const day = now.getDate();
     const label = `${year}년 ${month + 1}월 ${day}일`;
     const key = `yoobiMemo_${year}_${month}_${day}`;
@@ -911,12 +903,9 @@ function getTodayInfo() {
 
 if (btnQuickNote) {
     btnQuickNote.addEventListener('click', () => {
-        const { label, key } = getTodayInfo();
+        const { label } = getTodayInfo();
         if (memoModalDate) memoModalDate.innerText = `📅 ${label}`;
-        
-        // ⭐️ 버그 픽스 1: 모달을 열 때 입력창을 항상 비워줍니다. (새로운 항목 추가용)
         if (dailyMemoInput) dailyMemoInput.value = ''; 
-        
         if (dailyMemoModal) {
             dailyMemoModal.style.display = 'flex';
             if (dailyMemoInput) dailyMemoInput.focus();
@@ -924,7 +913,6 @@ if (btnQuickNote) {
     });
 }
 
-// 취소 버튼
 if (dailyMemoCancelBtn) {
     dailyMemoCancelBtn.addEventListener('click', () => {
         if (dailyMemoModal) dailyMemoModal.style.display = 'none';
@@ -932,7 +920,6 @@ if (dailyMemoCancelBtn) {
     });
 }
 
-// 저장 버튼
 if (dailyMemoSaveBtn) {
     dailyMemoSaveBtn.addEventListener('click', () => {
         const { label, key } = getTodayInfo();
@@ -943,7 +930,6 @@ if (dailyMemoSaveBtn) {
             return;
         }
 
-        // ⭐️ 리스트 방식 적용: 기존 데이터를 배열로 가져와서 새 메모 추가
         let memoArray = [];
         try {
             memoArray = JSON.parse(localStorage.getItem(key) || '[]');
@@ -954,26 +940,33 @@ if (dailyMemoSaveBtn) {
         memoArray.push(text);
         localStorage.setItem(key, JSON.stringify(memoArray));
 
-        const currentMemoKey = document.getElementById('save-memo-btn')?.getAttribute('data-key');
-        if (currentMemoKey === key) {
-            renderMemoList(memoArray, key);
+        // ⭐️ [버그 픽스] 현재 달력에서 선택된 날짜와 일치하면 즉시 화면에 띄우기!
+        const saveBtn = document.getElementById('save-memo-btn');
+        const currentSelectedBaseKey = saveBtn?.getAttribute('data-base-key');
+        const todayBaseKey = key.replace('yoobiMemo_', '');
+
+        if (currentSelectedBaseKey === todayBaseKey) {
+            const btnViewMemo = document.getElementById('btn-view-memo');
+            if (btnViewMemo && btnViewMemo.classList.contains('active')) {
+                renderMemoList(memoArray, key);
+            } else if (btnViewMemo) {
+                btnViewMemo.click(); // 타임라인 모드였다면 메모 모드로 강제 전환
+            }
         }
 
         if (dailyMemoModal) dailyMemoModal.style.display = 'none';
         showToast(`${label} 메모가 추가되었습니다. 📝`);
         
-        window.updateCalendarBadges(); // 👈 ⭐️ 데일리 메모를 써도 즉시 배지 업데이트!
+        if (window.updateCalendarBadges) window.updateCalendarBadges(); 
     });
 }
 
-// 모달 바깥 클릭 시 닫기
 if (dailyMemoModal) {
     dailyMemoModal.addEventListener('click', (e) => {
         if (e.target === dailyMemoModal) dailyMemoModal.style.display = 'none';
     });
 }
 
-// [script.js 교체] ⭐️ 무적의 캘린더 알림 업데이트 (메모는 빨간 배지, 타임라인은 파란 점)
 window.updateCalendarBadges = function() {
     const dateSlots = document.querySelectorAll('.calendar-dates div:not(.empty)');
     
@@ -985,14 +978,12 @@ window.updateCalendarBadges = function() {
         const memoArr = JSON.parse(localStorage.getItem(`yoobiMemo_${baseKey}`) || '[]');
         const timeArr = JSON.parse(localStorage.getItem(`yoobiTimeline_${baseKey}`) || '[]');
         
-        // 1. 기존에 그려진 배지와 도트를 일단 싹 청소합니다.
         const existingBadge = slot.querySelector('.event-badge');
         if(existingBadge) existingBadge.remove();
 
         const existingDot = slot.querySelector('.timeline-dot');
         if(existingDot) existingDot.remove();
 
-        // 2. [메모]가 1개 이상 있다면 기존처럼 우측 상단에 빨간 숫자 배지를 답니다.
         if (memoArr.length > 0) {
             const badge = document.createElement('span');
             badge.className = 'event-badge';
@@ -1000,7 +991,6 @@ window.updateCalendarBadges = function() {
             slot.appendChild(badge);
         }
 
-        // 3. ⭐️ [타임라인] 일정이 1개라도 있다면 하단 중앙에 파란 점을 콕 찍어줍니다. (개수 무관)
         if (timeArr.length > 0) {
             const dot = document.createElement('span');
             dot.className = 'timeline-dot';
@@ -1009,13 +999,11 @@ window.updateCalendarBadges = function() {
     });
 };
 
-// [script.js 하단 빈 공간에 새롭게 추가해 주세요]
-
 function renderMemoList(memoArray, memoKey) {
     const listContainer = document.getElementById('memo-list');
     if(!listContainer) return;
     
-    listContainer.innerHTML = ''; // 기존 목록 싹 비우기
+    listContainer.innerHTML = ''; 
     
     if(memoArray.length === 0) {
         listContainer.innerHTML = '<p style="text-align:center; color:#8b95a1; font-size:13px; margin-top: 20px;">등록된 메모가 없습니다.</p>';
@@ -1030,7 +1018,6 @@ function renderMemoList(memoArray, memoKey) {
         textSpan.className = 'memo-text';
         textSpan.innerText = text; 
         
-        // 텍스트 클릭 시 펼치기/접기
         textSpan.addEventListener('click', () => {
             textSpan.classList.toggle('expanded');
         });
@@ -1039,16 +1026,15 @@ function renderMemoList(memoArray, memoKey) {
         delBtn.className = 'delete-memo-btn';
         delBtn.innerText = '×';
         
-        // X 버튼 누르면 해당 메모만 삭제하고 배지 업데이트
         delBtn.addEventListener('click', () => {
             let currentArr = JSON.parse(localStorage.getItem(memoKey) || '[]');
-            currentArr.splice(index, 1); // 클릭한 메모만 배열에서 쏙 빼기
-            localStorage.setItem(memoKey, JSON.stringify(currentArr)); // 남은 거 다시 저장
-            renderMemoList(currentArr, memoKey); // 새로고침
+            currentArr.splice(index, 1); 
+            localStorage.setItem(memoKey, JSON.stringify(currentArr)); 
+            renderMemoList(currentArr, memoKey); 
             showToast('메모가 삭제되었습니다. 🗑️');
             
             if (window.updateCalendarBadges) {
-                window.updateCalendarBadges(); // 지웠을 때 달력 배지 업데이트!
+                window.updateCalendarBadges(); 
             }
         });
         
@@ -1061,15 +1047,13 @@ function renderMemoList(memoArray, memoKey) {
 // ==========================================
 // 🗓️ [Phase 7 업그레이드] 타임라인 & 메모 분리 제어 로직
 // ==========================================
+const saveMemoBtn = document.getElementById('save-memo-btn'); 
+const memoInput = document.getElementById('memo-input'); 
+const btnViewMemo = document.getElementById('btn-view-memo'); 
+const btnViewTimeline = document.getElementById('btn-view-timeline'); 
+const memoListArea = document.getElementById('memo-list'); 
+const plannerTimelineArea = document.getElementById('planner-timeline'); 
 
-const saveMemoBtn = document.getElementById('save-memo-btn'); // 저장 버튼
-const memoInput = document.getElementById('memo-input'); // 텍스트 입력창
-const btnViewMemo = document.getElementById('btn-view-memo'); // 메모 탭
-const btnViewTimeline = document.getElementById('btn-view-timeline'); // 타임라인 탭
-const memoListArea = document.getElementById('memo-list'); // 메모 리스트 영역
-const plannerTimelineArea = document.getElementById('planner-timeline'); // 타임라인 영역
-
-// ⭐️ 1. 탭 전환 로직 (UI 변경 및 각각의 DB 불러오기)
 if (btnViewMemo && btnViewTimeline) { 
     btnViewMemo.addEventListener('click', () => { 
         memoListArea.style.display = 'flex'; 
@@ -1077,14 +1061,13 @@ if (btnViewMemo && btnViewTimeline) {
         btnViewMemo.classList.add('active'); 
         btnViewTimeline.classList.remove('active'); 
         
-        // UI 변경: 메모 모드
         if(memoInput) memoInput.placeholder = "새로운 메모를 추가해보세요...";
         if(saveMemoBtn) saveMemoBtn.innerText = "메모 추가하기 💾";
 
         const baseKey = saveMemoBtn.getAttribute('data-base-key'); 
         if (baseKey) {
             const memoArray = JSON.parse(localStorage.getItem(`yoobiMemo_${baseKey}`) || '[]');
-            renderMemoList(memoArray, `yoobiMemo_${baseKey}`); // 메모 렌더링
+            renderMemoList(memoArray, `yoobiMemo_${baseKey}`); 
         }
     }); 
 
@@ -1094,23 +1077,21 @@ if (btnViewMemo && btnViewTimeline) {
         btnViewTimeline.classList.add('active'); 
         btnViewMemo.classList.remove('active'); 
         
-        // UI 변경: 타임라인 모드
         if(memoInput) memoInput.placeholder = "일정을 입력하세요 (예: 14:00 미팅)";
         if(saveMemoBtn) saveMemoBtn.innerText = "일정 추가하기 ⏰";
 
         const baseKey = saveMemoBtn.getAttribute('data-base-key'); 
         if (baseKey) {
             const timeArray = JSON.parse(localStorage.getItem(`yoobiTimeline_${baseKey}`) || '[]');
-            renderTimeline(timeArray, `yoobiTimeline_${baseKey}`);  // 타임라인 렌더링
+            renderTimeline(timeArray, `yoobiTimeline_${baseKey}`);  
         } 
     }); 
 } 
 
-// ⭐️ 2. 스마트 저장 버튼 로직 (어느 탭이냐에 따라 다른 금고에 저장)
 if (saveMemoBtn) {
     saveMemoBtn.addEventListener('click', () => {
         const baseKey = saveMemoBtn.getAttribute('data-base-key'); 
-        if (!baseKey) return alert('왼쪽 달력에서 날짜를 먼저 선택해주세요! 📅');
+        if (!baseKey) return showToast('왼쪽 달력에서 날짜를 먼저 선택해주세요! 📅');
 
         const text = memoInput.value.trim();
         if (!text) return showToast('내용을 입력해 주세요! ✏️');
@@ -1118,7 +1099,6 @@ if (saveMemoBtn) {
         const isTimelineMode = btnViewTimeline.classList.contains('active');
 
         if (isTimelineMode) {
-            // [타임라인 저장] 시간 포맷(00:00)이 있는지 검사!
             if (!/(\d{1,2}:\d{2})/.test(text)) {
                 return showToast('시간을 포함해주세요! (예: 14:00 미팅) ⏰');
             }
@@ -1127,25 +1107,23 @@ if (saveMemoBtn) {
             timeArray.push(text);
             localStorage.setItem(timeKey, JSON.stringify(timeArray));
             
-            renderTimeline(timeArray, timeKey); // 타임라인 즉시 새로고침
-            showToast('타임라인 일정이 추가되었습니다. ⏰'); // 알림 1개!
+            renderTimeline(timeArray, timeKey); 
+            showToast('타임라인 일정이 추가되었습니다. ⏰'); 
         } else {
-            // [일반 메모 저장]
             const memoKey = `yoobiMemo_${baseKey}`;
             const memoArray = JSON.parse(localStorage.getItem(memoKey) || '[]');
             memoArray.push(text);
             localStorage.setItem(memoKey, JSON.stringify(memoArray));
             
-            renderMemoList(memoArray, memoKey); // 메모 즉시 새로고침
-            showToast('새로운 메모가 추가되었습니다. 📝'); // 알림 1개!
+            renderMemoList(memoArray, memoKey); 
+            showToast('새로운 메모가 추가되었습니다. 📝'); 
         }
 
-        memoInput.value = ''; // 입력창 비우기
-        if (window.updateCalendarBadges) window.updateCalendarBadges(); // 배지 즉시 갱신
+        memoInput.value = ''; 
+        if (window.updateCalendarBadges) window.updateCalendarBadges(); 
     });
 }
 
-// ⭐️ 3. 완전히 새롭게 추가되는 타임라인 렌더링 함수!
 function renderTimeline(timeArray, timeKey) { 
     if (!plannerTimelineArea) return; 
     plannerTimelineArea.innerHTML = ''; 
@@ -1154,12 +1132,12 @@ function renderTimeline(timeArray, timeKey) {
         .map((text, index) => { 
             const timeMatch = text.match(/(\d{1,2}:\d{2})/); 
             return { 
-                originalIndex: index, // 나중에 지울 때를 대비해 진짜 순서를 기억해둠
+                originalIndex: index, 
                 time: timeMatch ? timeMatch[0] : '00:00', 
                 content: text.replace(/(\d{1,2}:\d{2})/, '').trim() 
             }; 
         }) 
-        .sort((a, b) => a.time.localeCompare(b.time)); // 시간순 정렬
+        .sort((a, b) => a.time.localeCompare(b.time)); 
 
     if (timelineData.length === 0) { 
         plannerTimelineArea.innerHTML = '<p style="text-align:center; color:#8b95a1; font-size:13px; margin-top: 20px;">등록된 일정이 없습니다.</p>'; 
@@ -1179,7 +1157,6 @@ function renderTimeline(timeArray, timeKey) {
             </div>
         `; 
         
-        // ❌ X 버튼 누르면 타임라인 개별 삭제
         const delBtn = div.querySelector('.delete-memo-btn');
         delBtn.addEventListener('click', () => {
             let currentArr = JSON.parse(localStorage.getItem(timeKey) || '[]');
@@ -1193,3 +1170,40 @@ function renderTimeline(timeArray, timeKey) {
         plannerTimelineArea.appendChild(div); 
     }); 
 }
+
+// ==========================================
+// ⭐️ 커스텀 드롭다운 작동 로직 (수정된 버전)
+// ==========================================
+function setupCustomDropdown(selectedId, listId, inputId) {
+    const selected = document.getElementById(selectedId);
+    const list = document.getElementById(listId);
+    const input = document.getElementById(inputId);
+
+    if (!selected || !list || !input) return;
+
+    selected.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.dropdown-list').forEach(el => {
+            if(el !== list) el.classList.remove('show');
+        });
+        list.classList.toggle('show');
+    });
+
+    list.querySelectorAll('li').forEach(item => {
+        item.addEventListener('click', () => {
+            selected.innerText = item.innerText; // ⭐️ 화살표 뺀 텍스트 적용
+            input.value = item.getAttribute('data-value');
+            list.classList.remove('show');
+        });
+    });
+}
+
+// ⭐️ 질문하신 바로 그 부분! (절대 지우면 안 됩니다)
+// 두 개의 모달 드롭다운 각각 세팅 
+setupCustomDropdown('quick-priority-selected', 'quick-priority-list', 'modal-task-priority');
+setupCustomDropdown('detail-priority-selected', 'detail-priority-list', 'edit-card-priority');
+
+// 화면 아무 곳이나 누르면 열려있는 드롭다운 닫기
+document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown-list').forEach(el => el.classList.remove('show'));
+});

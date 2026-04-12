@@ -319,9 +319,23 @@
     </div>
     <div id="task-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2>📝 새로운 할 일 추가</h2> <input type="text" id="modal-task-input" placeholder="어떤 일을 하실 건가요?">
-            <div class="modal-buttons"> <button id="modal-cancel-btn">취소</button> <button
-                    id="modal-add-btn">추가하기</button> </div>
+            <h2>⚡ 빠른 할 일 추가</h2>
+            <input type="text" id="modal-task-input" placeholder="어떤 일을 하실 건가요?">
+
+            <div class="custom-dropdown">
+                <div class="dropdown-selected" id="quick-priority-selected">낮음 (Low)</div>
+                <ul class="dropdown-list" id="quick-priority-list">
+                    <li data-value="low">낮음 (Low)</li>
+                    <li data-value="medium">보통 (Medium)</li>
+                    <li data-value="high">긴급 (High)</li>
+                </ul>
+            </div>
+            <input type="hidden" id="modal-task-priority" value="low">
+
+            <div class="modal-buttons">
+                <button id="modal-cancel-btn">취소</button>
+                <button id="modal-add-btn">추가하기</button>
+            </div>
         </div>
     </div>
 
@@ -350,9 +364,9 @@
     <div id="card-detail-modal" class="modal-overlay">
         <div class="modal-content card-detail-content">
             <h2>🧐 할 일 상세 설정</h2>
-            <input type="hidden" id="edit-card-id"> 
-            
-            <label>제목</label>
+            <input type="hidden" id="edit-card-id">
+
+            <label>제목 <span class="require-mark">*</span></label>
             <input type="text" id="edit-card-title" placeholder="할 일 제목">
             
             <label>상세 설명</label>
@@ -360,12 +374,16 @@
             
             <div class="modal-row">
                 <div>
-                    <label>우선순위</label>
-                    <select id="edit-card-priority">
-                        <option value="low">낮음 (Low)</option>
-                        <option value="medium">보통 (Medium)</option>
-                        <option value="high">긴급 (High)</option>
-                    </select>
+                    <label>우선순위 <span class="require-mark">*</span></label>
+                    <div class="custom-dropdown">
+                        <div class="dropdown-selected" id="detail-priority-selected">낮음 (Low)</div>
+                        <ul class="dropdown-list" id="detail-priority-list">
+                            <li data-value="low">낮음 (Low)</li>
+                            <li data-value="medium">보통 (Medium)</li>
+                            <li data-value="high">긴급 (High)</li>
+                        </ul>
+                    </div>
+                    <input type="hidden" id="edit-card-priority" value="low">
                 </div>
                 <div>
                     <label>마감일</label>
