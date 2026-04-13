@@ -816,7 +816,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const myContributions = [
             0, 0, 0, 0, 0, 0, 0, 
             0, 1, 2, 4, 0, 3, 0, 
-            1, 0, 0, 0, 0, 0, 0, 
+            2, 1, 0, 0, 0, 0, 0, 
             0, 0, 0, 0, 0, 0, 0, 
             0, 0, 0, 0, 0, 0, 0  
         ];
@@ -1206,4 +1206,84 @@ setupCustomDropdown('detail-priority-selected', 'detail-priority-list', 'edit-ca
 // 화면 아무 곳이나 누르면 열려있는 드롭다운 닫기
 document.addEventListener('click', () => {
     document.querySelectorAll('.dropdown-list').forEach(el => el.classList.remove('show'));
+});
+
+// 페이지 로드가 완료된 시점에 실행될 이벤트를 등록합니다.
+document.addEventListener('DOMContentLoaded', () => {
+    const backToTopBtn = document.getElementById('back-to-top'); // HTML에서 최상단 이동 버튼 요소를 가져옵니다.
+    const scrollContainer = document.querySelector('.scroll-container'); // 실제 스크롤이 일어나는 컨테이너 박스를 찾습니다.
+
+    // 버튼과 스크롤 박스가 둘 다 정상적으로 존재할 때만 로직을 실행합니다.
+    if (backToTopBtn && scrollContainer) {
+        
+        // 스냅 스크롤 박스 안에서 스크롤이 일어날 때마다 위치를 감지합니다.
+        scrollContainer.addEventListener('scroll', () => {
+            // 현재 브라우저 창의 높이(1페이지의 높이)를 가져옵니다.
+            const viewportHeight = window.innerHeight; 
+            
+            // 현재 스크롤된 높이가 1.5페이지 지점(2페이지 하단부)을 넘었는지 확인합니다.
+            // 이렇게 하면 1페이지(Home), 2페이지(Board)에서는 버튼이 안 보이고, 
+            // 3페이지(Calendar)에 도달했을 때만 버튼이 나타납니다.
+            if (scrollContainer.scrollTop > viewportHeight * 1.5) {
+                backToTopBtn.classList.add('show'); // 버튼을 쫀득하게 화면에 띄웁니다.
+            } else {
+                backToTopBtn.classList.remove('show'); // 1, 2페이지로 다시 올라가면 버튼을 숨깁니다.
+            }
+        });
+
+        // 사용자가 버튼을 클릭했을 때의 동작을 정의합니다.
+        backToTopBtn.addEventListener('click', () => {
+            // 컨테이너를 맨 위(0점)로 부드럽게 이동시킵니다.
+            scrollContainer.scrollTo({
+                top: 0,
+                behavior: 'smooth' // ⭐️ 텔레포트하지 않고 스르륵 부드럽게 올라갑니다.
+            });
+        });
+    }
+});
+
+// ==========================================
+// 📍 우측 라인 페이지네이션 (스크롤 스파이)
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    // 3개의 페이지 화면과 우측의 3개의 선을 가져옵니다.
+    const pages = document.querySelectorAll('#dashboard-view .page');
+    const pageLines = document.querySelectorAll('.page-line');
+    const scrollContainer = document.querySelector('.scroll-container');
+
+    if (pages.length === 0 || pageLines.length === 0 || !scrollContainer) return;
+
+    // 1. [스크롤 감지] 화면에 50% 이상 나타난 페이지를 추적합니다.
+    const observerOptions = {
+        root: scrollContainer,
+        rootMargin: '0px',
+        threshold: 0.5 // 화면에 절반 이상 보일 때 인식
+    };
+
+    const pageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // 현재 화면에 나타난 페이지가 몇 번째인지 알아냅니다.
+                const pageIndex = Array.from(pages).indexOf(entry.target);
+                
+                // 모든 선의 색상을 연하게 되돌린 뒤, 현재 화면에 맞는 선만 진하게 칠합니다.
+                pageLines.forEach(line => line.classList.remove('active'));
+                if(pageLines[pageIndex]) {
+                    pageLines[pageIndex].classList.add('active');
+                }
+            }
+        });
+    }, observerOptions);
+
+    // 감시 카메라를 각 페이지에 달아줍니다.
+    pages.forEach(page => pageObserver.observe(page));
+
+    // 2. [클릭 이동] 우측 선을 클릭하면 해당 페이지로 스르륵 이동합니다.
+    pageLines.forEach((line, index) => {
+        line.addEventListener('click', () => {
+            if(pages[index]) {
+                pages[index].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
 });

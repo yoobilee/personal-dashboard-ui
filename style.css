@@ -290,13 +290,14 @@ body {
 /* 🚀 4. 칸반 보드 (Phase 2) */
 /* ========================================= */
 .board-container {
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  padding: 80px 40px 40px 40px;
-  display: flex;
-  gap: 24px;
-  box-sizing: border-box;
+    width: 100%; /* 부모 요소의 전체 너비를 사용합니다. */
+    height: 100%; /* 부모 요소의 전체 높이를 사용합니다. */
+    background-color: transparent; /* 배경을 투명하게 유지하여 뒤쪽 테마가 비치게 합니다. */
+    /* ⭐️ 기존 40px이었던 우측 패딩을 100px로 늘려 페이지네이션 공간을 확보합니다. (위 우 아래 좌) */
+    padding: 80px 100px 40px 40px; 
+    display: flex; /* 내부의 3개 기둥을 가로로 배치하기 위해 플렉스 박스를 켭니다. */
+    gap: 24px; /* 기둥 사이의 간격을 24px로 띄워줍니다. */
+    box-sizing: border-box; /* 늘어난 패딩이 전체 100% 너비 안으로 포함되도록 계산 방식을 바꿉니다. */
 }
 
 .column {
@@ -735,12 +736,14 @@ body {
 /* 🚀 6. 캘린더 & 메모 (Phase 7) */
 /* ========================================= */
 .calendar-wrapper {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding: 80px 40px 40px 40px;
-  margin: 0 auto;
-  box-sizing: border-box;
+    display: flex; /* 달력과 메모장을 가로로 배치하기 위해 플렉스 박스를 켭니다. */
+    width: 100%; /* 부모 요소의 전체 너비를 사용합니다. */
+    max-width: auto; /* 최대 너비 제한을 해제합니다. */
+    height: 100%; /* 부모 요소의 전체 높이를 사용합니다. */
+    /* ⭐️ 여기도 우측 패딩을 40px에서 100px로 늘려 페이지네이션과 겹치지 않게 합니다. */
+    padding: 80px 100px 40px 40px; 
+    margin: 0 auto; /* 컨테이너를 화면 중앙에 정렬합니다. */
+    box-sizing: border-box; /* 패딩 영역이 전체 너비 안으로 계산되도록 설정합니다. */
 }
 
 .calendar-container {
@@ -2101,6 +2104,185 @@ body.dark-mode .memo-modal-date {
   color: #64748b;
 }
 
+/* 텍스트 입력창(textarea) 전용 커스텀 스크롤바 디자인을 시작합니다. */
+textarea::-webkit-scrollbar {
+    width: 8px; /* 스크롤바의 가로 너비를 8px로 얇게 핏하게 설정합니다. */
+}
+textarea::-webkit-scrollbar-track {
+    background: transparent; /* 스크롤바가 지나가는 길(트랙)의 배경을 완전히 투명하게 만듭니다. */
+}
+textarea::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15); /* 스크롤바 손잡이(썸)의 색상을 반투명한 검은색으로 설정합니다. */
+    border-radius: 10px; /* 스크롤바 손잡이의 양끝 모서리를 둥글게 깎아줍니다. */
+    border: 2px solid transparent; /* 손잡이 주변에 2px의 투명한 테두리를 주어 입력창 벽과의 여백을 만듭니다. */
+    background-clip: padding-box; /* 투명한 테두리 안쪽으로만 배경색이 칠해지도록 영역을 제한하여 슬림해 보이게 합니다. */
+}
+textarea::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3); /* 마우스를 올렸을 때 손잡이 색상을 조금 더 진하게 변경하여 반응성을 줍니다. */
+}
+body.dark-mode textarea::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2); /* 다크모드 환경에서는 손잡이를 반투명한 흰색으로 반전시킵니다. */
+}
+body.dark-mode textarea::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.4); /* 다크모드에서 마우스를 올리면 조금 더 밝은 흰색으로 변경됩니다. */
+}
+
+/* ========================================= */
+/* 💎 고도화된 리얼 글래스모피즘 Top 버튼 디자인 */
+/* ========================================= */
+
+.back-to-top-btn {
+    position: fixed; /* 브라우저 화면상의 절대 위치에 고정합니다. */
+    bottom: 40px; /* 화면 하단에서 40px 위로 배치합니다. */
+    right: 40px; /* 화면 우측에서 40px 안으로 배치합니다. */
+    width: 56px; /* 버튼의 가로 너비를 56px로 설정합니다. */
+    height: 56px; /* 버튼의 세로 높이를 56px로 설정합니다. */
+    border-radius: 20px; /* 완전한 원형보다 세련된 느낌의 부드러운 사각형 곡선을 줍니다. */
+    background: rgba(255, 255, 255, 0.12); /* 투명도를 대폭 높여 더 맑은 유리 질감을 구현합니다. */
+    backdrop-filter: blur(20px) saturate(200%); /* 배경 흐림을 강화하고 뒤쪽 색상을 더 생생하게 투영합니다. */
+    -webkit-backdrop-filter: blur(20px) saturate(200%); /* 사파리 브라우저 호환성을 위한 블러 설정입니다. */
+    border: 1px solid rgba(255, 255, 255, 0.25); /* 유리 단면처럼 아주 가늘고 밝은 테두리를 두릅니다. */
+    color: #3182f6; /* 아이콘 색상을 대시보드 시그니처 블루로 지정합니다. */
+    cursor: pointer; /* 클릭 가능한 요소임을 마우스 포인터로 표시합니다. */
+    display: flex; /* 내부 아이콘 정렬을 위해 플렉스 박스를 사용합니다. */
+    justify-content: center; /* 아이콘을 가로 중앙에 배치합니다. */
+    align-items: center; /* 아이콘을 세로 중앙에 배치합니다. */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.1); /* 외부 그림자와 내부 광택 효과를 동시에 줍니다. */
+    z-index: 1500; /* 다른 모든 UI 요소보다 항상 위에 보이도록 층수를 높게 설정합니다. */
+    opacity: 0; /* 처음에는 투명하게 숨겨진 상태로 시작합니다. */
+    visibility: hidden; /* 공간은 차지하지만 화면에는 보이지 않게 처리합니다. */
+    transform: translateY(30px) scale(0.9); /* 아래쪽에 살짝 작아진 상태로 대기시킵니다. */
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* 나타날 때 쫀득하게 튀어 오르는 바운스 효과를 줍니다. */
+}
+
+/* 스크롤이 감지되어 나타날 때의 스타일입니다. */
+.back-to-top-btn.show {
+    opacity: 1; /* 불투명도를 높여 화면에 드러냅니다. */
+    visibility: visible; /* 가시성을 활성화합니다. */
+    transform: translateY(0) scale(1); /* 원래 위치로 올라오며 정상 크기로 회복합니다. */
+}
+
+/* 마우스를 올렸을 때(Hover)의 영롱한 인터랙션입니다. */
+.back-to-top-btn:hover {
+    background: rgba(255, 255, 255, 0.35); /* 배경이 살짝 더 선명해지는 효과를 줍니다. */
+    transform: translateY(-8px) scale(1.1); /* 위로 슥 올라오며 부드럽게 커지는 반응을 줍니다. */
+    box-shadow: 0 15px 35px rgba(49, 130, 246, 0.2); /* 푸른빛 그림자가 번지며 빛나는 느낌을 더합니다. */
+    color: #1b64da; /* 아이콘 색상을 더 짙은 블루로 변경하여 강조합니다. */
+}
+
+/* 🌙 다크모드 대응 고밀도 유리 디자인 */
+body.dark-mode .back-to-top-btn {
+    background: rgba(15, 23, 42, 0.35); /* 어두운 투명 배경을 적용하여 다크모드와 조화시킵니다. */
+    border-color: rgba(255, 255, 255, 0.1); /* 테두리를 은은한 밝기로 조정합니다. */
+    color: #60a5fa; /* 다크모드 시인성을 위해 더 밝은 블루를 사용합니다. */
+}
+
+/* ========================================= */
+/* 📍 우측 미니멀 라인 페이지네이션 */
+/* ========================================= */
+
+.side-pagination {
+    position: fixed;
+    top: 50%; /* 세로 정중앙 배치 */
+    right: 40px; /* 우측 여백 */
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* 선 사이의 간격 */
+    z-index: 1000;
+}
+
+.page-line {
+    position: relative;
+    width: 20px; 
+    height: 3px; 
+    /* ⭐️ 기본 상태: 연한 토스 블루 투명도 적용 */
+    background-color: rgba(49, 130, 246, 0.2); 
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin-left: auto; 
+}
+
+/* ⭐️ 활성화된 페이지의 선 디자인 */
+.page-line.active {
+    background-color: #3182f6; 
+    width: 32px; 
+    /* 활성 선에는 은은한 푸른 광채(Glow)를 추가합니다. */
+    box-shadow: 0 0 10px rgba(49, 130, 246, 0.4);
+}
+
+.page-line:hover {
+    background-color: rgba(49, 130, 246, 0.5);
+}
+.page-line.active:hover {
+    background-color: #000000;
+}
+
+/* ========================================= */
+/* 💬 호버 시 나타나는 글래스 툴팁 */
+/* ========================================= */
+
+.page-tooltip {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-15px);
+    
+    /* ⭐️ 리얼 글래스 구현: 배경 투명도는 낮추고 블러와 채도를 높입니다. */
+    background: rgba(255, 255, 255, 0.15); 
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #191f28; /* 토스 그레이 900 */
+    white-space: nowrap;
+    
+    /* ⭐️ 유리 단면처럼 아주 얇고 밝은 테두리 */
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+}
+
+/* 툴팁 꼬리 부분도 투명하게 맞춥니다. */
+.page-tooltip::after {
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent rgba(255, 255, 255, 0.2);
+}
+
+/* 마우스를 선에 올렸을 때 툴팁이 튀어나오는 효과 */
+.page-line:hover .page-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(-10px);
+}
+
+/* 🌙 다크모드 대응 */
+body.dark-mode .page-line { background-color: rgba(96, 165, 250, 0.2); }
+body.dark-mode .page-line.active { background-color: #60a5fa; box-shadow: 0 0 12px rgba(96, 165, 250, 0.5); }
+body.dark-mode .page-line:hover { background-color: rgba(255, 255, 255, 0.5); }
+body.dark-mode .page-tooltip {
+    background: rgba(30, 41, 59, 0.4);
+    color: #f1f5f9;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .page-tooltip::after {
+    border-color: transparent transparent transparent rgba(30, 41, 59, 0.85);
+}
+
 /* ========================================= */
 /* 📱 9. 반응형 미디어 쿼리 */
 /* ========================================= */
@@ -2188,4 +2370,34 @@ body.dark-mode .memo-modal-date {
     padding: 6px 12px;
     margin-bottom: 2px;
   }
+}
+
+/* ========================================= */
+/* 💎 캘린더 메모창 글래스모피즘 슬라이드 애니메이션 */
+/* ========================================= */
+
+/* 1. 달력 컨테이너가 밀려날 때의 속도도 더 부드럽게 맞춥니다. */
+.calendar-container {
+    transition: flex 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* 2. 메모창이 숨어있을 때의 대기 상태를 설정합니다. */
+.memo-container {
+    /* ⭐️ 기존의 딱딱했던 애니메이션을 쫀득하고 우아한 곡선으로 바꿉니다. */
+    transition: 
+        flex 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), 
+        opacity 0.4s ease, 
+        padding 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), 
+        margin-left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+        
+    /* ⭐️ 평소에는 달력 뒤(오른쪽)에 살짝 작아진 상태로 대기합니다. */
+    transform: translateX(40px) scale(0.95) !important;
+    transform-origin: left center; /* 왼쪽을 축으로 삼아 펼쳐지게 합니다. */
+}
+
+/* 3. 날짜를 클릭해서 메모창이 나타날 때의 상태입니다. */
+.calendar-wrapper.show-memo .memo-container {
+    /* ⭐️ 원래 크기와 제자리로 돌아오면서 스르륵 밀려 나오는 효과를 줍니다! */
+    transform: translateX(0) scale(1) !important;
 }

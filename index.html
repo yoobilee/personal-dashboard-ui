@@ -368,10 +368,10 @@
 
             <label>제목 <span class="require-mark">*</span></label>
             <input type="text" id="edit-card-title" placeholder="할 일 제목">
-            
+
             <label>상세 설명</label>
             <textarea id="edit-card-desc" placeholder="상세한 내용을 적어주세요..."></textarea>
-            
+
             <div class="modal-row">
                 <div>
                     <label>우선순위 <span class="require-mark">*</span></label>
@@ -401,6 +401,24 @@
     <div id="toast-center-container" class="toast-center-container"></div>
     <script src="script.js"></script>
 
+    <button id="back-to-top" class="back-to-top-btn" aria-label="최상단으로 이동">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+    </button>
+
+    <nav class="side-pagination">
+        <div class="page-line active" data-target="0">
+            <span class="page-tooltip">로드맵 (Home)</span>
+        </div>
+        <div class="page-line" data-target="1">
+            <span class="page-tooltip">칸반 보드 (Board)</span>
+        </div>
+        <div class="page-line" data-target="2">
+            <span class="page-tooltip">캘린더 (Calendar)</span>
+        </div>
+    </nav>
 </body>
 
 </html>
