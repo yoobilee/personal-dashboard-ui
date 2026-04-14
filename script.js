@@ -1,16 +1,51 @@
 // ==========================================
-// [전역 변수] Phase 9/10에서 공통으로 쓰이는 변수들
+// 🚦 1. 전역 변수 및 통합 SPA 라우팅 엔진 (최상단 배치)
 // ==========================================
+let routeTimeout = null;
+let cardToDeleteId = null; 
+
 const homeView = document.getElementById('home-view');
 const dashboardView = document.getElementById('dashboard-view');
 const goDashboardBtn = document.getElementById('go-to-dashboard-btn');
-const goToHomeBtn = document.getElementById('go-to-home-btn');
+const profileImage = document.querySelector('.profile-image'); 
+const goToPortfolioBtn = document.getElementById('go-to-portfolio-btn');
 const deleteModal = document.getElementById('delete-modal'); 
 const deleteConfirmBtn = document.getElementById('delete-confirm-btn'); 
 const deleteCancelBtn = document.getElementById('delete-cancel-btn'); 
 
-let cardToDeleteId = null; // ⭐️ 삭제할 카드의 ID를 임시로 담아둘 공간
-let routeTimeout = null;
+function handleRouting() {
+    const hash = window.location.hash || '#home';
+    const views = document.querySelectorAll('.app-view');
+    const targetId = hash.replace('#', '') + '-view';
+    let targetView = document.getElementById(targetId);
+
+    if (!targetView) targetView = document.getElementById('home-view');
+
+    if (routeTimeout) clearTimeout(routeTimeout);
+
+    views.forEach(view => view.classList.remove('active'));
+
+    routeTimeout = setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (targetView) targetView.classList.add('active');
+        routeTimeout = null;
+    }, 50); 
+}
+
+window.addEventListener('hashchange', handleRouting);
+document.addEventListener('DOMContentLoaded', handleRouting);
+
+// 버튼 클릭 시 주소 변경 (사이드바 및 대문 버튼)
+if (goDashboardBtn) goDashboardBtn.addEventListener('click', () => { window.location.hash = 'dashboard'; });
+if (goToPortfolioBtn) goToPortfolioBtn.addEventListener('click', () => { window.location.hash = 'portfolio'; });
+if (profileImage) {
+    profileImage.style.cursor = 'pointer'; // 마우스를 올리면 손가락 모양으로 변하게 합니다.
+    profileImage.addEventListener('click', () => { window.location.hash = 'home'; });
+}
+
+// ==========================================
+// 🚀 여기서부터 유비님의 기존 기능 100% 원본 보존 영역
+// ==========================================
 
 /**
  * [Phase 1] 로드맵 달성도 기반 진행률 엔진 (유비 원본 보존)
@@ -68,33 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. 페이지가 처음 열렸을 때 게이지를 한 번 세팅합니다.
     updateVoyageProgress();
-
-    // ==========================================
-    // 🔀 [라우팅 추가] 뒤로가기 대응 해시 시스템
-    // ==========================================
-    function handleRouting() {
-        const hash = window.location.hash || '#home';
-        const homeView = document.getElementById('home-view');
-        const dashboardView = document.getElementById('dashboard-view');
-
-        if (hash === '#dashboard') {
-            homeView.classList.remove('active'); 
-            dashboardView.classList.add('active'); 
-        } else {
-            dashboardView.classList.remove('active'); 
-            homeView.classList.add('active'); 
-        }
-    }
-
-    window.addEventListener('hashchange', handleRouting);
-    handleRouting(); // 초기 실행
-
-    // 버튼 클릭 시 주소만 바꿔주면 위 handleRouting이 자동으로 감지합니다.
-    const goDashboardBtn = document.getElementById('go-to-dashboard-btn');
-    const goToHomeBtn = document.getElementById('go-to-home-btn');
-
-    if (goDashboardBtn) goDashboardBtn.addEventListener('click', () => window.location.hash = 'dashboard');
-    if (goToHomeBtn) goToHomeBtn.addEventListener('click', () => window.location.hash = 'home');
 });
 
 const scrollDownBtn = document.querySelector('.scroll-down-indicator'); // 화면 아래로 내려가는 화살표 버튼을 찾습니다.
@@ -471,50 +479,6 @@ if (nextMonthBtn) {
     });
 }
 
-// ==========================================
-// 🔀 [Phase 9] 세이프 해시 라우팅 (초기 로드 최적화)
-// ==========================================
-let isInitialLoad = true; 
-
-function handleRouting() {
-    const hash = window.location.hash || '#home';
-    const homeView = document.getElementById('home-view'); 
-    const dashboardView = document.getElementById('dashboard-view'); 
-
-    if (routeTimeout) clearTimeout(routeTimeout);
-
-    if (isInitialLoad) {
-        if (hash === '#dashboard') {
-            if (homeView) homeView.classList.remove('active'); 
-            if (dashboardView) dashboardView.classList.add('active'); 
-        } else {
-            if (dashboardView) dashboardView.classList.remove('active'); 
-            if (homeView) homeView.classList.add('active'); 
-        }
-        isInitialLoad = false; 
-        return; 
-    }
-
-    if (homeView) homeView.classList.remove('active'); 
-    if (dashboardView) dashboardView.classList.remove('active'); 
-
-    routeTimeout = setTimeout(() => {
-        if (hash === '#dashboard') {
-            if (dashboardView) dashboardView.classList.add('active'); 
-        } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
-            if (homeView) homeView.classList.add('active'); 
-        }
-        routeTimeout = null;
-    }, 300); 
-}
-
-window.addEventListener('hashchange', handleRouting);
-document.addEventListener('DOMContentLoaded', handleRouting);
-
-if (goDashboardBtn) goDashboardBtn.addEventListener('click', () => { window.location.hash = 'dashboard'; });
-if (goToHomeBtn) goToHomeBtn.addEventListener('click', () => { window.location.hash = 'home'; });
-
 /**
  * [Phase 10 최종] Three.js WebGL: Neural Network Field
  */
@@ -816,7 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const myContributions = [
             0, 0, 0, 0, 0, 0, 0, 
             0, 1, 2, 4, 0, 3, 0, 
-            2, 1, 0, 0, 0, 0, 0, 
+            2, 1, 1, 0, 0, 0, 0, 
             0, 0, 0, 0, 0, 0, 0, 
             0, 0, 0, 0, 0, 0, 0  
         ];
@@ -1287,3 +1251,87 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// ==========================================
+// 🔀 대문 진입점 탭 & 버튼 동기화 엔진
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.entry-tab');
+    const ctaBtn = document.getElementById('hero-cta-btn');
+
+    if (!ctaBtn || tabs.length === 0) return;
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // 1. 모든 탭에서 활성화 표시를 지우고 클릭한 탭만 켭니다.
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // 2. 선택한 탭의 타입(portfolio/dashboard)을 가져옵니다.
+            const type = tab.getAttribute('data-type');
+
+            // 3. 타입에 따라 버튼 텍스트를 즉시 변경합니다.
+            if (type === 'portfolio') {
+                ctaBtn.innerText = "View Portfolio 💼";
+                // ⭐️ 추후 포트폴리오 뷰가 완성되면 이 경로로 이동하게 됩니다.
+                ctaBtn.onclick = () => { window.location.hash = 'portfolio'; }; 
+            } else {
+                ctaBtn.innerText = "Launch Dashboard 🚀";
+                ctaBtn.onclick = () => { window.location.hash = 'dashboard'; };
+            }
+        });
+    });
+
+    // ⭐️ 초기 설정: Default로 포트폴리오 클릭 상태를 강제 실행합니다.
+    tabs[0].click();
+});
+
+// ==========================================
+// ✨ Portfolio Scroll Reveal (Intersection Observer)
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const revealEls = document.querySelectorAll('.reveal-up, .reveal-left');
+    if (!revealEls.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target); // 한 번 나타나면 해제
+            }
+        });
+    }, {
+        threshold: 0.12,      // 12% 보이면 트리거
+        rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // portfolio-view가 active될 때마다 재실행 (라우팅 후 재진입 대응)
+    const pfView = document.getElementById('portfolio-view');
+    if (pfView) {
+        const viewObserver = new MutationObserver(() => {
+            if (pfView.classList.contains('active')) {
+                // active 됐을 때 아직 안 보인 요소들 재관찰
+                document.querySelectorAll('.reveal-up:not(.is-visible), .reveal-left:not(.is-visible)')
+                    .forEach(el => observer.observe(el));
+            }
+        });
+        viewObserver.observe(pfView, { attributes: true, attributeFilter: ['class'] });
+    }
+});
+
+// 🍏 포트폴리오 뷰 전용 다이내믹 아일랜드 스크롤 핸들러
+const pfScrollArea = document.getElementById('portfolio-view');
+const islandNav = document.querySelector('.pf-dynamic-island');
+
+if (pfScrollArea && islandNav) {
+    pfScrollArea.addEventListener('scroll', () => {
+        // ⭐️ 60px 정도 내려가면 알약이 상단으로 이동하며 작아집니다.
+        if (pfScrollArea.scrollTop > 60) {
+            islandNav.classList.add('shrunk');
+        } else {
+            islandNav.classList.remove('shrunk');
+        }
+    });
+}

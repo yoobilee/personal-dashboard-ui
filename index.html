@@ -19,304 +19,469 @@
         </span>
     </label>
 
-    <div id="home-view" class="app-view">
-        <section class="page hero-page">
-            <div class="hero-container">
-                <div class="hero-text-area">
-                    <span class="hero-badge">🚀 QA Engineer to Frontend Developer</span>
-                    <h1 class="hero-title"> Do not just test code.<br /> <span class="highlight">Build the
-                            future.</span> </h1>
+    <main id="main-content">
 
-                    <p class="hero-desc"> 품질을 보증하던 꼼꼼한 시선으로, 이제는 완벽한 사용자 경험(UX)을 직접 설계합니다.<br /> 데이터와 디테일이 살아 숨 쉬는 저만의
-                        프론트엔드 관제탑을 경험해 보세요. </p>
-
-                    <div class="hero-stats">
-                        <div class="stat-box">
-                            <h4>100%</h4>
-                            <p>Passion & Detail</p>
-                        </div>
-                        <div class="stat-box">
-                            <h4>3+ Years</h4>
-                            <p>QA Experience</p>
-                        </div>
-                        <div class="stat-box">
-                            <h4>∞</h4>
-                            <p>Growth Potential</p>
-                        </div>
-                    </div>
-                    <button id="go-to-dashboard-btn" class="go-dashboard-btn">Launch Dashboard 🚀</button>
+        <div id="home-view" class="app-view">
+            <section class="page hero-page">
+                <div class="hero-entry-tabs">
+                    <span class="entry-tab active" data-type="portfolio">PORTFOLIO</span>
+                    <span class="tab-divider">|</span>
+                    <span class="entry-tab" data-type="dashboard">SYSTEM DASHBOARD</span>
                 </div>
-                <div class="hero-visual-area">
-                    <div class="glass-profile-card">
-                        <div class="profile-header">
-                            <div class="profile-avatar">👤</div>
-                            <div class="profile-info">
-                                <h3>이유비 (YooBi)</h3>
-                                <p>Frontend Developer</p>
+                <div class="hero-container">
+                    <div class="hero-text-area">
+                        <span class="hero-badge">🚀 QA Engineer to Frontend Developer</span>
+
+                        <h1 class="hero-title">
+                            Do not just test code.<br />
+                            <span class="highlight">Build the future.</span>
+                        </h1>
+
+                        <p class="hero-desc">
+                            품질을 보증하던 꼼꼼한 시선으로, 이제는 완벽한 사용자 경험(UX)을 직접 설계합니다.<br />
+                            데이터와 디테일이 살아 숨 쉬는 저만의 프론트엔드 관제탑을 경험해 보세요.
+                        </p>
+
+                        <div class="hero-stats">
+                            <div class="stat-box">
+                                <h4>100%</h4>
+                                <p>Passion & Detail</p>
+                            </div>
+                            <div class="stat-box">
+                                <h4>3+ Years</h4>
+                                <p>QA Experience</p>
+                            </div>
+                            <div class="stat-box">
+                                <h4>∞</h4>
+                                <p>Growth Potential</p>
                             </div>
                         </div>
-                        <div class="profile-body">
-                            <p><strong>Stack:</strong> HTML, CSS, Vanilla JS, React</p>
-                            <p><strong>Goal:</strong> 사용자 중심의 인터랙티브 웹 구현</p>
-                        </div>
+
+                        <button id="hero-cta-btn" class="go-dashboard-btn">View Portfolio 💼</button>
                     </div>
-                </div>
-            </div>
-        </section>
-    </div>
-    <div id="dashboard-view" class="app-view">
-
-        <aside class="sidebar">
-            <div class="profile-section">
-                <div class="profile-image">👤</div>
-                <h2 class="user-name">이유비 (YooBi LEE)</h2>
-                <p class="user-role">QA Engineer ➡ Frontend Developer</p>
-
-                <div class="status-dropdown-container">
-                    <div class="status-toggle" id="status-toggle">
-                        <span id="status-icon">🟢</span>
-                        <span id="status-text">구직 준비 중</span>
-                        <span class="status-arrow">▾</span>
-                    </div>
-                    <ul class="status-menu" id="status-menu">
-                        <li data-icon="🟢" data-text="구직 준비 중">🟢 구직 준비 중</li>
-                        <li data-icon="🔥" data-text="프로젝트 몰입">🔥 프로젝트 몰입</li>
-                        <li data-icon="📚" data-text="학습 중">📚 학습 중</li>
-                        <li data-icon="🌙" data-text="휴식 중">🌙 휴식 중</li>
-                    </ul>
-                </div>
-            </div>
-
-            <nav class="sidebar-menu">
-                <div class="menu-category">QUICK ACTIONS</div>
-                <ul class="quick-action-list">
-                    <li id="go-to-home-btn" class="action-btn">
-                        <span class="icon">🏠</span>
-                        <span class="text">대시보드 (Home)</span>
-                        <span class="action-arrow">↑</span>
-                    </li>
-
-                    <li class="nav-divider"></li>
-
-                    <li id="btn-quick-task" class="action-btn">
-                        <span class="icon">➕</span>
-                        <span class="text">새로운 할 일</span>
-                        <span class="action-arrow">＋</span>
-                    </li>
-
-                    <li id="btn-quick-note" class="action-btn">
-                        <span class="icon">📝</span>
-                        <span class="text">데일리 메모</span>
-                        <span class="action-arrow">＋</span>
-                    </li>
-
-                    <li class="nav-divider"></li>
-
-                    <a href="resume.html" class="action-btn sidebar-external-link">
-                        <span class="icon">📄</span>
-                        <span class="text">내 이력서 보기</span>
-                        <span class="link-arrow">→</span>
-                    </a>
-                </ul>
-            </nav>
-
-            <div class="sidebar-footer">
-                <div class="github-minimap-container">
-                    <div class="github-wrapper" id="github-wrapper">
-                        <a href="https://github.com/yoobilee" target="_blank" class="github-link">
-                            <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
-                                style="margin-right: 4px;">
-                                <path
-                                    d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z">
-                                </path>
-                            </svg>
-                            <span class="github-text">GitHub</span>
-                            <span class="link-arrow">↗</span>
-                        </a>
-
-                        <div class="github-tooltip">
-                            <div class="github-layout">
-                                <div class="github-days">
-                                    <span></span>
-                                    <span>Mon</span>
-                                    <span></span>
-                                    <span>Wed</span>
-                                    <span></span>
-                                    <span>Fri</span>
-                                    <span></span>
-                                </div>
-                                <div class="github-grid-container">
-                                    <div class="github-month">Mar</div>
-                                    <div class="github-grid" id="github-grid"></div>
+                    <div class="hero-visual-area">
+                        <div class="glass-profile-card">
+                            <div class="profile-header">
+                                <div class="profile-avatar">👤</div>
+                                <div class="profile-info">
+                                    <h3>이유비 (YooBi)</h3>
+                                    <p>Frontend Developer</p>
                                 </div>
                             </div>
-                            <div class="github-legend">
-                                <span>Less</span>
-                                <div class="git-cube"></div>
-                                <div class="git-cube git-lv-1"></div>
-                                <div class="git-cube git-lv-2"></div>
-                                <div class="git-cube git-lv-3"></div>
-                                <div class="git-cube git-lv-4"></div>
-                                <span>More</span>
+                            <div class="profile-body">
+                                <p><strong>Stack:</strong> HTML, CSS, Vanilla JS, React</p>
+                                <p><strong>Goal:</strong> 사용자 중심의 인터랙티브 웹 구현</p>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <p>📍 서울특별시 강동구 고덕로 130</p>
-                <p>📧 <a href="/cdn-cgi/l/email-protection#2f5640404d46014b4a596f48424e4643014c4042"
-                        style="color: inherit; text-decoration: none;"><span class="__cf_email__"
-                            data-cfemail="bfc6d0d0ddd691dbdac9ffd8d2ded6d391dcd0d2">[email&#160;protected]</span></a>
-                </p>
-            </div>
-        </aside>
-
-        <div class="scroll-container">
-            <section class="page">
-                <div class="progress-container">
-                    <div class="progress-header">
-                        <span>🛰️ 커리어 항해 달성률</span>
-                        <span id="progress-text">0%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progress-fill"></div>
-                    </div>
-                </div>
-
-                <div class="roadmap-container">
-                    <h2 class="roadmap-title">🛰️ Career Flight Path</h2>
-
-                    <div class="treasure-map-area"> <svg class="path-svg" viewBox="0 0 1400 500">
-                            <defs>
-                                <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stop-color="#3182f6" />
-                                    <stop offset="100%" stop-color="#a855f7" />
-                                </linearGradient>
-                            </defs>
-                            <path class="dotted-path"
-                                d="M 80 400 C 160 400, 200 360, 280 360 S 400 250, 480 250 S 580 300, 680 300 S 790 170, 890 170 S 1000 220, 1100 220 S 1240 100, 1320 100" />
-                        </svg>
-
-                        <div class="map-item completed" style="left: 5.7%; top: 80%;" data-phase="phase-1">
-                            <div class="map-marker">🛫</div>
-                            <div class="map-content">
-                                <h4>Phase 01</h4>
-                                <p>퇴사 및 직무 전환 준비<br>3.31 퇴사 절차 완료</p>
-                            </div>
-                        </div>
-
-                        <div class="map-item active" style="left: 20%; top: 72%;" data-phase="phase-2">
-                            <div class="map-marker">🛠️</div>
-                            <div class="map-content">
-                                <h4>Phase 02</h4>
-                                <p>포트폴리오 Project 01<br>개인 대시보드 개발 및 완성</p>
-                            </div>
-                        </div>
-
-                        <div class="map-item" style="left: 34.3%; top: 50%;" data-phase="phase-3">
-                            <div class="map-marker">📝</div>
-                            <div class="map-content">
-                                <h4>Phase 03</h4>
-                                <p>Project 02 설계 및 자격증 준비<br>가계부 프로젝트 시작 & 정처기 필기 공부</p>
-                            </div>
-                        </div>
-
-                        <div class="map-item" style="left: 48.6%; top: 60%;" data-phase="phase-4">
-                            <div class="map-marker">💰</div>
-                            <div class="map-content">
-                                <h4>Phase 04</h4>
-                                <p>Project 02 완성 및 차기작 착수<br>가계부 프로젝트 완료 & 신호등 프로젝트 시작</p>
-                            </div>
-                        </div>
-
-                        <div class="map-item" style="left: 63.6%; top: 34%;" data-phase="phase-5">
-                            <div class="map-marker">🚦</div>
-                            <div class="map-content">
-                                <h4>Phase 05</h4>
-                                <p>포트폴리오 완성 및 1차 검증<br>신호등 프로젝트 완료 & 정처기 필기 합격</p>
-                            </div>
-                        </div>
-
-                        <div class="map-item" style="left: 78.6%; top: 44%;" data-phase="phase-6">
-                            <div class="map-marker">🏅</div>
-                            <div class="map-content">
-                                <h4>Phase 06</h4>
-                                <p>취업 준비 최적화<br>3종 포트폴리오 및 이력서 최종 검수</p>
-                            </div>
-                        </div>
-
-                        <div class="map-item goal" style="left: 94.3%; top: 20%;" data-phase="phase-7">
-                            <div class="map-marker">💎</div>
-                            <div class="map-content">
-                                <h4>Final Goal</h4>
-                                <p>프론트엔드 개발자 재취업<br><strong>직무 전환 및 구직 활동 성공</strong></p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="scroll-down-indicator" onclick="scrollToBoard()">
-                    <span>Scroll Down</span>
-                    <div class="arrow">↓</div>
-                </div>
-            </section>
-
-            <section class="page">
-                <main class="board-container">
-                    <div class="column">
-                        <h3>To Do (할 일)</h3>
-                        <button class="add-btn">+ 새로운 할 일</button>
-                    </div>
-                    <div class="column">
-                        <h3>Doing (진행 중)</h3>
-                    </div>
-                    <div class="column">
-                        <h3>Done (완료)</h3>
-                    </div>
-                </main>
-            </section>
-
-            <section class="page">
-                <div class="calendar-wrapper">
-                    <div class="calendar-container">
-                        <div class="calendar-header">
-                            <button id="prev-month">◀</button>
-                            <h2 id="calendar-title">2026년 3월</h2>
-                            <button id="next-month">▶</button>
-                        </div>
-                        <div class="calendar-days">
-                            <div>일</div>
-                            <div>월</div>
-                            <div>화</div>
-                            <div>수</div>
-                            <div>목</div>
-                            <div>금</div>
-                            <div>토</div>
-                        </div>
-                        <div class="calendar-dates" id="calendar-dates">
-                        </div>
-                    </div>
-
-                    <div class="memo-container">
-                        <h3 id="memo-date-title">날짜를 선택해주세요 📅</h3>
-                        <div class="planner-tabs">
-                            <button id="btn-view-memo" class="active">메모</button>
-                            <button id="btn-view-timeline">타임라인</button>
-                        </div>
-                        <div id="memo-list" class="memo-list">
-                            <p style="text-align:center; color:#8b95a1; font-size:13px; margin-top: 20px;">등록된 메모가 없습니다.
-                            </p>
-                        </div>
-                        <div id="planner-timeline" class="planner-timeline" style="display: none;"></div>
-                        <div class="memo-input-area">
-                            <textarea id="memo-input" placeholder="새로운 메모를 추가해보세요..."></textarea>
-                            <button id="save-memo-btn">메모 추가하기 💾</button>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
-    </div>
+
+        <div id="portfolio-view" class="app-view">
+            <div class="pf-wrap">
+                <nav class="pf-dynamic-island">
+                    <div class="island-content">
+                        <a href="#home" class="island-logo">YB</a>
+
+                        <div class="island-divider"></div>
+
+                        <a href="#dashboard" class="island-btn">
+                            <span class="btn-text">Dashboard</span>
+                            <span class="btn-icon">🚀</span>
+                        </a>
+                    </div>
+                </nav>
+
+                <!-- ── HERO ── -->
+                <section class="pf-section pf-hero">
+                    <div class="pf-hero-inner reveal-up">
+                        <span class="pf-eyebrow">Frontend Developer</span>
+                        <h1 class="pf-hero-title">이유비<br><span class="pf-hero-en">YooBi LEE</span></h1>
+                        <p class="pf-hero-sub">QA 엔지니어의 꼼꼼한 시선으로<br>사용자 경험을 직접 설계합니다.</p>
+                        <div class="pf-hero-links">
+                            <a href="https://github.com/yoobilee" target="_blank" class="pf-link-btn">GitHub ↗</a>
+                            <a href="resume.html" class="pf-link-btn pf-link-ghost">Resume →</a>
+                        </div>
+                    </div>
+                    <div class="pf-hero-badge reveal-up" style="--delay:.15s">
+                        <span class="pf-badge-dot"></span>Available for work
+                    </div>
+                </section>
+
+                <!-- ── ABOUT ── -->
+                <section class="pf-section">
+                    <div class="pf-label reveal-left">About</div>
+                    <div class="pf-about-grid">
+                        <div class="pf-about-text reveal-up" style="--delay:.05s">
+                            <p>품질을 보증하던 QA 엔지니어로서 쌓은 <strong>2년+의 경험</strong>을 바탕으로, 이제는 완벽한 사용자 경험을 직접 만드는 프론트엔드 개발자로
+                                전환하고 있습니다.</p>
+                            <p>버그를 찾는 눈이 아닌, <strong>버그가 생기지 않는 코드</strong>를 짜는 개발자가 목표입니다.</p>
+                        </div>
+                        <div class="pf-stat-row reveal-up" style="--delay:.1s">
+                            <div class="pf-stat"><span class="pf-stat-num">2+</span><span class="pf-stat-label">Years
+                                    QA</span></div>
+                            <div class="pf-stat"><span class="pf-stat-num">3</span><span
+                                    class="pf-stat-label">Projects</span></div>
+                            <div class="pf-stat"><span class="pf-stat-num">∞</span><span
+                                    class="pf-stat-label">Growth</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── SKILLS ── -->
+                <section class="pf-section">
+                    <div class="pf-label reveal-left">Skills</div>
+                    <div class="pf-skills-grid">
+                        <div class="pf-skill-group reveal-up" style="--delay:.0s">
+                            <h4>Frontend</h4>
+                            <div class="pf-tag-list">
+                                <span class="pf-tag">HTML5</span>
+                                <span class="pf-tag">CSS3</span>
+                                <span class="pf-tag">JavaScript</span>
+                                <span class="pf-tag">React</span>
+                                <span class="pf-tag">Three.js</span>
+                            </div>
+                        </div>
+                        <div class="pf-skill-group reveal-up" style="--delay:.08s">
+                            <h4>QA & Tools</h4>
+                            <div class="pf-tag-list">
+                                <span class="pf-tag">Selenium</span>
+                                <span class="pf-tag">Cypress</span>
+                                <span class="pf-tag">Jest</span>
+                                <span class="pf-tag">Git</span>
+                                <span class="pf-tag">Figma</span>
+                            </div>
+                        </div>
+                        <div class="pf-skill-group reveal-up" style="--delay:.16s">
+                            <h4>Learning</h4>
+                            <div class="pf-tag-list">
+                                <span class="pf-tag pf-tag-dim">TypeScript</span>
+                                <span class="pf-tag pf-tag-dim">Next.js</span>
+                                <span class="pf-tag pf-tag-dim">Node.js</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── EXPERIENCE ── -->
+                <section class="pf-section">
+                    <div class="pf-label reveal-left">Experience</div>
+                    <div class="pf-timeline">
+                        <div class="pf-tl-item reveal-up" style="--delay:.0s">
+                            <div class="pf-tl-dot"></div>
+                            <div class="pf-tl-body">
+                                <div class="pf-tl-head">
+                                    <strong>Senior QA Engineer</strong>
+                                    <span class="pf-tl-date">2023 — 2025.03</span>
+                                </div>
+                                <p class="pf-tl-company">OO 테크</p>
+                                <ul class="pf-tl-list">
+                                    <li>서비스 품질 보증 프로세스 설계 및 리딩</li>
+                                    <li>자동화 테스트 스크립트 작성 및 릴리즈 안정성 확보</li>
+                                    <li>UX 개선점 제안 및 기획 협업</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── PROJECTS ── -->
+                <section class="pf-section">
+                    <div class="pf-label reveal-left">Projects</div>
+                    <div class="pf-projects">
+                        <div class="pf-project-card reveal-up" style="--delay:.0s">
+                            <div class="pf-proj-num">01</div>
+                            <div class="pf-proj-body">
+                                <h3>Personal Dashboard</h3>
+                                <p>글래스모피즘 기반의 개인화 관제탑. Three.js Neural Network 배경, 칸반 보드, 캘린더, 커리어 로드맵을 하나의 SPA로 구현.</p>
+                                <div class="pf-tag-list">
+                                    <span class="pf-tag">Vanilla JS</span>
+                                    <span class="pf-tag">Three.js</span>
+                                    <span class="pf-tag">CSS3</span>
+                                </div>
+                            </div>
+                            <a href="#" class="pf-proj-link">View →</a>
+                        </div>
+                        <div class="pf-project-card reveal-up" style="--delay:.1s">
+                            <div class="pf-proj-num">02</div>
+                            <div class="pf-proj-body">
+                                <h3>가계부 앱 <span class="pf-wip">WIP</span></h3>
+                                <p>수입/지출 시각화와 카테고리별 분석 기능을 갖춘 개인 가계부 웹 애플리케이션.</p>
+                                <div class="pf-tag-list">
+                                    <span class="pf-tag">React</span>
+                                    <span class="pf-tag">Chart.js</span>
+                                </div>
+                            </div>
+                            <a href="#" class="pf-proj-link">View →</a>
+                        </div>
+                        <div class="pf-project-card reveal-up" style="--delay:.2s">
+                            <div class="pf-proj-num">03</div>
+                            <div class="pf-proj-body">
+                                <h3>신호등 프로젝트 <span class="pf-wip">WIP</span></h3>
+                                <p>Coming soon.</p>
+                                <div class="pf-tag-list">
+                                    <span class="pf-tag pf-tag-dim">TBD</span>
+                                </div>
+                            </div>
+                            <a href="#" class="pf-proj-link pf-proj-link-dim">Soon</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── FOOTER ── -->
+                <footer class="pf-footer reveal-up">
+                    <p>© 2026 YooBi LEE · Built with 💙</p>
+                    <a href="mailto:yoobi.dev@gmail.com" class="pf-footer-mail">yoobi.dev@gmail.com</a>
+                </footer>
+
+            </div>
+        </div>
+
+        <div id="dashboard-view" class="app-view">
+
+            <aside class="sidebar">
+                <div class="profile-section">
+                    <div class="profile-image">👤</div>
+                    <h2 class="user-name">이유비 (YooBi LEE)</h2>
+                    <p class="user-role">QA Engineer ➡ Frontend Developer</p>
+
+                    <div class="status-dropdown-container">
+                        <div class="status-toggle" id="status-toggle">
+                            <span id="status-icon">🟢</span>
+                            <span id="status-text">구직 준비 중</span>
+                            <span class="status-arrow">▾</span>
+                        </div>
+                        <ul class="status-menu" id="status-menu">
+                            <li data-icon="🟢" data-text="구직 준비 중">🟢 구직 준비 중</li>
+                            <li data-icon="🔥" data-text="프로젝트 몰입">🔥 프로젝트 몰입</li>
+                            <li data-icon="📚" data-text="학습 중">📚 학습 중</li>
+                            <li data-icon="🌙" data-text="휴식 중">🌙 휴식 중</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <nav class="sidebar-menu">
+                    <div class="menu-category">QUICK ACTIONS</div>
+                    <ul class="quick-action-list">
+
+                        <li id="go-to-portfolio-btn" class="action-btn">
+                            <span class="icon">💼</span>
+                            <span class="text">포트폴리오</span>
+                            <span class="action-arrow">→</span>
+                        </li>
+
+                        <li class="nav-divider"></li>
+
+                        <li id="btn-quick-task" class="action-btn">
+                            <span class="icon">➕</span>
+                            <span class="text">새로운 할 일</span>
+                            <span class="action-arrow">＋</span>
+                        </li>
+                        <li id="btn-quick-note" class="action-btn">
+                            <span class="icon">📝</span>
+                            <span class="text">데일리 메모</span>
+                            <span class="action-arrow">＋</span>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="github-minimap-container">
+                        <div class="github-wrapper" id="github-wrapper">
+                            <a href="https://github.com/yoobilee" target="_blank" class="github-link">
+                                <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"
+                                    style="margin-right: 4px;">
+                                    <path
+                                        d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z">
+                                    </path>
+                                </svg>
+                                <span class="github-text">GitHub</span>
+                                <span class="link-arrow">↗</span>
+                            </a>
+                            <div class="github-tooltip">
+                                <div class="github-layout">
+                                    <div class="github-days">
+                                        <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
+                                    </div>
+                                    <div class="github-grid-container">
+                                        <div class="github-month">Mar</div>
+                                        <div class="github-grid" id="github-grid"></div>
+                                    </div>
+                                </div>
+                                <div class="github-legend">
+                                    <span>Less</span>
+                                    <div class="git-cube"></div>
+                                    <div class="git-cube git-lv-1"></div>
+                                    <div class="git-cube git-lv-2"></div>
+                                    <div class="git-cube git-lv-3"></div>
+                                    <div class="git-cube git-lv-4"></div>
+                                    <span>More</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>📍 서울특별시 강동구 고덕로 130</p>
+                    <p>📧 <a href="/cdn-cgi/l/email-protection#2f5640404d46014b4a596f48424e4643014c4042"
+                            style="color: inherit; text-decoration: none;"><span class="__cf_email__"
+                                data-cfemail="bfc6d0d0ddd691dbdac9ffd8d2ded6d391dcd0d2">[email&#160;protected]</span></a>
+                    </p>
+                </div>
+            </aside>
+
+            <div class="scroll-container">
+                <section class="page">
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span>🛰️ 커리어 항해 달성률</span>
+                            <span id="progress-text">0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="roadmap-container">
+                        <h2 class="roadmap-title">🛰️ Career Flight Path</h2>
+                        <div class="treasure-map-area"> <svg class="path-svg" viewBox="0 0 1400 500">
+                                <defs>
+                                    <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#3182f6" />
+                                        <stop offset="100%" stop-color="#a855f7" />
+                                    </linearGradient>
+                                </defs>
+                                <path class="dotted-path"
+                                    d="M 80 400 C 160 400, 200 360, 280 360 S 400 250, 480 250 S 580 300, 680 300 S 790 170, 890 170 S 1000 220, 1100 220 S 1240 100, 1320 100" />
+                            </svg>
+                            <div class="map-item completed" style="left: 5.7%; top: 80%;" data-phase="phase-1">
+                                <div class="map-marker">🛫</div>
+                                <div class="map-content">
+                                    <h4>Phase 01</h4>
+                                    <p>퇴사 및 직무 전환 준비<br>3.31 퇴사 절차 완료</p>
+                                </div>
+                            </div>
+                            <div class="map-item active" style="left: 20%; top: 72%;" data-phase="phase-2">
+                                <div class="map-marker">🛠️</div>
+                                <div class="map-content">
+                                    <h4>Phase 02</h4>
+                                    <p>포트폴리오 Project 01<br>개인 대시보드 개발 및 완성</p>
+                                </div>
+                            </div>
+                            <div class="map-item" style="left: 34.3%; top: 50%;" data-phase="phase-3">
+                                <div class="map-marker">📝</div>
+                                <div class="map-content">
+                                    <h4>Phase 03</h4>
+                                    <p>Project 02 설계 및 자격증 준비<br>가계부 프로젝트 시작 & 정처기 필기 공부</p>
+                                </div>
+                            </div>
+                            <div class="map-item" style="left: 48.6%; top: 60%;" data-phase="phase-4">
+                                <div class="map-marker">💰</div>
+                                <div class="map-content">
+                                    <h4>Phase 04</h4>
+                                    <p>Project 02 완성 및 차기작 착수<br>가계부 프로젝트 완료 & 신호등 프로젝트 시작</p>
+                                </div>
+                            </div>
+                            <div class="map-item" style="left: 63.6%; top: 34%;" data-phase="phase-5">
+                                <div class="map-marker">🚦</div>
+                                <div class="map-content">
+                                    <h4>Phase 05</h4>
+                                    <p>포트폴리오 완성 및 1차 검증<br>신호등 프로젝트 완료 & 정처기 필기 합격</p>
+                                </div>
+                            </div>
+                            <div class="map-item" style="left: 78.6%; top: 44%;" data-phase="phase-6">
+                                <div class="map-marker">🏅</div>
+                                <div class="map-content">
+                                    <h4>Phase 06</h4>
+                                    <p>취업 준비 최적화<br>3종 포트폴리오 및 이력서 최종 검수</p>
+                                </div>
+                            </div>
+                            <div class="map-item goal" style="left: 94.3%; top: 20%;" data-phase="phase-7">
+                                <div class="map-marker">💎</div>
+                                <div class="map-content">
+                                    <h4>Final Goal</h4>
+                                    <p>프론트엔드 개발자 재취업<br><strong>직무 전환 및 구직 활동 성공</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scroll-down-indicator" onclick="scrollToBoard()">
+                        <span>Scroll Down</span>
+                        <div class="arrow">↓</div>
+                    </div>
+                </section>
+
+                <section class="page">
+                    <div class="board-container">
+                        <div class="column">
+                            <h3>To Do (할 일)</h3>
+                            <button class="add-btn">+ 새로운 할 일</button>
+                        </div>
+                        <div class="column">
+                            <h3>Doing (진행 중)</h3>
+                        </div>
+                        <div class="column">
+                            <h3>Done (완료)</h3>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="page">
+                    <div class="calendar-wrapper">
+                        <div class="calendar-container">
+                            <div class="calendar-header">
+                                <button id="prev-month">◀</button>
+                                <h2 id="calendar-title">2026년 3월</h2>
+                                <button id="next-month">▶</button>
+                            </div>
+                            <div class="calendar-days">
+                                <div>일</div>
+                                <div>월</div>
+                                <div>화</div>
+                                <div>수</div>
+                                <div>목</div>
+                                <div>금</div>
+                                <div>토</div>
+                            </div>
+                            <div class="calendar-dates" id="calendar-dates"></div>
+                        </div>
+                        <div class="memo-container">
+                            <h3 id="memo-date-title">날짜를 선택해주세요 📅</h3>
+                            <div class="planner-tabs">
+                                <button id="btn-view-memo" class="active">메모</button>
+                                <button id="btn-view-timeline">타임라인</button>
+                            </div>
+                            <div id="memo-list" class="memo-list">
+                                <p style="text-align:center; color:#8b95a1; font-size:13px; margin-top: 20px;">등록된 메모가
+                                    없습니다.</p>
+                            </div>
+                            <div id="planner-timeline" class="planner-timeline" style="display: none;"></div>
+                            <div class="memo-input-area">
+                                <textarea id="memo-input" placeholder="새로운 메모를 추가해보세요..."></textarea>
+                                <button id="save-memo-btn">메모 추가하기 💾</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <button id="back-to-top" class="back-to-top-btn" aria-label="최상단으로 이동">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <nav class="side-pagination">
+            <div class="page-line active" data-target="0">
+                <span class="page-tooltip">로드맵 (Home)</span>
+            </div>
+            <div class="page-line" data-target="1">
+                <span class="page-tooltip">칸반 보드 (Board)</span>
+            </div>
+            <div class="page-line" data-target="2">
+                <span class="page-tooltip">캘린더 (Calendar)</span>
+            </div>
+        </nav>
+    </main>
     <div id="task-modal" class="modal-overlay">
         <div class="modal-content">
             <h2>⚡ 빠른 할 일 추가</h2>
@@ -400,25 +565,6 @@
 
     <div id="toast-center-container" class="toast-center-container"></div>
     <script src="script.js"></script>
-
-    <button id="back-to-top" class="back-to-top-btn" aria-label="최상단으로 이동">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
-                stroke-linejoin="round" />
-        </svg>
-    </button>
-
-    <nav class="side-pagination">
-        <div class="page-line active" data-target="0">
-            <span class="page-tooltip">로드맵 (Home)</span>
-        </div>
-        <div class="page-line" data-target="1">
-            <span class="page-tooltip">칸반 보드 (Board)</span>
-        </div>
-        <div class="page-line" data-target="2">
-            <span class="page-tooltip">캘린더 (Calendar)</span>
-        </div>
-    </nav>
 </body>
 
 </html>
