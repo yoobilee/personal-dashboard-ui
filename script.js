@@ -13,6 +13,8 @@ const deleteModal = document.getElementById('delete-modal');
 const deleteConfirmBtn = document.getElementById('delete-confirm-btn'); 
 const deleteCancelBtn = document.getElementById('delete-cancel-btn'); 
 
+// script.js 상단의 handleRouting 함수 내부 수정
+
 function handleRouting() {
     const hash = window.location.hash || '#home';
     const views = document.querySelectorAll('.app-view');
@@ -23,11 +25,21 @@ function handleRouting() {
 
     if (routeTimeout) clearTimeout(routeTimeout);
 
-    views.forEach(view => view.classList.remove('active'));
+    // ⭐️ 1. 새로 나타날 뷰를 먼저 최상단(z-index)으로 끌어올려 덮을 준비를 합니다.
+    targetView.style.zIndex = '20'; 
 
     routeTimeout = setTimeout(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        if (targetView) targetView.classList.add('active');
+        
+        // ⭐️ 2. 모든 뷰의 불투명도를 끄고, 타겟만 켭니다.
+        views.forEach(view => {
+            if(view !== targetView) {
+                view.classList.remove('active');
+                view.style.zIndex = '1'; // 나머지 뷰는 뒤로 보냅니다.
+            }
+        });
+        
+        targetView.classList.add('active');
         routeTimeout = null;
     }, 50); 
 }
@@ -133,16 +145,22 @@ let kanbanData = []; // ⭐️ 모든 데이터의 심장
 // ⭐️ [함수 1] 화면을 새로 그리는 핵심 (State -> UI)
 function renderBoard() {
     columns.forEach(col => {
-        col.querySelectorAll('.task-card').forEach(card => card.remove());
+        // 기둥 내부의 .task-list 영역을 찾습니다.
+        const list = col.querySelector('.task-list');
+        // 기존에 그려졌던 카드들만 쏙쏙 골라 삭제합니다.
+        list.querySelectorAll('.task-card').forEach(card => card.remove());
     });
 
     kanbanData.forEach(cardObj => {
+        // 데이터를 기반으로 새 카드 요소를 생성합니다.
         const cardEl = createCardElement(cardObj);
+        // 상태에 따라 몇 번째 기둥에 넣을지 결정합니다.
         const colIdx = cardObj.status === 'todo' ? 0 : cardObj.status === 'doing' ? 1 : 2;
-        columns[colIdx].appendChild(cardEl);
+        // ⭐️ 해당 기둥의 .task-list 바구니 안에 카드를 집어넣습니다.
+        columns[colIdx].querySelector('.task-list').appendChild(cardEl);
     });
     
-    // ⭐️ 데이터 저장 (금고 v2)
+    // 변경된 데이터를 로컬 스토리지에 저장합니다.
     localStorage.setItem('yoobiTasks_v2', JSON.stringify(kanbanData));
 }
 
@@ -302,21 +320,25 @@ if(deleteCancelBtn) {
     });
 }
 
-// ⭐️ [부드러운 드래그] 기둥 사이 위치 계산 로직
+// ⭐️ [수정] 드래그 오버 로직: 이제 드래그 대상은 .task-list입니다.
 columns.forEach((column, index) => {
-    column.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        const draggingCard = document.querySelector('.dragging');
-        const afterElement = getDragAfterElement(column, e.clientY);
+    // 기둥 내의 리스트 영역을 타겟으로 잡습니다.
+    const list = column.querySelector('.task-list');
+    
+    list.addEventListener('dragover', (e) => {
+        e.preventDefault(); // 기본 드롭 방지 기능을 해제합니다.
+        const draggingCard = document.querySelector('.dragging'); // 드래그 중인 카드를 찾습니다.
+        const afterElement = getDragAfterElement(list, e.clientY); // 삽입될 위치를 계산합니다.
         
         if (afterElement == null) {
-            column.appendChild(draggingCard);
+            list.appendChild(draggingCard); // 리스트의 맨 마지막에 추가합니다.
         } else {
-            column.insertBefore(draggingCard, afterElement);
+            list.insertBefore(draggingCard, afterElement); // 계산된 위치 앞에 끼워넣습니다.
         }
     });
 
-    column.addEventListener('drop', () => {
+    // 카드를 떨어뜨렸을(Drop) 때의 상태 변경 로직입니다.
+    list.addEventListener('drop', () => {
         const draggingCard = document.querySelector('.dragging');
         if (draggingCard) {
             const cardId = parseInt(draggingCard.dataset.id);
@@ -325,7 +347,7 @@ columns.forEach((column, index) => {
             
             if (cardObj.status !== newStatus) {
                 cardObj.status = newStatus;
-                renderBoard(); 
+                renderBoard(); // 상태가 변했으므로 화면을 다시 그립니다.
                 showToast(`상태 변경: ${newStatus.toUpperCase()} 🚀`);
             }
         }
@@ -780,7 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const myContributions = [
             0, 0, 0, 0, 0, 0, 0, 
             0, 1, 2, 4, 0, 3, 0, 
-            2, 1, 1, 0, 0, 0, 0, 
+            2, 1, 1, 1, 0, 0, 0, 
             0, 0, 0, 0, 0, 0, 0, 
             0, 0, 0, 0, 0, 0, 0  
         ];
