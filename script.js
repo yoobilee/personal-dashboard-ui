@@ -802,7 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const myContributions = [
             0, 0, 0, 0, 0, 0, 0, 
             0, 1, 2, 4, 0, 3, 0, 
-            2, 1, 1, 1, 0, 0, 0, 
+            2, 1, 1, 1, 0, 0, 1, 
             0, 0, 0, 0, 0, 0, 0, 
             0, 0, 0, 0, 0, 0, 0  
         ];
@@ -1210,7 +1210,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 현재 스크롤된 높이가 1.5페이지 지점(2페이지 하단부)을 넘었는지 확인합니다.
             // 이렇게 하면 1페이지(Home), 2페이지(Board)에서는 버튼이 안 보이고, 
             // 3페이지(Calendar)에 도달했을 때만 버튼이 나타납니다.
-            if (scrollContainer.scrollTop > viewportHeight * 1.5) {
+            if (scrollContainer.scrollTop > viewportHeight * 0.5) {
                 backToTopBtn.classList.add('show'); // 버튼을 쫀득하게 화면에 띄웁니다.
             } else {
                 backToTopBtn.classList.remove('show'); // 1, 2페이지로 다시 올라가면 버튼을 숨깁니다.
@@ -1357,3 +1357,99 @@ if (pfScrollArea && islandNav) {
         }
     });
 }
+
+// 📦 4페이지: 지식 보관소 데이터 (실제 링크 적용 완료) // 지식 보관소 섹션의 데이터를 정의하는 부분입니다.
+const archiveData = [ // 아카이브 데이터 객체들을 담을 배열을 선언합니다.
+    { // 첫 번째 카드 데이터 객체의 시작을 알립니다.
+        title: "React 19 신기능 정리", // 화면에 표시될 카드의 주 제목을 문자열로 설정합니다.
+        desc: "Action API와 컴파일러 도입으로 변하는 개발 패러다임", // 제목 아래에 들어갈 상세한 설명을 설정합니다.
+        category: "react", // 탭 클릭 시 필터링 기준으로 사용될 카테고리 값을 'react'로 지정합니다.
+        icon: "⚛️", // 카드 좌측 상단 태그 옆에 표시될 이모지 아이콘을 설정합니다.
+        link: "https://react.dev/blog/2024/04/25/react-19" // 리액트 공식 블로그의 19 버전 발표 게시글 URL을 연결합니다.
+    }, // 첫 번째 데이터 객체를 닫습니다.
+    { // 두 번째 카드 데이터 객체의 시작을 알립니다.
+        title: "정처기 필기 핵심 요약", // 화면에 표시될 카드의 주 제목을 문자열로 설정합니다.
+        desc: "데이터베이스와 소프트웨어 설계 파트 집중 공략", // 제목 아래에 들어갈 상세한 설명을 설정합니다.
+        category: "cs", // 탭 클릭 시 필터링 기준으로 사용될 카테고리 값을 'cs'로 지정합니다.
+        icon: "📖", // 카드 좌측 상단 태그 옆에 표시될 책 모양 이모지 아이콘을 설정합니다.
+        link: "https://github.com/Kwonputer/Information-Processing-Engineer" // 정보처리기사 필기 핵심 요약이 잘 정리된 깃허브 레포지토리 URL을 연결합니다.
+    }, // 두 번째 데이터 객체를 닫습니다.
+    { // 세 번째 카드 데이터 객체의 시작을 알립니다.
+        title: "Toss 디자인 시스템 분석", // 화면에 표시될 카드의 주 제목을 문자열로 설정합니다.
+        desc: "사용자 중심의 인터랙션을 위한 UX 디테일 학습", // 제목 아래에 들어갈 상세한 설명을 설정합니다.
+        category: "design", // 탭 클릭 시 필터링 기준으로 사용될 카테고리 값을 'design'으로 지정합니다.
+        icon: "🎨", // 카드 좌측 상단 태그 옆에 표시될 팔레트 모양 이모지 아이콘을 설정합니다.
+        link: "https://toss.tech/article/Various-attempts-to-solve-the-problem" // 토스 테크 블로그의 디자인 시스템(TDS) 테이블 구축기 아티클 URL을 연결합니다.
+    }, // 세 번째 데이터 객체를 닫습니다.
+    { // 네 번째 카드 데이터 객체의 시작을 알립니다.
+        title: "QA에서 Dev로 넘어가기", // 화면에 표시될 카드의 주 제목을 문자열로 설정합니다.
+        desc: "품질 보증 경험을 프론트엔드 강점으로 승화하는 법", // 제목 아래에 들어갈 상세한 설명을 설정합니다.
+        category: "qa", // 탭 클릭 시 필터링 기준으로 사용될 카테고리 값을 'qa'로 지정합니다.
+        icon: "🚀", // 카드 좌측 상단 태그 옆에 표시될 로켓 모양 이모지 아이콘을 설정합니다.
+        link: "https://velog.io/search?q=QA%EC%97%90%EC%84%9C+%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C" // QA에서 프론트엔드 개발자로 전향한 회고록들을 모아볼 수 있는 벨로그 검색 결과 URL을 연결합니다.
+    }, // 네 번째 데이터 객체를 닫습니다.
+    { // 다섯 번째 카드 데이터 객체의 시작을 알립니다.
+        title: "Cypress E2E 가이드", // 화면에 표시될 카드의 주 제목을 문자열로 설정합니다.
+        desc: "웹 애플리케이션의 안정성을 위한 자동화 테스트 기초", // 제목 아래에 들어갈 상세한 설명을 설정합니다.
+        category: "qa", // 탭 클릭 시 필터링 기준으로 사용될 카테고리 값을 'qa'로 지정합니다.
+        icon: "🧪", // 카드 좌측 상단 태그 옆에 표시될 실험관 모양 이모지 아이콘을 설정합니다.
+        link: "https://velog.io/@_woogie/E2E%ED%85%8C%EC%8A%A4%ED%8A%B8-with-Cypress" // Cypress를 활용한 E2E 테스트 환경 구축 가이드가 상세히 적힌 벨로그 URL을 연결합니다.
+    } // 다섯 번째 데이터 객체를 닫습니다.
+]; // 데이터 배열의 선언을 완전히 마칩니다.
+
+// 지식 보관소 카드를 화면에 그려주는 함수입니다.
+function renderArchive(filter = 'all') { 
+    // 카드가 담길 그리드 컨테이너 요소를 가져옵니다.
+    const grid = document.getElementById('archive-grid'); 
+    // 만약 그리드 요소가 존재하지 않는다면 함수 실행을 즉시 중단합니다.
+    if (!grid) return; 
+
+    // 새로운 카드를 그리기 전에 기존에 있던 카드들을 깨끗이 비웁니다.
+    grid.innerHTML = ''; 
+    // 선택된 카테고리에 맞는 데이터만 골라냅니다.
+    const filtered = filter === 'all' ? archiveData : archiveData.filter(d => d.category === filter); 
+
+    // 필터링된 데이터 배열을 하나씩 돌면서 카드를 만듭니다.
+    filtered.forEach(data => { 
+        // 카드 역할을 할 'a' (링크) 태그를 생성합니다.
+        const card = document.createElement('a'); 
+        // 생성한 태그의 이동 주소(href)를 데이터의 링크 값으로 설정합니다.
+        card.href = data.link; 
+        // CSS 스타일링을 위해 'archive-card' 클래스를 부여합니다.
+        card.className = 'archive-card'; 
+        
+        // target 속성을 _blank로 설정하여 클릭 시 새 창/탭이 뜨게 합니다.
+        card.target = '_blank'; 
+        // 새 창 열기 시 보안 취약점을 방지하기 위해 rel 속성을 추가합니다.
+        card.rel = 'noopener noreferrer'; 
+
+        // ⭐️ 해결된 부분: 배열(Array)을 사용해 JS 주석과 HTML 코드를 완벽히 분리했습니다!
+        card.innerHTML = [
+            '<div class="arc-top">', // 카드 상단 영역을 생성합니다.
+            `    <span class="arc-icon">${data.icon}</span>`, // 데이터에 정의된 이모지 아이콘을 표시합니다.
+            `    <span class="arc-tag">${data.category}</span>`, // 해당 카드의 카테고리 태그를 표시합니다.
+            '</div>', // 상단 영역을 닫습니다.
+            '<div class="arc-body">', // 카드 본문(텍스트) 영역을 생성합니다.
+            `    <h3>${data.title}</h3>`, // 데이터에 정의된 게시글 제목을 제목 태그로 표시합니다.
+            `    <p>${data.desc}</p>`, // 게시글에 대한 요약 설명을 단락 태그로 표시합니다.
+            '</div>' // 본문 영역을 닫습니다.
+        ].join(''); // 배열 안의 코드 조각들을 하나의 완전한 HTML 문자열로 싹 합칩니다.
+
+        // 완성된 카드 요소를 그리드 컨테이너 안에 최종적으로 집어넣습니다.
+        grid.appendChild(card); 
+    }); // 반복문 실행을 마칩니다.
+} // renderArchive 함수 정의를 마칩니다.
+
+// 필터 버튼 클릭 이벤트
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderArchive(btn.dataset.category);
+    });
+});
+
+// 초기화
+document.addEventListener('DOMContentLoaded', () => {
+    renderArchive();
+});

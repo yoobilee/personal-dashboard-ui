@@ -15,9 +15,9 @@
    08. Dashboard - Kanban Board
    09. Dashboard - Calendar & Memo
    10. Portfolio View
-   11. Animations & Keyframes
-   12. Media Queries
-   13. Dark Mode
+   11. Dashboard - Knowledge Archive
+   12. Animations & Keyframes
+   13. Media Queries
 ===================================================== */
 
 
@@ -38,6 +38,7 @@ body.dark-mode {
   background: #0a0f1a;
   color: #f8f9fa;
 }
+
 
 /* =========================================
    02. Layout & Views
@@ -125,9 +126,10 @@ body.dark-mode textarea::-webkit-scrollbar-thumb:hover {
 }
 
 body.dark-mode #dashboard-view {
-  background: radial-gradient(at 0% 0%, rgba(30, 41, 59, 0.9) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(15, 23, 42, 0.9) 0px, transparent 50%),
-    #0f172a;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(49, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+    #0f172a !important;
 }
 
 #portfolio-view {
@@ -172,6 +174,11 @@ body.dark-mode #portfolio-view {
 #memo-input {
   min-height: 60px;
   resize: none;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #64748b;
 }
 
 /* 폼 포커스 */
@@ -477,6 +484,7 @@ body.dark-mode .toast-msg {
   transform: translateY(0) scale(1);
 }
 
+
 /* =========================================
    04. Modals
 ========================================= */
@@ -579,20 +587,20 @@ body.dark-mode .memo-modal-date {
 #daily-memo-save-btn,
 #detail-save-btn,
 #save-memo-btn {
-    background: linear-gradient(135deg, #3182f6 0%, #a855f7 100%);
-    color: white;
-    border: none;
-    font-weight: 700;
-    box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3);
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  background: linear-gradient(135deg, #3182f6 0%, #a855f7 100%);
+  color: white;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-#save-memo-btn { 
-    width: 100%; 
-    padding: 14px;         /* 잃어버린 높이(상하 여백) 복구 */
-    border-radius: 12px;   /* 둥근 모서리 복구 */
-    font-size: 15px;       /* 잃어버린 글자 크기 복구 */
-    cursor: pointer;       /* 마우스 포인터 손가락 모양 복구 */
+#save-memo-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
 }
 
 #modal-add-btn:hover,
@@ -807,7 +815,7 @@ body.dark-mode .island-divider {
   position: fixed;
   top: 50%;
   right: 40px;
-  transform: translateY(-50%);
+  transform: translateY(-50%) translateZ(0);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -815,6 +823,7 @@ body.dark-mode .island-divider {
   opacity: 0;
   visibility: hidden;
   transition: all 0.4s ease-in-out;
+  will-change: transform, opacity;
 }
 
 #dashboard-view.active~.side-pagination {
@@ -865,28 +874,28 @@ body.dark-mode .page-line:hover {
   position: absolute;
   right: 100%;
   top: 50%;
-  transform: translateY(-50%) translateX(-15px);
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  transform: translateY(-50%) translateX(-15px) translateZ(0);
+  background: rgba(255, 255, 255, 0.95);
   padding: 8px 14px;
   border-radius: 12px;
   font-size: 13px;
   font-weight: 700;
   color: #191f28;
   white-space: nowrap;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity, visibility;
 }
 
 body.dark-mode .page-tooltip {
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(30, 41, 59, 0.98);
   color: #f1f5f9;
   border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .page-tooltip::after {
@@ -897,17 +906,17 @@ body.dark-mode .page-tooltip {
   transform: translateY(-50%);
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent transparent rgba(255, 255, 255, 0.2);
+  border-color: transparent transparent transparent rgba(255, 255, 255, 0.95);
 }
 
 body.dark-mode .page-tooltip::after {
-  border-color: transparent transparent transparent rgba(30, 41, 59, 0.85);
+  border-color: transparent transparent transparent rgba(30, 41, 59, 0.98);
 }
 
 .page-line:hover .page-tooltip {
   opacity: 1;
   visibility: visible;
-  transform: translateY(-50%) translateX(-10px);
+  transform: translateY(-50%) translateX(-10px) translateZ(0);
 }
 
 /* 최상단 이동 버튼 (Back to Top) */
@@ -1442,7 +1451,7 @@ body.dark-mode .hero-page {
 
 body.dark-mode .hero-badge {
   background: rgba(255, 255, 255, 0.05);
-  color: #94a3b8;
+  color: #94a3b8 !important;
 }
 
 .hero-title {
@@ -1714,6 +1723,12 @@ body.dark-mode .profile-body p {
   z-index: 100;
 }
 
+body.dark-mode .progress-container {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
 .progress-header {
   display: flex;
   justify-content: space-between;
@@ -1735,6 +1750,10 @@ body.dark-mode .progress-header {
   overflow: hidden;
 }
 
+body.dark-mode .progress-bar-bg {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
 .progress-bar-fill {
   height: 100%;
   width: 0%;
@@ -1752,6 +1771,17 @@ body.dark-mode .progress-header {
   width: 100%;
   padding: 0 40px;
   box-sizing: border-box;
+}
+
+.roadmap-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #191f28;
+  margin-bottom: 40px;
+}
+
+body.dark-mode .roadmap-title {
+  color: #f8fafc;
 }
 
 .treasure-map-area {
@@ -1840,10 +1870,18 @@ body.dark-mode .progress-header {
   color: #333d4b;
 }
 
+body.dark-mode .map-content h4 {
+  color: #f8fafc;
+}
+
 .map-content p {
   font-size: 11px;
   line-height: 1.5;
   color: #4e5968;
+}
+
+body.dark-mode .map-content p {
+  color: #cbd5e1;
 }
 
 .map-item.completed .map-marker {
@@ -1966,12 +2004,22 @@ body.dark-mode .progress-header {
   min-width: 200px;
 }
 
+body.dark-mode .column {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
 .column h3 {
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 18px;
   color: #333d4b;
   font-weight: 700;
+}
+
+body.dark-mode .column h3 {
+  color: #f8fafc;
 }
 
 .add-btn {
@@ -1994,6 +2042,16 @@ body.dark-mode .progress-header {
   border-color: #b0b8c1;
 }
 
+body.dark-mode .add-btn {
+  color: #cbd5e1;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .add-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+}
+
 .task-list {
   flex: 1;
   overflow-y: auto;
@@ -2001,6 +2059,9 @@ body.dark-mode .progress-header {
   margin-top: 8px;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+  padding-bottom: 24px;
 }
 
 .column::-webkit-scrollbar,
@@ -2020,13 +2081,20 @@ body.dark-mode .progress-header {
 }
 
 body.dark-mode .task-card {
-  background-color: rgba(30, 41, 59, 0.8);
-  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
 }
 
 .task-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+}
+
+body.dark-mode .task-card:hover {
+  background-color: rgba(255, 255, 255, 0.09) !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25) !important;
 }
 
 .task-card:active {
@@ -2060,9 +2128,19 @@ body.dark-mode .task-card {
   color: #1b64da;
 }
 
+body.dark-mode .tag.low {
+  background: rgba(49, 130, 246, 0.2);
+  color: #93c5fd;
+}
+
 .tag.medium {
   background: #fff5e6;
   color: #ff9500;
+}
+
+body.dark-mode .tag.medium {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
 }
 
 .tag.high {
@@ -2070,11 +2148,20 @@ body.dark-mode .task-card {
   color: #f04452;
 }
 
+body.dark-mode .tag.high {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
 .task-title {
   margin: 0;
   font-size: 15px;
   color: #333d4b;
   font-weight: 500;
+}
+
+body.dark-mode .task-title {
+  color: #f8fafc;
 }
 
 .delete-btn {
@@ -2121,6 +2208,12 @@ body.dark-mode .task-card {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
+body.dark-mode .calendar-container {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
 .memo-container {
   display: flex;
   flex-direction: column;
@@ -2138,6 +2231,12 @@ body.dark-mode .task-card {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   transform: translateX(40px) scale(0.95) !important;
   transform-origin: left center;
+}
+
+body.dark-mode .memo-container {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
 }
 
 .calendar-wrapper.show-memo .calendar-container {
@@ -2167,9 +2266,17 @@ body.dark-mode .task-card {
   color: #333d4b;
 }
 
+body.dark-mode .calendar-header button {
+  color: #f8fafc;
+}
+
 #calendar-title {
   margin: 0;
   color: #333d4b;
+}
+
+body.dark-mode #calendar-title {
+  color: #f8fafc;
 }
 
 .calendar-days {
@@ -2179,6 +2286,10 @@ body.dark-mode .task-card {
   font-weight: bold;
   margin-bottom: 10px;
   color: #4e5968;
+}
+
+body.dark-mode .calendar-days {
+  color: #cbd5e1;
 }
 
 .calendar-dates {
@@ -2199,22 +2310,10 @@ body.dark-mode .task-card {
   transition: all 0.2s ease;
 }
 
-.calendar-dates div.today {
-  background: #3182f6;
-  color: white;
-  box-shadow: 0 4px 10px rgba(49, 130, 246, 0.4);
-  border: none;
-}
-
-.calendar-dates div.today:hover {
-  background: #1b64da !important;
-  color: white !important;
-  box-shadow: 0 6px 14px rgba(49, 130, 246, 0.5) !important;
-}
-
-.calendar-dates div.selected {
-  border: 3px solid #3182f6;
-  transform: translateY(-2px);
+body.dark-mode .calendar-dates div {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
 .calendar-dates div:hover {
@@ -2223,10 +2322,45 @@ body.dark-mode .task-card {
   background: rgba(255, 255, 255, 0.5);
 }
 
+body.dark-mode .calendar-dates div:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.calendar-dates div.selected {
+  border: 3px solid #3182f6;
+  transform: translateY(-2px);
+}
+
 .calendar-dates div.empty {
   background: transparent;
   border: none;
   box-shadow: none;
+}
+
+.calendar-dates div.today {
+  background: #3182f6;
+  color: white;
+  box-shadow: 0 4px 10px rgba(49, 130, 246, 0.4);
+  border: none;
+}
+
+body.dark-mode .calendar-dates div.today {
+  background: #3182f6 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(49, 130, 246, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+  font-weight: 800 !important;
+}
+
+.calendar-dates div.today:hover {
+  background: #1b64da !important;
+  color: white !important;
+  box-shadow: 0 6px 14px rgba(49, 130, 246, 0.5) !important;
+}
+
+body.dark-mode .calendar-dates div.today:hover {
+  background: #60a5fa !important;
+  box-shadow: 0 6px 20px rgba(96, 165, 250, 0.8) !important;
 }
 
 .event-badge {
@@ -2256,6 +2390,10 @@ body.dark-mode .task-card {
   margin-bottom: 20px;
   color: #333d4b;
   white-space: nowrap;
+}
+
+body.dark-mode #memo-date-title {
+  color: #f8fafc;
 }
 
 .memo-input-area {
@@ -2304,6 +2442,10 @@ body.dark-mode .task-card {
   transition: all 0.2s ease;
 }
 
+body.dark-mode .memo-text {
+  color: #f8fafc;
+}
+
 .memo-text.expanded {
   display: block;
 }
@@ -2344,10 +2486,20 @@ body.dark-mode .task-card {
   transition: all 0.2s ease;
 }
 
+body.dark-mode .planner-tabs button {
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .planner-tabs button.active {
   background: #3182f6;
   color: white;
   box-shadow: 0 4px 10px rgba(49, 130, 246, 0.3);
+}
+
+body.dark-mode .planner-tabs button.active {
+  color: #ffffff;
+  background: #3182f6;
 }
 
 .planner-timeline {
@@ -2395,6 +2547,10 @@ body.dark-mode .task-card {
   word-break: break-word;
 }
 
+body.dark-mode .timeline-text {
+  color: #f8fafc;
+}
+
 .timeline-dot {
   position: absolute;
   bottom: 0;
@@ -2410,6 +2566,11 @@ body.dark-mode .task-card {
 .today .timeline-dot {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
   box-shadow: 0 -2px 10px rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .memo-list p,
+body.dark-mode .planner-timeline p {
+  color: #cbd5e1 !important;
 }
 
 
@@ -2869,7 +3030,210 @@ body.dark-mode .pf-about-text strong {
 
 
 /* =========================================
-   11. Animations & Keyframes
+   11. Dashboard - Knowledge Archive
+========================================= */
+.archive-container {
+  width: 100%;
+  height: 100vh;
+  padding: 80px 100px 60px 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.archive-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.archive-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  color: #3182f6;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.archive-title-group h2 {
+  font-size: 32px;
+  margin: 0 0 8px 0;
+  font-weight: 800;
+  color: #191f28;
+}
+
+.archive-title-group p {
+  font-size: 15px;
+  color: #4e5968;
+  margin: 0;
+}
+
+body.dark-mode .archive-title-group h2 {
+  color: #f8fafc;
+}
+
+/* 필터 버튼 (알약 디자인) */
+.archive-filters {
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 5px;
+  border-radius: 100px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode .archive-filters {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.filter-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7684;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.filter-btn.active {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #3182f6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode .filter-btn.active {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.filter-btn:hover:not(.active) {
+  color: #191f28;
+}
+
+body.dark-mode .filter-btn:hover:not(.active) {
+  color: #cbd5e1;
+}
+
+/* 벤토 그리드 설정 */
+.archive-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-auto-rows: 200px;
+  gap: 20px;
+  overflow-y: auto;
+  padding: 15px 10px 25px 10px;
+}
+
+.archive-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* ⭐️ 아카이브 카드 */
+.archive-card {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  overflow: visible;
+  transform: translateZ(0);
+  background-clip: padding-box;
+}
+
+body.dark-mode .archive-card {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.archive-card:hover {
+  transform: translateY(-8px);
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  border-color: #3182f6;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .archive-card:hover {
+  transform: translateY(-8px);
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 카드 상단: 아이콘 & 태그 */
+.arc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arc-icon {
+  font-size: 24px;
+}
+
+.arc-tag {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  background: rgba(49, 130, 246, 0.1);
+  color: #3182f6;
+  border-radius: 100px;
+  text-transform: uppercase;
+}
+
+/* 카드 하단: 제목 & 설명 */
+.arc-body h3 {
+  font-size: 18px;
+  margin: 0 0 8px 0;
+  color: #191f28;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.arc-body p {
+  font-size: 13px;
+  color: #6b7684;
+  margin: 0;
+  line-height: 1.5;
+}
+
+body.dark-mode .arc-body h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .arc-body p {
+  color: #94a3b8;
+}
+
+/* 렌더링 버그 방어 */
+body:has(.side-pagination:hover) .archive-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+
+/* =========================================
+   12. Animations & Keyframes
 ========================================= */
 @keyframes path-absolute-sync {
   from {
@@ -2986,7 +3350,7 @@ body.dark-mode .pf-about-text strong {
 
 
 /* =========================================
-   12. Media Queries
+   13. Media Queries
 ========================================= */
 @media (max-width: 1440px),
 (max-height: 850px) {
@@ -3072,68 +3436,4 @@ body.dark-mode .pf-about-text strong {
     padding: 6px 12px;
     margin-bottom: 2px;
   }
-}
-
-/* =========================================
-   🚑 13. 다크모드 긴급 구조 패치 (Rescue Patch)
-========================================= */
-
-/* 1. 로드맵 글자색 복구 */
-body.dark-mode .roadmap-title,
-body.dark-mode .map-content h4 { color: #f8fafc; }
-body.dark-mode .map-content p { color: #cbd5e1; }
-
-/* 2. 칸반 보드 글자색 & 카드 투명도 복구 */
-body.dark-mode .column h3,
-body.dark-mode .task-title { color: #f8fafc; }
-body.dark-mode .add-btn { color: #cbd5e1; border-color: rgba(255, 255, 255, 0.2); }
-body.dark-mode .add-btn:hover { background-color: rgba(255, 255, 255, 0.1); color: #f8fafc; }
-
-body.dark-mode .task-card {
-    background-color: rgba(30, 41, 59, 0.5); /* 시멘트 같던 배경을 다시 맑은 유리로! */
-}
-
-/* 칸반 태그 다크모드 색상 복구 */
-body.dark-mode .tag.low { background: rgba(49, 130, 246, 0.2); color: #93c5fd; }
-body.dark-mode .tag.medium { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
-body.dark-mode .tag.high { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
-
-/* 3. 캘린더 & 메모 글자색 및 투명도 복구 */
-body.dark-mode #calendar-title,
-body.dark-mode .calendar-header button,
-body.dark-mode #memo-date-title,
-body.dark-mode .memo-text,
-body.dark-mode .timeline-text { color: #f8fafc; }
-
-body.dark-mode .calendar-days { color: #cbd5e1; }
-
-body.dark-mode .calendar-dates div {
-    background: rgba(15, 23, 42, 0.4); /* 달력 칸도 다시 맑은 유리로! */
-    color: #f8fafc; /* 까맣던 날짜 숫자를 흰색으로! */
-    border-color: rgba(255, 255, 255, 0.08);
-}
-body.dark-mode .calendar-dates div:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* 4. 메모장 내부 디테일 복구 */
-body.dark-mode .planner-tabs button { 
-    color: #cbd5e1; 
-    background: rgba(255, 255, 255, 0.1); 
-}
-body.dark-mode .planner-tabs button.active { 
-    color: #ffffff; 
-    background: #3182f6; 
-}
-
-/* HTML에 인라인으로 박혀있던 '등록된 메모가 없습니다' 회색 강제 변경 */
-body.dark-mode .memo-list p, 
-body.dark-mode .planner-timeline p { 
-    color: #cbd5e1 !important; 
-}
-
-/* 입력창(Textarea) Placeholder(안내문구) 가독성 복구 */
-body.dark-mode input::placeholder,
-body.dark-mode textarea::placeholder {
-    color: #64748b;
 }
