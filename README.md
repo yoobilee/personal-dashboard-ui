@@ -8,6 +8,15 @@
 
 <br/>
 
+## 💎 Core Value: QA-Driven Development
+본 프로젝트는 **'QA의 눈으로 코드를 짜고 검증한다'**는 철학을 바탕으로 개발되었습니다. 2년 2개월간 현대오토에버 CCS/CCI 통합 프로젝트 등을 수행하며 쌓은 품질 관리 역량을 프론트엔드 최적화 로직으로 승화시켰습니다.
+
+* **Performance Precision**: 단순 평균이 아닌 **90분위수(P90)**를 고려한 렌더링 최적화 및 Google Colab 기반의 데이터 시각화 분석 기법 적용.
+* **Defensive Programming**: 경계값 분석(BVA) 및 입력 보안 가이드라인을 적용하여 데이터 무결성을 확보하는 방어적 로직 구현.
+* **UI/UX Integrity**: 1px의 오차와 렌더링 딜레이를 허용하지 않는 QA 특유의 집요함으로 하이엔드 인터랙션 마감 처리.
+
+<br/>
+
 ## ✨ Key Features (주요 기능)
 
 ### 1. 하이브리드 투 트랙(Two-Track) SPA 엔진
@@ -54,6 +63,7 @@
   <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
   <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript" />
   <img src="https://img.shields.io/badge/Three.js-black?style=for-the-badge&logo=three.js&logoColor=white" alt="Three.js" />
+  <img src="https://img.shields.io/badge/Google%20Colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white" alt="Google Colab" />
 </div>
 
 <br/>
@@ -65,14 +75,15 @@
 * **복합 스크롤 환경의 이벤트 최적화**: 스냅 스크롤 컨테이너 내부의 이벤트를 정밀하게 감지하여 내비게이션 상태 전환 로직을 안정화했습니다.
 * **QA 기반의 방어적 프로그래밍**: 리팩토링 후 발생할 수 있는 레이아웃 무너짐이나 텍스트 시인성 이슈를 전수 조사하고 수정하여 UI 안정성을 확보했습니다.
 
-### 🐛 Deep Dive: Rendering Bug Troubleshooting
-**1. 크롬 컴포지터 레이어 충돌 해결**
-* **Issue**: 다중 글래스모피즘 요소가 겹친 상태에서 애니메이션 발생 시 뷰포트 가로선 찢어짐 현상 발생.
-* **Solution**: transform: translateZ(0)와 will-change를 부여해 GPU 레이어로 강제 분리하고, :has() 선택자를 활용해 마우스 호버 시 배경 블러를 일시 제어하여 엔진 과부하를 차단했습니다.
+### 🐛 Deep Dive: Troubleshooting & Experience
+**1. 렌더링 성능 최적화 및 버그 해결**
+* **크롬 컴포지터 레이어 충돌**: 다중 글래스모피즘 요소 겹침 시 발생하는 뷰포트 찢어짐 현상을 `transform: translateZ(0)`와 `will-change`를 활용한 GPU 레이어 강제 분리로 해결했습니다.
+* **비동기 데이터 정밀 제어**: 실무에서 체득한 '타이머 로직과 UI 액션 간의 불일치' 방지 기술을 적용하여, 1초 단위의 렌더링 딜레이까지 잡아내는 정밀한 상태 관리를 구현했습니다.
 
-**2. 렌더링 엔진의 Blur Bleeding 해결**
-* **Issue**: 호버 애니메이션 시 둥근 모서리의 블러 연산 누락으로 인한 깨짐 현상.
-* **Solution**: scale 대신 translateY로 애니메이션을 단순화하고 속성별 명시적 transition 할당을 통해 렌더링 안정성을 확보했습니다.
+**2. 실무 커리어 기반의 품질 검증 성과**
+* **컴즈(주) | 현대자동차 통합모바일 서비스**: P90 지표 도입 및 Google Colab 데이터 분석을 통한 성능 리포트 고도화로 시스템 성능 기준점 재수립 기여.
+* **(주)와이즈와이어즈 | 현대오토에버 CCS/CCI 프로젝트**: 로그 분석을 통한 데이터 무결성 이슈 조기 발견 및 실차 평가 기반의 연동 안정성 확보.
+* **가상화폐 플랫폼 Flipster**: API 환경 조작을 통한 데이터 기반 테스트(DDT) 수행 및 래더 페이지 정렬 로직 결함 발견.
 
 ---
-*Developed by YooBi LEE*
+*Developed by YooBi LEE | QA Engineer & Frontend Developer*

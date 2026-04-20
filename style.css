@@ -1390,6 +1390,7 @@ body.dark-mode .git-lv-4 {
   background-size: 32px 32px, 32px 32px;
   background-position: center center, center center;
   position: relative;
+  transition: background-color 0.6s ease;
 }
 
 body.dark-mode #home-view {
@@ -1399,6 +1400,160 @@ body.dark-mode #home-view {
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 100% 100%, 32px 32px, 32px 32px;
   background-position: center top, center center, center center;
+}
+
+/* 대시보드 탭 활성화 시 배경 전환 */
+#home-view.dash-mode {
+  background-color: #f0f4ff;
+  background-image: none;
+}
+
+body.dark-mode #home-view.dash-mode {
+  background-color: #080e1f !important;
+  background-image: none !important;
+}
+
+/* ── Mesh Gradient Orbs (대시보드 전용 배경) ── */
+.dash-bg-orbs {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+#home-view.dash-mode .dash-bg-orbs {
+  opacity: 1;
+}
+
+.dash-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+}
+
+.dash-orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(49, 130, 246, 0.22) 0%, transparent 70%);
+  top: -15%;
+  left: -10%;
+  animation: orb-drift-1 18s ease-in-out infinite alternate;
+}
+
+.dash-orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, transparent 70%);
+  top: 20%;
+  right: -8%;
+  animation: orb-drift-2 22s ease-in-out infinite alternate;
+}
+
+.dash-orb-3 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.12) 0%, transparent 70%);
+  bottom: -10%;
+  left: 30%;
+  animation: orb-drift-3 16s ease-in-out infinite alternate;
+}
+
+.dash-orb-4 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(99, 179, 237, 0.15) 0%, transparent 70%);
+  top: 40%;
+  left: 20%;
+  animation: orb-drift-4 20s ease-in-out infinite alternate;
+}
+
+/* 다크모드 오브 — 더 진하게 */
+body.dark-mode .dash-orb-1 {
+  background: radial-gradient(circle, rgba(49, 130, 246, 0.35) 0%, transparent 70%);
+}
+
+body.dark-mode .dash-orb-2 {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.28) 0%, transparent 70%);
+}
+
+body.dark-mode .dash-orb-3 {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.18) 0%, transparent 70%);
+}
+
+body.dark-mode .dash-orb-4 {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 70%);
+}
+
+@keyframes orb-drift-1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(60px, 40px) scale(1.08);
+  }
+
+  100% {
+    transform: translate(30px, 80px) scale(0.95);
+  }
+}
+
+@keyframes orb-drift-2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-50px, 60px) scale(1.1);
+  }
+
+  100% {
+    transform: translate(-80px, 20px) scale(0.9);
+  }
+}
+
+@keyframes orb-drift-3 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(40px, -50px) scale(1.05);
+  }
+
+  100% {
+    transform: translate(-30px, -30px) scale(1.12);
+  }
+}
+
+@keyframes orb-drift-4 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(70px, -40px) scale(0.9);
+  }
+
+  100% {
+    transform: translate(-20px, 60px) scale(1.06);
+  }
+}
+
+/* 오브 위에 깔리는 미세 노이즈 텍스처 느낌 (그리드 제거 대신) */
+#home-view.dash-mode::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 40%);
 }
 
 .hero-page {
@@ -1523,126 +1678,100 @@ body.dark-mode .stat-box p {
   color: #94a3b8;
 }
 
-/* =========================================
-   💎 리얼 유리판 반사광(Window Reflection) 버튼
-========================================= */
+/* =====================================================
+   💼 CTA 버튼 — 토스 + 글라스모피즘 (2026 트렌드)
+   평상시: 테두리만 / 호버: 블루 fill이 아래→위로 채워짐
+   ===================================================== */
 .go-dashboard-btn {
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  
-  /* 유리 엣지를 살려주는 아주 얇고 밝은 테두리 */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.4);
-  
-  color: #fff;
-  padding: 16px 36px;
-  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 32px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(49, 130, 246, 0.35);
+  background: transparent;
+  color: #3182f6;
   font-size: 15px;
   font-weight: 700;
+  letter-spacing: -0.01em;
   cursor: pointer;
   overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition:
+    color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.25s ease;
   z-index: 1;
 }
 
-/* =========================================
-   💎 고정밀 리얼 글래스 리플렉션 (이질감 제거 버전)
-========================================= */
-.go-dashboard-btn {
-  position: relative;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  
-  /* 테두리: 라이트모드에서도 경계가 확실히 보이도록 그림자 추가 */
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-top: 1px solid rgba(255, 255, 255, 0.8);
-  
-  color: #191f28; /* 라이트모드 기본 글자색 */
-  padding: 16px 36px;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  z-index: 1;
-}
-
-/* ⭐️ 핵심: 창문 반사광 레이어 (크기 조절 및 위치 제어) */
-.go-dashboard-btn::before {
-  content: "";
-  position: absolute;
-  /* 버튼 내부에서 마우스 위치를 정중앙으로 잡기 위해 크기 고정 */
-  width: 300px;
-  height: 300px;
-  
-  /* 라이트모드에서도 이질감 없는 '맑은' 반사광 디자인 */
-  background: linear-gradient(
-    115deg,
-    transparent 0%,
-    transparent 45%,
-    rgba(255, 255, 255, 0.6) 45.2%, /* 메인 광택 */
-    rgba(255, 255, 255, 0.6) 48%,
-    transparent 48.2%,
-    transparent 52%,
-    rgba(255, 255, 255, 0.3) 52.2%, /* 보조 광택 */
-    rgba(255, 255, 255, 0.3) 54%,
-    transparent 54.2%
-  );
-  
-  /* 마우스 위치로 정확히 이동시키기 위한 설정 */
-  left: var(--x, -100%);
-  top: var(--y, -100%);
-  transform: translate(-50%, -50%); /* 마우스가 광택의 정중앙에 오도록 함 */
-  
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: -1;
-  filter: blur(2px); /* 너무 날카롭지 않게 살짝 뭉개줌 */
-}
-
-/* 호버 시 효과 */
-.go-dashboard-btn:hover {
-  /* ⭐️ 마우스 호버 시 토스 시그니처 블루로 변화 */
-  background: #3182f6; 
-  
-  /* 테두리도 블루 톤에 맞춰 투명하게 조절 */
-  border-color: rgba(255, 255, 255, 0.3);
-  
-  /* 글자색을 완전한 흰색으로 고정하여 가독성 확보 */
-  color: #fff; 
-  
-  transform: translateY(-2px);
-  
-  /* 그림자에 푸른 빛을 살짝 섞어 버튼이 발광하는 느낌 부여 */
-  box-shadow: 0 8px 25px rgba(49, 130, 246, 0.4);
-}
-
-/* ⭐️ 반사광이 파란색 배경 위에서도 쨍하게 보이도록 살짝 강화 */
-.go-dashboard-btn:hover::before {
-  opacity: 1;
-  /* 파란 배경 위에서 흰색 반사광이 더 잘 보일 수 있게 필터 조정 가능 */
-  filter: blur(1px) brightness(1.2); 
-}
-
-/* 다크모드 전용: 배경과 글자색 반전 */
 body.dark-mode .go-dashboard-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
-  border-top-color: rgba(255, 255, 255, 0.3);
-  color: #fff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(96, 165, 250, 0.4);
+  color: #60a5fa;
 }
 
-body.dark-mode .go-dashboard-btn:hover {
-  background: #3182f6;
-  box-shadow: 0 10px 30px rgba(49, 130, 246, 0.5);
+/* 호버 fill — 아래→위로 블루 그라데이션 슬라이드 */
+.go-dashboard-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #3182f6 0%, #2563eb 100%);
+  transform: translateY(100%);
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -2;
+  border-radius: 12px;
+}
+
+/* 글라스 하이라이트 — 좌상단 고정 */
+.go-dashboard-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 50%;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0.0) 100%);
+  border-radius: 12px 0 0 0;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 호버 상태 */
+.go-dashboard-btn:hover {
+  color: #fff;
+  border-color: transparent;
+  box-shadow:
+    0 8px 28px rgba(49, 130, 246, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.go-dashboard-btn:hover::before {
+  transform: translateY(0%);
+}
+
+.go-dashboard-btn:hover::after {
+  opacity: 1;
+}
+
+/* 버튼 내부 아이콘 */
+.go-dashboard-btn .cta-icon {
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.go-dashboard-btn:hover .cta-icon {
+  transform: translateX(4px);
+}
+
+/* active 클릭 시 살짝 눌리는 느낌 */
+.go-dashboard-btn:active {
+  transform: translateY(0px) scale(0.98);
 }
 
 /* Glass Profile Card (Deep Shadow) */
@@ -3019,6 +3148,10 @@ body.dark-mode .pf-label {
   padding-top: 0;
 }
 
+.pf-project-card:last-child {
+  border-bottom: none !important;
+}
+
 .pf-proj-num {
   font-size: 13px;
   font-weight: 800;
@@ -3074,18 +3207,28 @@ body.dark-mode .pf-label {
 
 /* Portfolio Footer */
 .pf-footer {
-  padding-top: 80px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  /* 1. 글자를 위쪽(선 쪽)으로 정렬 */
+  align-items: flex-start; 
   border-top: 1px solid rgba(0, 0, 0, 0.07);
-  margin-top: 80px;
+  
+  /* 2. 유비님이 설정하신 프로젝트와의 간격 유지 */
+  margin-top: 60px; 
+  
+  /* 3. ⭐️ 핵심: 선과 글자 사이의 간격 (원하시는 만큼 숫자를 줄이세요) */
+  padding-top: 5px; 
+  padding-bottom: 40px;
+
+  /* 4. ⚠️ 중요: 간격 축소 시 애니메이션 때문에 사라지는 현상 방지 */
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .pf-footer p {
+  margin: 0; 
   font-size: 13px;
-  color: #8b95a1;
-  margin: 0;
+  color: #86868b;
 }
 
 .pf-footer-mail {
@@ -3598,307 +3741,357 @@ body:has(.side-pagination:hover) .archive-card {
    ===================================================== */
 
 .dashboard-bento-grid {
-    display: grid;
-    grid-template-columns: 1.6fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 16px;
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    height: 420px;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  height: 420px;
 }
 
 /* 공통 카드 베이스 */
 .bento-item {
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(0, 0, 0, 0.07);
-    border-radius: 20px;
-    padding: 28px 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 20px;
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .bento-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
 }
 
 body.dark-mode .bento-item {
-    background: rgba(15, 23, 42, 0.65);
-    border-color: rgba(255, 255, 255, 0.07);
+  background: rgba(15, 23, 42, 0.65);
+  border-color: rgba(255, 255, 255, 0.07);
 }
 
 body.dark-mode .bento-item:hover {
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
 /* ── 왼쪽 큰 카드 ── */
 .bento-main {
-    grid-column: 1 / 2;
-    grid-row: 1 / 3;
-    justify-content: space-between;
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  justify-content: space-between;
 }
 
 .bento-main-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .bento-date-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #8b95a1;
-    letter-spacing: 0.04em;
-    font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b95a1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
 }
 
-body.dark-mode .bento-date-label { color: #475569; }
+body.dark-mode .bento-date-label {
+  color: #475569;
+}
 
 .bento-available-dot {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #22c55e;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #22c55e;
 }
 
 .bento-dot-pulse {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #22c55e;
-    animation: dot-pulse 2s infinite;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: dot-pulse 2s infinite;
 }
 
 .bento-clock-wrap {
-    flex: 1;
-    display: flex;
-    align-items: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 .bento-clock {
-    font-size: clamp(42px, 5.5vw, 64px);
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    color: #0d1117;
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
+  font-size: clamp(42px, 5.5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #0d1117;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
 
-body.dark-mode .bento-clock { color: #f0f6ff; }
+body.dark-mode .bento-clock {
+  color: #f0f6ff;
+}
 
 /* 연도 진행률 바 */
 .bento-year-progress {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .bento-year-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    font-weight: 600;
-    color: #8b95a1;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8b95a1;
 }
 
-body.dark-mode .bento-year-label { color: #475569; }
+body.dark-mode .bento-year-label {
+  color: #475569;
+}
 
-#bento-year-pct { color: #3182f6; }
+#bento-year-pct {
+  color: #3182f6;
+}
 
 .bento-year-bar-bg {
-    height: 4px;
-    background: rgba(0,0,0,0.08);
-    border-radius: 99px;
-    overflow: hidden;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
 }
 
-body.dark-mode .bento-year-bar-bg { background: rgba(255,255,255,0.08); }
+body.dark-mode .bento-year-bar-bg {
+  background: rgba(255, 255, 255, 0.08);
+}
 
 .bento-year-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #3182f6, #a855f7);
-    border-radius: 99px;
-    width: 0%;
-    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+  height: 100%;
+  background: linear-gradient(90deg, #3182f6, #a855f7);
+  border-radius: 99px;
+  width: 0%;
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* 대시보드 열기 버튼 */
 .engage-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #0d1117;
-    color: #fff;
-    border: none;
-    padding: 13px 24px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-    width: 100%;
-    margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #0d1117;
+  color: #fff;
+  border: none;
+  padding: 13px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  width: 100%;
+  margin-top: 8px;
 }
 
-body.dark-mode .engage-btn { background: #f0f6ff; color: #0d1117; }
+body.dark-mode .engage-btn {
+  background: #f0f6ff;
+  color: #0d1117;
+}
 
-.engage-btn:hover { background: #3182f6; color: #fff; transform: translateY(-1px); }
-body.dark-mode .engage-btn:hover { background: #3182f6; color: #fff; }
+.engage-btn:hover {
+  background: #3182f6;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+body.dark-mode .engage-btn:hover {
+  background: #3182f6;
+  color: #fff;
+}
 
 /* ── 공통 라벨 ── */
 .bento-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #8b95a1;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+  color: #8b95a1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-body.dark-mode .bento-label { color: #475569; }
+body.dark-mode .bento-label {
+  color: #475569;
+}
 
 /* ── 큰 숫자 값 ── */
 .bento-value {
-    font-size: 56px;
-    font-weight: 900;
-    color: #0d1117;
-    letter-spacing: -0.04em;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
+  font-size: 56px;
+  font-weight: 900;
+  color: #0d1117;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
-body.dark-mode .bento-value { color: #f0f6ff; }
+body.dark-mode .bento-value {
+  color: #f0f6ff;
+}
 
 .bento-sub {
-    font-size: 13px;
-    color: #6b7684;
-    font-weight: 500;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 13px;
+  color: #6b7684;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-body.dark-mode .bento-sub { color: #64748b; }
+body.dark-mode .bento-sub {
+  color: #64748b;
+}
 
 /* ── 진행 중 할 일 카드 ── */
 .bento-tasks {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
 }
 
 .bento-task-bar-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .bento-task-bar-bg {
-    flex: 1;
-    height: 4px;
-    background: rgba(0,0,0,0.08);
-    border-radius: 99px;
-    overflow: hidden;
+  flex: 1;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
 }
 
-body.dark-mode .bento-task-bar-bg { background: rgba(255,255,255,0.08); }
+body.dark-mode .bento-task-bar-bg {
+  background: rgba(255, 255, 255, 0.08);
+}
 
 .bento-task-bar-fill {
-    height: 100%;
-    background: #3182f6;
-    border-radius: 99px;
-    width: 0%;
-    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+  height: 100%;
+  background: #3182f6;
+  border-radius: 99px;
+  width: 0%;
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .bento-task-total {
-    font-size: 12px;
-    font-weight: 600;
-    color: #8b95a1;
-    white-space: nowrap;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8b95a1;
+  white-space: nowrap;
 }
 
 /* ── D-Day 카드 ── */
 .bento-dday {
-    grid-column: 3 / 4;
-    grid-row: 1 / 2;
+  grid-column: 3 / 4;
+  grid-row: 1 / 2;
 }
 
 .bento-dday-num {
-    color: #3182f6 !important;
+  color: #3182f6 !important;
 }
 
 /* ── 로드맵 카드 ── */
 .bento-roadmap {
-    grid-column: 2 / 4;
-    grid-row: 2 / 3;
-    gap: 12px;
+  grid-column: 2 / 4;
+  grid-row: 2 / 3;
+  gap: 12px;
 }
 
 .bento-roadmap-dots {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .roadmap-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.1);
-    transition: background 0.3s, transform 0.3s;
-    flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, transform 0.3s;
+  flex-shrink: 0;
 }
 
-body.dark-mode .roadmap-dot { background: rgba(255,255,255,0.1); }
+/* 기본 빈 도트의 다크모드 색상 */
+body.dark-mode .roadmap-dot {
+  background: rgba(255, 255, 255, 0.1);
+}
 
+/* 완료된 도트 (파란색) */
 .roadmap-dot.done {
-    background: #3182f6;
-    box-shadow: 0 0 0 3px rgba(49,130,246,0.15);
+  background: #3182f6;
+  box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.15);
 }
 
+/* 다크모드 완료 도트: CSS 덮어쓰기 방어 및 발광 효과 강화 */
+body.dark-mode .roadmap-dot.done {
+  background: #3182f6;
+  box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.3);
+}
+
+/* 진행 중 도트 (보라색) */
 .roadmap-dot.active-dot {
-    background: #a855f7;
-    box-shadow: 0 0 0 3px rgba(168,85,247,0.2);
-    transform: scale(1.3);
+  background: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+  transform: scale(1.3);
+}
+
+/* 다크모드 진행 중 도트: CSS 덮어쓰기 방어 및 발광 효과 강화 */
+body.dark-mode .roadmap-dot.active-dot {
+  background: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.4);
 }
 
 .roadmap-dot-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #8b95a1;
-    white-space: nowrap;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8b95a1;
+  white-space: nowrap;
 }
 
 .bento-roadmap-bar-bg {
-    height: 4px;
-    background: rgba(0,0,0,0.08);
-    border-radius: 99px;
-    overflow: hidden;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
 }
 
-body.dark-mode .bento-roadmap-bar-bg { background: rgba(255,255,255,0.08); }
+body.dark-mode .bento-roadmap-bar-bg {
+  background: rgba(255, 255, 255, 0.08);
+}
 
 .bento-roadmap-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #3182f6, #a855f7);
-    border-radius: 99px;
-    width: 0%;
-    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+  height: 100%;
+  background: linear-gradient(90deg, #3182f6, #a855f7);
+  border-radius: 99px;
+  width: 0%;
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .bento-roadmap-pct {
-    font-size: 12px;
-    font-weight: 600;
-    color: #8b95a1;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8b95a1;
 }
 
-body.dark-mode .bento-roadmap-pct { color: #475569; }
+body.dark-mode .bento-roadmap-pct {
+  color: #475569;
+}

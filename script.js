@@ -519,7 +519,8 @@ if (homeView && window.THREE) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     Object.assign(renderer.domElement.style, {
         position: 'absolute', top: '0', left: '0',
-        width: '100%', height: '100%', zIndex: '0', pointerEvents: 'none'
+        width: '100%', height: '100%', zIndex: '0', pointerEvents: 'none',
+        transition: 'opacity 0.6s ease'
     });
     homeView.appendChild(renderer.domElement);
     camera.position.z = 42;
@@ -702,13 +703,15 @@ if (homeView && window.THREE) {
 }
 
 // ==========================================
-// 🔀 대문 진입점 탭 & 버튼 동기화 엔진 (완성판)
+// 🔀 대문 진입점 탭 & 버튼 동기화 엔진 (단일 정리판)
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.entry-tab');
+    const tabs       = document.querySelectorAll('.entry-tab');
     const ctaBtnPort = document.getElementById('hero-cta-btn');
     const ctaBtnDash = document.getElementById('hero-cta-btn-dash');
+    const homeViewEl = document.getElementById('home-view');
 
+    // 시계 시작
     updateSystemClock();
     setInterval(updateSystemClock, 1000);
 
@@ -716,25 +719,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            const type = tab.getAttribute('data-type'); 
+            const type = tab.getAttribute('data-type');
 
+            // 탭 active 전환
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
 
-            document.querySelectorAll('.hero-mode-content').forEach(content => {
-                content.classList.remove('active');
-            });
-
-            const targetContent = document.getElementById(`hero-content-${type}`);
-            if (targetContent) {
-                targetContent.classList.add('active'); 
-            }
+            // 콘텐츠 전환
+            document.querySelectorAll('.hero-mode-content').forEach(c => c.classList.remove('active'));
+            const target = document.getElementById(`hero-content-${type}`);
+            if (target) target.classList.add('active');
 
             if (type === 'dashboard') {
                 updateSystemBriefing();
-                window.yoobiDashMode = 'dashboard'; 
+                window.yoobiDashMode = 'dashboard';
+                // ⭐️ 대시보드 탭: mesh gradient 배경 ON, Three.js 배경 흐리게
+                if (homeViewEl) homeViewEl.classList.add('dash-mode');
+                const threeCanvas = homeViewEl ? homeViewEl.querySelector('canvas') : null;
+                if (threeCanvas) threeCanvas.style.opacity = '0';
             } else {
-                window.yoobiDashMode = 'portfolio'; // 폭발 코드 삭제! 스르륵 재정렬됨.
+                window.yoobiDashMode = 'portfolio';
+                // ⭐️ 포트폴리오 탭: mesh gradient 배경 OFF, Three.js 배경 복구
+                if (homeViewEl) homeViewEl.classList.remove('dash-mode');
+                const threeCanvas = homeViewEl ? homeViewEl.querySelector('canvas') : null;
+                if (threeCanvas) threeCanvas.style.opacity = '1';
             }
         });
     });
@@ -742,122 +750,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ctaBtnPort) ctaBtnPort.onclick = () => { window.location.hash = 'portfolio'; };
     if (ctaBtnDash) ctaBtnDash.onclick = () => { window.location.hash = 'dashboard'; };
 
-    tabs[0].click(); 
+    // 초기: 포트폴리오 탭 활성화
+    tabs[0].click();
 });
 
-// ⭐️ [신규 함수] 큐브 상태의 입자들에게 펑! 터지는 강력한 '폭발 속도'를 부여합니다.
-function burstParticles() {
-    if (nodes.length > 0) {
-        nodes.forEach(n => {
-            n.vx = (Math.random() - 0.5) * 2.0; // 엄청난 속도로 사방으로 발사!
-            n.vy = (Math.random() - 0.5) * 2.0;
-            n.vz = (Math.random() - 0.5) * 2.0;
-        });
-    }
-}
-
-// ==========================================
-// 🔀 대문 진입점 탭 & 버튼 동기화 엔진 (최종)
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.entry-tab');
-    const ctaBtnPort = document.getElementById('hero-cta-btn');
-    const ctaBtnDash = document.getElementById('hero-cta-btn-dash');
-
-    updateSystemClock();
-    setInterval(updateSystemClock, 1000);
-
-    if (tabs.length === 0) return;
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const type = tab.getAttribute('data-type'); 
-
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            document.querySelectorAll('.hero-mode-content').forEach(content => {
-                content.classList.remove('active');
-            });
-
-            const targetContent = document.getElementById(`hero-content-${type}`);
-            if (targetContent) {
-                targetContent.classList.add('active'); 
-            }
-
-            if (type === 'dashboard') {
-                updateSystemBriefing();
-                window.yoobiDashMode = 'dashboard'; 
-            } else {
-                // ⭐️ 대시보드(큐브)에서 포트폴리오로 갈 때만 폭발(Burst) 애니메이션 실행!
-                if (window.yoobiDashMode === 'dashboard') burstParticles();
-                window.yoobiDashMode = 'portfolio'; 
-            }
-        });
-    });
-
-    if (ctaBtnPort) ctaBtnPort.onclick = () => { window.location.hash = 'portfolio'; };
-    if (ctaBtnDash) ctaBtnDash.onclick = () => { window.location.hash = 'dashboard'; };
-
-    tabs[0].click(); 
-});
-
-// ⭐️ [신규 함수] 포트폴리오로 돌아갈 때 입자들을 사방으로 흩뿌려줍니다.
-function disperseParticles() {
-    if (nodes.length > 0) {
-        nodes.forEach(n => {
-            // 위치를 다시 랜덤하게 세팅하여 큐브 구조를 즉시 파괴합니다.
-            n.x = (Math.random() - 0.5) * W;
-            n.y = (Math.random() - 0.5) * H;
-            n.z = (Math.random() - 0.5) * 8;
-        });
-    }
-}
-
-// ==========================================
-// 🔀 대문 진입점 탭 & 버튼 동기화 엔진 (최종 수정판)
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.entry-tab');
-    const ctaBtnPort = document.getElementById('hero-cta-btn');
-    const ctaBtnDash = document.getElementById('hero-cta-btn-dash');
-
-    updateSystemClock();
-    setInterval(updateSystemClock, 1000);
-
-    if (tabs.length === 0) return;
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const type = tab.getAttribute('data-type'); 
-
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            document.querySelectorAll('.hero-mode-content').forEach(content => {
-                content.classList.remove('active');
-            });
-
-            const targetContent = document.getElementById(`hero-content-${type}`);
-            if (targetContent) {
-                targetContent.classList.add('active'); 
-            }
-
-            if (type === 'dashboard') {
-                updateSystemBriefing();
-                window.yoobiDashMode = 'dashboard'; 
-            } else {
-                window.yoobiDashMode = 'portfolio'; 
-                disperseParticles(); // ⭐️ 큐브를 폭발시켜 다시 흩뿌립니다!
-            }
-        });
-    });
-
-    if (ctaBtnPort) ctaBtnPort.onclick = () => { window.location.hash = 'portfolio'; };
-    if (ctaBtnDash) ctaBtnDash.onclick = () => { window.location.hash = 'dashboard'; };
-
-    tabs[0].click(); 
-});
 
 /**
  * [Phase 12] 딥 다이내믹 쉐도우 (Deep Lighting)
@@ -931,7 +827,7 @@ document.addEventListener('DOMContentLoaded', () => {
             0, 0, 0, 0, 0, 0, 0,
             0, 1, 2, 4, 0, 3, 0,
             2, 1, 1, 1, 0, 0, 1,
-            1, 0, 0, 0, 0, 0, 0,
+            1, 1, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0
         ];
 
@@ -1753,30 +1649,3 @@ function renderUpcomingEvent() {
         widget.classList.remove('show');
     }
 }
-
-// 🖱️ 리얼 유리 반사광 1:1 추적 엔진
-function updateButtonReflection() {
-    const sheenButtons = document.querySelectorAll('.go-dashboard-btn');
-    
-    sheenButtons.forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            
-            // 버튼 내부에서의 상대적 마우스 좌표 (px)
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            // 감쇠값 없이 1:1로 좌표 전달 (끝까지 따라오게 함)
-            btn.style.setProperty('--x', `${x}px`);
-            btn.style.setProperty('--y', `${y}px`);
-        });
-        
-        // 마우스가 버튼을 벗어나면 좌표를 초기화하여 광택을 숨깁니다.
-        btn.addEventListener('mouseleave', () => {
-            btn.style.setProperty('--x', '-100%');
-            btn.style.setProperty('--y', '-100%');
-        });
-    });
-}
-
-document.addEventListener('DOMContentLoaded', updateButtonReflection);

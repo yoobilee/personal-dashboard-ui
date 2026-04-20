@@ -22,6 +22,13 @@
     <main id="main-content">
 
         <div id="home-view" class="app-view">
+            <!-- 대시보드 탭 전용 Mesh Gradient 배경 -->
+            <div class="dash-bg-orbs">
+                <div class="dash-orb dash-orb-1"></div>
+                <div class="dash-orb dash-orb-2"></div>
+                <div class="dash-orb dash-orb-3"></div>
+                <div class="dash-orb dash-orb-4"></div>
+            </div>
             <section class="page hero-page">
                 <div class="hero-entry-tabs">
                     <span class="entry-tab active" data-type="portfolio">PORTFOLIO</span>
@@ -58,7 +65,15 @@
                                 </div>
                             </div>
 
-                            <button id="hero-cta-btn" class="go-dashboard-btn">View Portfolio 💼</button>
+                            <button id="hero-cta-btn" class="go-dashboard-btn">
+                                View Portfolio
+                                <span class="cta-icon">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </span>
+                            </button>
                         </div>
                         <div class="hero-visual-area">
                             <div class="glass-profile-card">
@@ -83,7 +98,8 @@
                             <div class="bento-item bento-main">
                                 <div class="bento-main-top">
                                     <span class="bento-date-label" id="system-date">2026.04.19</span>
-                                    <span class="bento-available-dot"><span class="bento-dot-pulse"></span>Available</span>
+                                    <span class="bento-available-dot"><span
+                                            class="bento-dot-pulse"></span>Available</span>
                                 </div>
                                 <div class="bento-clock-wrap">
                                     <span id="system-clock" class="bento-clock">00:00:00</span>
@@ -170,9 +186,12 @@
                     <div class="pf-label reveal-left">About</div>
                     <div class="pf-about-grid">
                         <div class="pf-about-text reveal-up" style="--delay:.05s">
-                            <p>품질을 보증하던 QA 엔지니어로서 쌓은 <strong>2년+의 경험</strong>을 바탕으로, 이제는 완벽한 사용자 경험을 직접 만드는 프론트엔드 개발자로
-                                전환하고 있습니다.</p>
-                            <p>버그를 찾는 눈이 아닌, <strong>버그가 생기지 않는 코드</strong>를 짜는 개발자가 목표입니다.</p>
+                            <p>
+                                <strong>"품질의 기준을 코드로 구현하는 프론트엔드 엔지니어 유비입니다."</strong><br><br>
+                                약 2년 2개월간의 QA 엔지니어링 경험을 통해 사용자가 체감하는 <strong>성능 임계치와 서비스 무결성</strong>에 대한 깊은 이해를
+                                쌓았습니다.<br>
+                                단순히 기능을 만드는 것에 그치지 않고, 개발 단계부터 성능 테스트 기준점을 준수하며 예외 상황에 강한 인터페이스를 구축하는 데 집중합니다.
+                            </p>
                         </div>
                         <div class="pf-stat-row reveal-up" style="--delay:.1s">
                             <div class="pf-stat"><span class="pf-stat-num">2+</span><span class="pf-stat-label">Years
@@ -224,18 +243,68 @@
                 <section class="pf-section">
                     <div class="pf-label reveal-left">Experience</div>
                     <div class="pf-timeline">
+
                         <div class="pf-tl-item reveal-up" style="--delay:.0s">
                             <div class="pf-tl-dot"></div>
                             <div class="pf-tl-body">
                                 <div class="pf-tl-head">
-                                    <strong>Senior QA Engineer</strong>
-                                    <span class="pf-tl-date">2023 — 2025.03</span>
+                                    <strong>QA Engineer</strong>
+                                    <span class="pf-exp-date">2025.12 — 2026.03</span>
                                 </div>
-                                <p class="pf-tl-company">OO 테크</p>
+                                <p class="pf-tl-company">컴즈(주) | 현대자동차 통합모바일 서비스</p>
                                 <ul class="pf-tl-list">
-                                    <li>서비스 품질 보증 프로세스 설계 및 리딩</li>
-                                    <li>자동화 테스트 스크립트 작성 및 릴리즈 안정성 확보</li>
-                                    <li>UX 개선점 제안 및 기획 협업</li>
+                                    <li>정비 효율화를 위한 태블릿 앱 Phase 1 개발 단계 QA 및 성능 테스트 리딩</li>
+                                    <li>핵심 모듈(RO) 데이터 요청/수신 안정성 검증을 위한 1,000개 이상의 TC/TS 설계 및 수행</li>
+                                    <li>Google Colab을 활용한 성능 데이터 분석 및 P90(90분위수) 지표 도입으로 성능 리포트 고도화</li>
+                                    <li>대량 데이터 조회 시 타임아웃 에러 및 비동기 타이머 액션 불일치 등 정밀한 결함 다수 발견</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pf-tl-item reveal-up" style="--delay:.1s">
+                            <div class="pf-tl-dot"></div>
+                            <div class="pf-tl-body">
+                                <div class="pf-tl-head">
+                                    <strong>QA Engineer</strong>
+                                    <span class="pf-exp-date">2025.10 — 2025.11</span>
+                                </div>
+                                <p class="pf-tl-company">컴즈(주) | 현대자동차 국내판매시스템</p>
+                                <ul class="pf-tl-list">
+                                    <li>판매금융 파트 대대적 개편에 따른 기획서 기반의 TC 설계 및 상시 업데이트</li>
+                                    <li>높은 기획 변동성에 대응하여 금융 프로세스별 예외 케이스와 비즈니스 로직 정밀 검증</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pf-tl-item reveal-up" style="--delay:.2s">
+                            <div class="pf-tl-dot"></div>
+                            <div class="pf-tl-body">
+                                <div class="pf-tl-head">
+                                    <strong>QA Engineer</strong>
+                                    <span class="pf-exp-date">2025.09 — 2025.10</span>
+                                </div>
+                                <p class="pf-tl-company">컴즈(주) | 가상화폐 플랫폼 'Flipster'</p>
+                                <ul class="pf-tl-list">
+                                    <li>안드로이드 부문 2,000개 이상의 Full TC 및 Regression 테스트 고속 수행</li>
+                                    <li>API 환경 조작 및 계정별 조건 생성을 통한 데이터 기반의 이벤트 혜택 로직 검증</li>
+                                    <li>투자 성과 데이터와 래더 페이지 순위 간의 정렬 로직 이슈 발견 및 정정 기여</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="pf-tl-item reveal-up" style="--delay:.0s">
+                            <div class="pf-tl-dot"></div>
+                            <div class="pf-tl-body">
+                                <div class="pf-tl-head">
+                                    <strong>QA Engineer</strong>
+                                    <span class="pf-exp-date">2024.01 — 2025.08</span>
+                                </div>
+                                <p class="pf-tl-company">(주)와이즈와이어즈 | 현대오토에버 커넥티드 앱 프로젝트</p>
+                                <ul class="pf-tl-list">
+                                    <li>기존 CCS(블루링크, Kia Connect) 유지보수 및 신규 CCI(MyHyundai, KIA) 통합 리뉴얼 프로젝트 참여</li>
+                                    <li>로그 분석을 통한 데이터 무결성 검토 및 앱-차량 간 제어 신호(열선 시트 등) 동기화 결함 조기 발견</li>
+                                    <li>소유자 환경별(멤버십, 사업자 명의 등) 권한 및 결제 약관 동의 프로세스 예외 케이스 설계 및 TC 수행</li>
+                                    <li>지도 서비스 내 특정 액션 시 발생하는 런타임 크래시를 배포 전 다수 발견하여 출시 품질 안정화 기여</li>
+                                    <li>차량 네비게이션 및 원격 제어 기능과 앱 간의 연동 안정성 평가를 위한 실차 테스트 수행</li>
                                 </ul>
                             </div>
                         </div>
@@ -249,46 +318,76 @@
                         <div class="pf-project-card reveal-up" style="--delay:.0s">
                             <div class="pf-proj-num">01</div>
                             <div class="pf-proj-body">
-                                <h3>Personal Dashboard</h3>
-                                <p>글래스모피즘 기반의 개인화 관제탑. Three.js Neural Network 배경, 칸반 보드, 캘린더, 커리어 로드맵을 하나의 SPA로 구현.</p>
+                                <h3>Personal Dashboard & Portfolio</h3>
+                                <p>
+                                    Vanilla JS 기반의 SPA(Single Page Application)로 구축된 개인화 관제탑입니다.
+                                    벤토 그리드 레이아웃을 통해 시각적 즐거움과 정보 전달력을 동시에 확보했습니다.
+                                </p>
+                                <ul class="pf-achieve-list"
+                                    style="margin: 12px 0; padding-left: 18px; color: #9ca3af; font-size: 14px; line-height: 1.6;">
+                                    <li>Three.js를 활용한 GPU 가속 렌더링 최적화</li>
+                                    <li>localStorage 기반의 칸반 보드 상태 관리 시스템</li>
+                                    <li>FOUC(스타일 지연 깜빡임) 방지 로직 적용</li>
+                                </ul>
                                 <div class="pf-tag-list">
                                     <span class="pf-tag">Vanilla JS</span>
                                     <span class="pf-tag">Three.js</span>
-                                    <span class="pf-tag">CSS3</span>
+                                    <span class="pf-tag">Optimization</span>
                                 </div>
                             </div>
                             <a href="#" class="pf-proj-link">View →</a>
                         </div>
+
                         <div class="pf-project-card reveal-up" style="--delay:.1s">
                             <div class="pf-proj-num">02</div>
                             <div class="pf-proj-body">
-                                <h3>가계부 앱 <span class="pf-wip">WIP</span></h3>
-                                <p>수입/지출 시각화와 카테고리별 분석 기능을 갖춘 개인 가계부 웹 애플리케이션.</p>
+                                <h3>Minimalist Budget Manager <span class="pf-wip">WIP</span></h3>
+                                <p>
+                                    React와 Chart.js를 활용하여 지출 내역을 직관적으로 시각화하는 자산 관리 앱입니다.
+                                    불필요한 단계를 제거한 미니멀 UX와 데이터 무결성에 중점을 두었습니다.
+                                </p>
+                                <ul class="pf-achieve-list"
+                                    style="margin: 12px 0; padding-left: 18px; color: #9ca3af; font-size: 14px; line-height: 1.6;">
+                                    <li>Chart.js 기반의 동적 데이터 시각화 구현</li>
+                                    <li>입력값 유효성 검증(Validation) 로직 설계</li>
+                                </ul>
                                 <div class="pf-tag-list">
                                     <span class="pf-tag">React</span>
                                     <span class="pf-tag">Chart.js</span>
+                                    <span class="pf-tag">State Management</span>
                                 </div>
                             </div>
-                            <a href="#" class="pf-proj-link">View →</a>
+                            <a href="#" class="pf-proj-link">Planning...</a>
                         </div>
+
                         <div class="pf-project-card reveal-up" style="--delay:.2s">
                             <div class="pf-proj-num">03</div>
                             <div class="pf-proj-body">
-                                <h3>신호등 프로젝트 <span class="pf-wip">WIP</span></h3>
-                                <p>Coming soon.</p>
+                                <h3>Crosswalk Signal Monitor <span class="pf-wip">WIP</span></h3>
+                                <p>
+                                    실시간 공공 데이터를 활용하여 보행자 신호 상태를 실시간으로 제공하는 서비스입니다.
+                                    비동기 데이터 처리와 네트워크 지연 대응이 핵심입니다.
+                                </p>
+                                <ul class="pf-achieve-list"
+                                    style="margin: 12px 0; padding-left: 18px; color: #9ca3af; font-size: 14px; line-height: 1.6;">
+                                    <li>REST API 기반 실시간 데이터 동기화</li>
+                                    <li>스켈레톤 UI를 활용한 비동기 렌더링 최적화</li>
+                                </ul>
                                 <div class="pf-tag-list">
-                                    <span class="pf-tag pf-tag-dim">TBD</span>
+                                    <span class="pf-tag">REST API</span>
+                                    <span class="pf-tag">Async/Await</span>
+                                    <span class="pf-tag">Skeleton UI</span>
                                 </div>
                             </div>
-                            <a href="#" class="pf-proj-link pf-proj-link-dim">Soon</a>
+                            <a href="#" class="pf-proj-link pf-proj-link-dim">Coming Soon</a>
                         </div>
                     </div>
                 </section>
 
                 <!-- ── FOOTER ── -->
                 <footer class="pf-footer reveal-up">
-                    <p>© 2026 YooBi LEE · Built with 💙</p>
-                    <a href="mailto:yoobi.dev@gmail.com" class="pf-footer-mail">yoobi.dev@gmail.com</a>
+                    <p>© 2026 YooBi LEE</p>
+                    <a href="mailto:yoobi.dev@gmail.com" class="pf-footer-mail">yblrrto23@gmail.com</a>
                 </footer>
 
             </div>
