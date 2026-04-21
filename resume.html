@@ -3,103 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이유비 | Resume</title>
-    <link rel="stylesheet" href="style.css"> 
-    <style>
-        /* 이력서 전용 추가 스타일링 */
-        body {
-            overflow-y: auto; /* 이력서는 길어질 수 있으므로 스크롤을 허용합니다 */
-            justify-content: center;
-            padding: 50px 20px;
-        }
-        
-        .resume-container {
-            width: 100%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.4); /* 대시보드와 같은 유리 질감 */
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 30px;
-            padding: 60px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #3182f6; /* 토스 블루 컬러 사용 */
-            text-decoration: none;
-            font-weight: 700;
-            margin-bottom: 40px;
-            transition: transform 0.2s;
-        }
-
-        .back-link:hover { transform: translateX(-5px); }
-
-        .resume-header { border-bottom: 2px solid rgba(0, 0, 0, 0.05); padding-bottom: 30px; margin-bottom: 40px; }
-        .resume-header h1 { font-size: 42px; margin: 0; color: #191f28; }
-        .resume-header p { color: #4e5968; font-size: 18px; margin-top: 10px; }
-
-        .resume-section { margin-bottom: 40px; }
-        .resume-section h2 { font-size: 22px; color: #3182f6; margin-bottom: 20px; }
-        .resume-item { margin-bottom: 25px; }
-        .resume-item h3 { font-size: 19px; color: #333d4b; margin-bottom: 5px; }
-        .resume-item .date { font-size: 14px; color: #8b95a1; margin-bottom: 10px; }
-        .resume-item ul { padding-left: 20px; color: #4e5968; line-height: 1.7; }
-
-        /* 다크모드 대응 */
-        body.dark-mode .resume-container { background: rgba(30, 41, 59, 0.7); border-color: rgba(255, 255, 255, 0.1); }
-        body.dark-mode .resume-header h1 { color: #f8fafc; }
-        body.dark-mode .resume-item h3 { color: #e2e8f0; }
-        body.dark-mode .resume-item ul { color: #94a3b8; }
-    </style>
+    <title>이유비 — Resume</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="resume.css">
 </head>
 <body>
-    <div class="resume-container">
-        <a href="index.html#dashboard" class="back-link">← 대시보드로 돌아가기</a>
 
+<!-- 포트폴리오와 테마 동기화 -->
+<script>
+    (function() {
+        const saved = localStorage.getItem('yoobiTheme');
+        if (saved === 'dark') document.body.classList.add('dark-mode');
+    })();
+</script>
+
+<div class="resume-root">
+
+    <!-- Dynamic Island 네비 -->
+    <nav class="resume-island">
+        <a href="index.html#portfolio" class="resume-island-logo">YB</a>
+        <div class="resume-island-divider"></div>
+        <a href="index.html#portfolio" class="resume-island-back">
+            ← Portfolio
+        </a>
+        <button class="resume-island-print" onclick="window.print()">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6V2h8v4M4 12H2V7h12v5h-2M4 10h8v4H4v-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            </svg>
+            Print / PDF
+        </button>
+    </nav>
+
+    <div class="resume-body">
+
+        <!-- ── HEADER ── -->
         <header class="resume-header">
-            <h1>이유비 (YooBi LEE)</h1>
-            <p>QA Engineer ➡ Frontend Developer</p>
+            <div class="resume-header-left">
+                <span class="resume-eyebrow">Resume · 이력서</span>
+                <h1 class="resume-name">
+                    이유비
+                    <span class="resume-name-en">/ YooBi LEE</span>
+                </h1>
+                <p class="resume-tagline">QA 엔지니어의 꼼꼼한 시선으로<br>사용자 경험을 직접 설계하는 프론트엔드 개발자</p>
+            </div>
+            <div class="resume-header-right">
+                <a href="mailto:yoobi.dev@gmail.com" class="resume-contact-item">
+                    <span class="resume-contact-icon">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                            <path d="M2 4l6 5 6-5M2 4h12v9H2V4z" stroke="#3182f6" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    yoobi.dev@gmail.com
+                </a>
+                <a href="https://github.com/yoobilee" target="_blank" class="resume-contact-item">
+                    <span class="resume-contact-icon">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="#3182f6">
+                            <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38v-1.34C3.73 14.3 3.28 13 3.28 13c-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.21 1.87.86 2.33.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 014 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                        </svg>
+                    </span>
+                    github.com/yoobilee
+                </a>
+                <span class="resume-contact-item">
+                    <span class="resume-contact-icon">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 1.5A4.5 4.5 0 018 10.5M8 1.5A4.5 4.5 0 018 10.5M8 1.5C9.4 3 10.5 5 10.5 8S9.4 13 8 14.5M8 1.5C6.6 3 5.5 5 5.5 8S6.6 13 8 14.5M1.5 8h13" stroke="#3182f6" stroke-width="1.4" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    서울특별시 거주
+                </span>
+            </div>
         </header>
 
-        <section class="resume-section">
-            <h2>Experience</h2>
-            <div class="resume-item">
-                <h3>Senior QA Engineer | OO 테크</h3>
-                <p class="date">2023.01 - 현재</p>
-                <ul>
-                    <li>서비스 전반의 품질 보증 프로세스 설계 및 리딩</li>
-                    <li>자동화 테스트 스크립트 작성 및 릴리즈 안정성 확보</li>
-                    <li>사용자 피드백 기반 UX 개선점 제안 및 기획 협업</li>
-                </ul>
-            </div>
-        </section>
+        <!-- ── 자기소개 (전체 너비) ── -->
+        <div class="resume-section resume-full-width" style="padding-top: 40px;">
+            <div class="resume-section-label">About</div>
+            <p class="resume-about-text">
+                2년간 QA 엔지니어로서 서비스 품질 보증 프로세스를 설계하고 자동화 테스트 스크립트를 운영했습니다.
+                <strong>버그를 찾는 눈</strong>이 아닌, <strong>버그가 생기지 않는 코드</strong>를 짜는 개발자로 전환하는 것이 목표입니다.
+                꼼꼼한 QA 관점을 바탕으로 사용자 경험을 세심하게 설계하는 프론트엔드 개발자를 지향합니다.
+            </p>
+        </div>
 
-        <section class="resume-section">
-            <h2>Skills</h2>
-            <div class="resume-item">
-                <p><strong>Frontend:</strong> HTML, CSS, Vanilla JS, React</p>
-                <p><strong>QA Tools:</strong> Selenium, Appium, Jest, Cypress</p>
-                <p><strong>Collaboration:</strong> Jira, Confluence, Git, Figma</p>
-            </div>
-        </section>
+        <!-- ── 2단 레이아웃 ── -->
+        <div class="resume-grid">
 
-        <section class="resume-section">
-            <h2>Education</h2>
-            <div class="resume-item">
-                <h3>OO대학교 컴퓨터공학 전공</h3>
-                <p class="date">2016.03 - 2021.02</p>
-            </div>
-        </section>
-    </div>
+            <!-- 좌측 컬럼 -->
+            <div class="resume-sidebar">
 
-    <script>
-        // 대시보드의 다크모드 설정을 그대로 가져옵니다
-        if (localStorage.getItem('yoobiTheme') === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
-    </script>
+                <!-- 기술 스택 -->
+                <div class="resume-section">
+                    <div class="resume-section-label">Skills</div>
+
+                    <div class="resume-skill-group">
+                        <div class="resume-skill-group-title">Frontend</div>
+                        <div class="resume-tag-list">
+                            <span class="resume-tag">HTML5</span>
+                            <span class="resume-tag">CSS3</span>
+                            <span class="resume-tag">JavaScript</span>
+                            <span class="resume-tag">React</span>
+                            <span class="resume-tag">Three.js</span>
+                        </div>
+                    </div>
+
+                    <div class="resume-skill-group">
+                        <div class="resume-skill-group-title">QA & Tools</div>
+                        <div class="resume-tag-list">
+                            <span class="resume-tag">Selenium</span>
+                            <span class="resume-tag">Cypress</span>
+                            <span class="resume-tag">Jest</span>
+                            <span class="resume-tag">Git</span>
+                            <span class="resume-tag">Figma</span>
+                        </div>
+                    </div>
+
+                    <div class="resume-skill-group">
+                        <div class="resume-skill-group-title">Learning</div>
+                        <div class="resume-tag-list">
+                            <span class="resume-tag resume-tag-dim">TypeScript</span>
+                            <span class="resume-tag resume-tag-dim">Next.js</span>
+                            <span class="resume-tag resume-tag-dim">Node.js</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 학력 -->
+                <div class="resume-section">
+                    <div class="resume-section-label">Education</div>
+                    <div class="resume-edu-item">
+                        <div class="resume-edu-school">OO대학교</div>
+                        <div class="resume-edu-dept">사회복지학과</div>
+                        <div class="resume-edu-date">2018 — 2024</div>
+                    </div>
+                </div>
+
+                <!-- 링크 -->
+                <div class="resume-section">
+                    <div class="resume-section-label">Links</div>
+                    <div class="resume-link-row">
+                        <a href="https://github.com/yoobilee" target="_blank" class="resume-ext-link">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38v-1.34C3.73 14.3 3.28 13 3.28 13c-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.21 1.87.86 2.33.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 014 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                            </svg>
+                            github.com/yoobilee
+                        </a>
+                        <a href="index.html#portfolio" class="resume-ext-link">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                <rect x="1" y="2" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M5 2v11M1 7h14" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            Portfolio Site
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 우측 컬럼 -->
+            <div class="resume-main">
+
+                <!-- 경력 -->
+                <div class="resume-section">
+                    <div class="resume-section-label">Experience</div>
+
+                    <div class="resume-exp-item">
+                        <div class="resume-exp-head">
+                            <span class="resume-exp-role">Senior QA Engineer</span>
+                            <span class="resume-exp-date">2023.01 — 2025.03</span>
+                        </div>
+                        <div class="resume-exp-company">OO 테크</div>
+                        <ul class="resume-exp-list">
+                            <li>서비스 품질 보증 프로세스 설계 및 팀 리딩</li>
+                            <li>Selenium 기반 자동화 테스트 스크립트 작성으로 릴리즈 안정성 확보</li>
+                            <li>UX 개선점 제안 및 기획팀 협업을 통한 사용자 경험 향상</li>
+                            <li>신규 서비스 런칭 QA 프로세스 수립 및 결함 예방 체계 구축</li>
+                        </ul>
+                    </div>
+
+                    <div class="resume-exp-item">
+                        <div class="resume-exp-head">
+                            <span class="resume-exp-role">QA Engineer</span>
+                            <span class="resume-exp-date">2022.07 — 2022.12</span>
+                        </div>
+                        <div class="resume-exp-company">OO 테크</div>
+                        <ul class="resume-exp-list">
+                            <li>웹/앱 서비스 기능 테스트 및 결함 보고</li>
+                            <li>테스트 케이스 작성 및 회귀 테스트 수행</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 프로젝트 -->
+                <div class="resume-section">
+                    <div class="resume-section-label">Projects</div>
+
+                    <div class="resume-proj-item">
+                        <div class="resume-proj-head">
+                            <span class="resume-proj-title">Personal Dashboard</span>
+                            <span class="resume-proj-status">완료</span>
+                        </div>
+                        <p class="resume-proj-desc">
+                            글래스모피즘 기반의 개인화 관제탑 SPA. 포트폴리오 페이지와 대시보드(칸반 보드·캘린더·커리어 로드맵)를 해시 라우팅으로 통합 구현. Three.js Neural Network 인터랙티브 배경 적용.
+                        </p>
+                        <div class="resume-tag-list">
+                            <span class="resume-tag">Vanilla JS</span>
+                            <span class="resume-tag">Three.js</span>
+                            <span class="resume-tag">CSS3</span>
+                            <span class="resume-tag">LocalStorage</span>
+                        </div>
+                    </div>
+
+                    <div class="resume-proj-item">
+                        <div class="resume-proj-head">
+                            <span class="resume-proj-title">가계부 앱</span>
+                            <span class="resume-proj-status wip">WIP</span>
+                        </div>
+                        <p class="resume-proj-desc">
+                            수입·지출 시각화와 카테고리별 분석 기능을 갖춘 개인 가계부 웹 애플리케이션.
+                        </p>
+                        <div class="resume-tag-list">
+                            <span class="resume-tag">React</span>
+                            <span class="resume-tag">Chart.js</span>
+                        </div>
+                    </div>
+
+                    <div class="resume-proj-item">
+                        <div class="resume-proj-head">
+                            <span class="resume-proj-title">신호등 프로젝트</span>
+                            <span class="resume-proj-status wip">WIP</span>
+                        </div>
+                        <p class="resume-proj-desc">준비 중입니다.</p>
+                        <div class="resume-tag-list">
+                            <span class="resume-tag resume-tag-dim">TBD</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="resume-print-hint">
+            우측 하단 버튼 또는 상단 <strong>Print / PDF</strong>를 눌러 저장할 수 있습니다.
+        </div>
+
+    </div><!-- /resume-body -->
+
+</div><!-- /resume-root -->
+
+<!-- 다크모드 토글 -->
+<button class="resume-theme-toggle" id="resume-theme-btn" title="테마 전환">🌙</button>
+
+<script>
+    // 테마 토글
+    const themeBtn = document.getElementById('resume-theme-btn');
+
+    function syncTheme() {
+        const isDark = document.body.classList.contains('dark-mode');
+        themeBtn.textContent = isDark ? '☀️' : '🌙';
+    }
+
+    syncTheme();
+
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('yoobiTheme', isDark ? 'dark' : 'light');
+        syncTheme();
+    });
+</script>
+
 </body>
 </html>

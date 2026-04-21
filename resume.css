@@ -1,0 +1,677 @@
+/* =====================================================
+Resume — 포트폴리오와 동일한 디자인 언어
+===================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.resume-root {
+  min-height: 100vh;
+  background: #f9fafb;
+  color: #191f28;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark-mode .resume-root {
+  background: #0a0f1a;
+  color: #f0f6ff;
+}
+
+/* ── Dynamic Island (포트폴리오와 동일) ── */
+.resume-island {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 100px;
+  padding: 6px 6px 6px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s ease;
+}
+
+body.dark-mode .resume-island {
+  background: rgba(30, 41, 59, 0.75);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ── YB 로고: 포트폴리오 스타일과 100% 동일하게 수정 ── */
+.resume-island-logo {
+  position: relative; /* 빛 반사 효과의 기준점 설정 */
+  overflow: hidden; /* 빛이 원형 영역 밖으로 나가지 않도록 설정 */
+  width: 32px; /* 로고 버튼의 너비 설정 */
+  height: 32px; /* 로고 버튼의 높이 설정 */
+  border-radius: 50%; /* 로고 버튼을 완벽한 원형으로 설정 */
+  background: transparent; /* 배경을 투명하게 설정 */
+  color: #191f28; /* 라이트 모드 기본 글자색 설정 */
+  display: flex; /* 내부 요소 정렬을 위해 플렉스 박스 사용 */
+  align-items: center; /* 세로 방향 중앙 정렬 */
+  justify-content: center; /* 가로 방향 중앙 정렬 */
+  font-weight: 900; /* 글자 두께를 아주 두껍게 설정 */
+  font-size: 14px; /* 글자 크기 설정 */
+  text-decoration: none; /* 밑줄 등 기본 텍스트 장식 제거 */
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* 부드러운 애니메이션 효과 설정 */
+  border: none; /* 테두리 제거 */
+}
+
+/* ── YB 로고: 알약 크기 고정 및 글자 전용 유리 질감 ── */
+.resume-island-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* ⭐️ 알약이 넓어지지 않도록 크기를 32px로 엄격히 고정 */
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;               /* 부모 요소 안에서 찌그러지지 않게 설정 */
+  
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 14px;              /* ⭐️ 요구사항: 14px 고정 */
+  
+  /* ⭐️ 글자 내부에만 빛이 흐르도록 마스킹 설정 */
+  background: linear-gradient(
+    120deg, 
+    #191f28 40%, 
+    rgba(255, 255, 255, 0.7) 50%, 
+    #191f28 60%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* 확대 효과(transform) 없이 색상과 위치만 부드럽게 전환 */
+  transition: background-position 0.6s cubic-bezier(0.23, 1, 0.32, 1), 
+              background-image 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+/* 마우스 호버 시: 글자색이 파란색으로 변하며 빛이 글자만 통과 */
+.resume-island-logo:hover {
+  background-position: 0% 0;    /* 빛줄기 이동 */
+  background-image: linear-gradient(
+    120deg, 
+    #3182f6 40%,                /* 호버 시 시그니처 블루 */
+    rgba(255, 255, 255, 0.9) 50%, 
+    #3182f6 60%
+  );
+}
+
+/* ── 다크모드 대응 ── */
+body.dark-mode .resume-island-logo {
+  background-image: linear-gradient(
+    120deg, 
+    #ffffff 40%, 
+    rgba(255, 255, 255, 0.6) 50%, 
+    #ffffff 60%
+  );
+}
+
+body.dark-mode .resume-island-logo:hover {
+  background-image: linear-gradient(
+    120deg, 
+    #3182f6 40%, 
+    rgba(255, 255, 255, 0.8) 50%, 
+    #3182f6 60%
+  );
+}
+
+.resume-island-divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .resume-island-divider {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.resume-island-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  color: #4e5968;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+body.dark-mode .resume-island-back {
+  background: rgba(255, 255, 255, 0.07);
+  color: #94a3b8;
+}
+
+.resume-island-back:hover {
+  background: #3182f6;
+  color: #fff;
+}
+
+.resume-island-print {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #3182f6;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.resume-island-print:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3);
+}
+
+/* ── 레이아웃 ── */
+.resume-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 100px 32px 80px;
+}
+
+/* ── Header ── */
+.resume-header {
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+body.dark-mode .resume-header {
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+
+.resume-header-left {}
+
+.resume-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3182f6;
+  margin-bottom: 10px;
+  display: block;
+}
+
+body.dark-mode .resume-eyebrow {
+  color: #60a5fa;
+}
+
+.resume-name {
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: #191f28;
+  margin-bottom: 8px;
+}
+
+body.dark-mode .resume-name {
+  color: #f0f6ff;
+}
+
+.resume-name-en {
+  font-size: 0.55em;
+  font-weight: 500;
+  color: #8b95a1;
+  letter-spacing: 0.01em;
+}
+
+.resume-tagline {
+  font-size: 15px;
+  color: #4e5968;
+  line-height: 1.6;
+  margin-top: 10px;
+  max-width: 420px;
+}
+
+body.dark-mode .resume-tagline {
+  color: #94a3b8;
+}
+
+.resume-header-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.resume-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #4e5968;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+body.dark-mode .resume-contact-item {
+  color: #94a3b8;
+}
+
+.resume-contact-item:hover {
+  color: #3182f6;
+}
+
+.resume-contact-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(49, 130, 246, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+body.dark-mode .resume-contact-icon {
+  background: rgba(96, 165, 250, 0.1);
+}
+
+/* ── 2단 레이아웃 ── */
+.resume-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.85fr;
+  gap: 0 56px;
+  margin-top: 48px;
+}
+
+/* ── 섹션 공통 ── */
+.resume-section {
+  margin-bottom: 40px;
+}
+
+.resume-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3182f6;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(49, 130, 246, 0.15);
+}
+
+body.dark-mode .resume-section-label {
+  color: #60a5fa;
+  border-bottom-color: rgba(96, 165, 250, 0.15);
+}
+
+/* ── 스킬 태그 ── */
+.resume-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.resume-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(49, 130, 246, 0.07);
+  color: #3182f6;
+  letter-spacing: -0.01em;
+}
+
+body.dark-mode .resume-tag {
+  background: rgba(96, 165, 250, 0.1);
+  color: #93c5fd;
+}
+
+.resume-tag-dim {
+  background: rgba(0, 0, 0, 0.04);
+  color: #8b95a1;
+}
+
+body.dark-mode .resume-tag-dim {
+  background: rgba(255, 255, 255, 0.05);
+  color: #64748b;
+}
+
+/* ── 스킬 그룹 ── */
+.resume-skill-group {
+  margin-bottom: 18px;
+}
+
+.resume-skill-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8b95a1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 7px;
+}
+
+/* ── 학력 ── */
+.resume-edu-item {
+  margin-bottom: 16px;
+}
+
+.resume-edu-school {
+  font-size: 14px;
+  font-weight: 700;
+  color: #191f28;
+  margin-bottom: 2px;
+}
+
+body.dark-mode .resume-edu-school {
+  color: #f0f6ff;
+}
+
+.resume-edu-dept {
+  font-size: 13px;
+  color: #4e5968;
+  margin-bottom: 2px;
+}
+
+body.dark-mode .resume-edu-dept {
+  color: #94a3b8;
+}
+
+.resume-edu-date {
+  font-size: 12px;
+  color: #8b95a1;
+}
+
+/* ── 링크 ── */
+.resume-link-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resume-ext-link {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3182f6;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.resume-ext-link:hover {
+  opacity: 0.7;
+}
+
+/* ── 경력 타임라인 ── */
+.resume-exp-item {
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.resume-exp-item:last-child {
+  border-bottom: none;
+}
+
+body.dark-mode .resume-exp-item {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.resume-exp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 3px;
+}
+
+.resume-exp-role {
+  font-size: 15px;
+  font-weight: 800;
+  color: #191f28;
+  letter-spacing: -0.02em;
+}
+
+body.dark-mode .resume-exp-role {
+  color: #f0f6ff;
+}
+
+.resume-exp-date {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8b95a1;
+  white-space: nowrap;
+  padding-top: 2px;
+}
+
+.resume-exp-company {
+  font-size: 13px;
+  color: #3182f6;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+body.dark-mode .resume-exp-company {
+  color: #60a5fa;
+}
+
+.resume-exp-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.resume-exp-list li {
+  font-size: 13.5px;
+  color: #4e5968;
+  line-height: 1.55;
+  padding-left: 14px;
+  position: relative;
+}
+
+body.dark-mode .resume-exp-list li {
+  color: #94a3b8;
+}
+
+.resume-exp-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #3182f6;
+  font-size: 11px;
+  top: 3px;
+}
+
+/* ── 프로젝트 ── */
+.resume-proj-item {
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.resume-proj-item:last-child {
+  border-bottom: none;
+}
+
+body.dark-mode .resume-proj-item {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.resume-proj-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.resume-proj-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #191f28;
+  letter-spacing: -0.02em;
+}
+
+body.dark-mode .resume-proj-title {
+  color: #f0f6ff;
+}
+
+.resume-proj-status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 100px;
+  background: rgba(49, 130, 246, 0.08);
+  color: #3182f6;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.resume-proj-status.wip {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+body.dark-mode .resume-proj-status.wip {
+  background: rgba(245, 158, 11, 0.08);
+  color: #fbbf24;
+}
+
+.resume-proj-desc {
+  font-size: 13.5px;
+  color: #4e5968;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+body.dark-mode .resume-proj-desc {
+  color: #94a3b8;
+}
+
+/* ── 자기소개 ── */
+.resume-about-text {
+  font-size: 14px;
+  color: #4e5968;
+  line-height: 1.75;
+}
+
+body.dark-mode .resume-about-text {
+  color: #94a3b8;
+}
+
+.resume-about-text strong {
+  color: #191f28;
+  font-weight: 700;
+}
+
+body.dark-mode .resume-about-text strong {
+  color: #f0f6ff;
+}
+
+/* ── 우측 컬럼 상단 자기소개 전체 너비 ── */
+.resume-full-width {
+  grid-column: 1 / -1;
+  padding-bottom: 40px;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+body.dark-mode .resume-full-width {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ── 인쇄 버튼 영역 ── */
+.resume-print-hint {
+  text-align: center;
+  padding: 40px 0 0;
+  font-size: 13px;
+  color: #8b95a1;
+}
+
+/* ── @media print ── */
+@media print {
+
+  .resume-island,
+  .resume-print-hint {
+    display: none !important;
+  }
+
+  .resume-root {
+    background: #fff !important;
+  }
+
+  body.dark-mode .resume-root {
+    background: #fff !important;
+    color: #191f28 !important;
+  }
+
+  .resume-body {
+    padding: 40px 24px !important;
+  }
+
+  .resume-name,
+  .resume-exp-role,
+  .resume-proj-title,
+  .resume-edu-school {
+    color: #191f28 !important;
+  }
+
+  .resume-about-text,
+  .resume-exp-list li,
+  .resume-proj-desc,
+  .resume-tagline {
+    color: #4e5968 !important;
+  }
+}
+
+/* ── 다크모드 토글 ── */
+.resume-theme-toggle {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 1000;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
+}
+
+body.dark-mode .resume-theme-toggle {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.resume-theme-toggle:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}

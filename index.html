@@ -8,6 +8,8 @@
     <title>나만의 일정 대시보드</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -187,19 +189,25 @@
                     <div class="pf-about-grid">
                         <div class="pf-about-text reveal-up" style="--delay:.05s">
                             <p>
-                                <strong>"품질의 기준을 코드로 구현하는 프론트엔드 엔지니어 유비입니다."</strong><br><br>
-                                약 2년 2개월간의 QA 엔지니어링 경험을 통해 사용자가 체감하는 <strong>성능 임계치와 서비스 무결성</strong>에 대한 깊은 이해를
-                                쌓았습니다.<br>
-                                단순히 기능을 만드는 것에 그치지 않고, 개발 단계부터 성능 테스트 기준점을 준수하며 예외 상황에 강한 인터페이스를 구축하는 데 집중합니다.
+                                <strong>"사용자의 신뢰를 코드로 렌더링하는 프론트엔드 엔지니어, 유비입니다."</strong><br><br>
+                                화려한 UI 뒤에 숨겨진 '단단한 기본기'를 중시합니다. 2년여의 소프트웨어 품질 검증(QA) 경험은 저에게 <strong>엣지 케이스를 예측하고 렌더링
+                                    성능을 최적화하는 날카로운 시야</strong>를 길러주었습니다.<br>
+                                단순히 동작하는 화면을 넘어서, 어떤 환경에서도 끊김 없는 사용자 경험과 무결점의 인터페이스를 구축하는 개발자로 성장하고 있습니다.
                             </p>
                         </div>
                         <div class="pf-stat-row reveal-up" style="--delay:.1s">
-                            <div class="pf-stat"><span class="pf-stat-num">2+</span><span class="pf-stat-label">Years
-                                    QA</span></div>
-                            <div class="pf-stat"><span class="pf-stat-num">3</span><span
-                                    class="pf-stat-label">Projects</span></div>
-                            <div class="pf-stat"><span class="pf-stat-num">∞</span><span
-                                    class="pf-stat-label">Growth</span></div>
+                            <div class="pf-stat">
+                                <span class="pf-stat-num">02+</span>
+                                <span class="pf-stat-label">Years in Tech</span>
+                            </div>
+                            <div class="pf-stat">
+                                <span class="pf-stat-num">03+</span>
+                                <span class="pf-stat-label">Frontend<br>Projects</span>
+                            </div>
+                            <div class="pf-stat">
+                                <span class="pf-stat-num" id="github-commits">0</span>
+                                <span class="pf-stat-label">Monthly<br>Commits</span>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -211,29 +219,40 @@
                         <div class="pf-skill-group reveal-up" style="--delay:.0s">
                             <h4>Frontend</h4>
                             <div class="pf-tag-list">
-                                <span class="pf-tag">HTML5</span>
-                                <span class="pf-tag">CSS3</span>
                                 <span class="pf-tag">JavaScript</span>
-                                <span class="pf-tag">React</span>
+                                <span class="pf-tag">HTML5 / CSS3</span>
                                 <span class="pf-tag">Three.js</span>
-                            </div>
-                        </div>
-                        <div class="pf-skill-group reveal-up" style="--delay:.08s">
-                            <h4>QA & Tools</h4>
-                            <div class="pf-tag-list">
-                                <span class="pf-tag">Selenium</span>
-                                <span class="pf-tag">Cypress</span>
-                                <span class="pf-tag">Jest</span>
-                                <span class="pf-tag">Git</span>
-                                <span class="pf-tag">Figma</span>
-                            </div>
-                        </div>
-                        <div class="pf-skill-group reveal-up" style="--delay:.16s">
-                            <h4>Learning</h4>
-                            <div class="pf-tag-list">
+                                <span class="pf-tag">SPA Architecture</span>
+                                <span class="pf-tag pf-tag-dim">React</span>
                                 <span class="pf-tag pf-tag-dim">TypeScript</span>
                                 <span class="pf-tag pf-tag-dim">Next.js</span>
-                                <span class="pf-tag pf-tag-dim">Node.js</span>
+                                <span class="pf-tag pf-tag-dim">Tailwind CSS</span>
+                                <span class="pf-tag pf-tag-dim">Chart.js</span>
+                            </div>
+                        </div>
+
+                        <div class="pf-skill-group reveal-up" style="--delay:.08s">
+                            <h4>QA & Engineering</h4>
+                            <div class="pf-tag-list">
+                                <span class="pf-tag">TC/TS Design & Execution</span>
+                                <span class="pf-tag">Performance Testing</span>
+                                <span class="pf-tag">Log Analysis</span>
+                                <span class="pf-tag">API Testing</span>
+                                <span class="pf-tag">Django</span>
+                                <span class="pf-tag">Arduino</span>
+                            </div>
+                        </div>
+
+                        <div class="pf-skill-group reveal-up" style="--delay:.16s">
+                            <h4>Collaboration & Tools</h4>
+                            <div class="pf-tag-list">
+                                <span class="pf-tag">Git / GitHub</span>
+                                <span class="pf-tag">Jira / Confluence</span>
+                                <span class="pf-tag">Zephyr</span>
+                                <span class="pf-tag">GameBench Pro</span>
+                                <span class="pf-tag">Google Colab</span>
+                                <span class="pf-tag">Figma</span>
+                                <span class="pf-tag">Notion</span>
                             </div>
                         </div>
                     </div>
@@ -255,7 +274,8 @@
                                 <ul class="pf-tl-list">
                                     <li>정비 효율화를 위한 태블릿 앱 Phase 1 개발 단계 QA 및 성능 테스트 리딩</li>
                                     <li>핵심 모듈(RO) 데이터 요청/수신 안정성 검증을 위한 1,000개 이상의 TC/TS 설계 및 수행</li>
-                                    <li>Google Colab을 활용한 성능 데이터 분석 및 P90(90분위수) 지표 도입으로 성능 리포트 고도화</li>
+                                    <li>GameBench Pro를 활용한 성능 데이터 수집 및 P90(90분위수) 지표 기반의 시각화 리포트(Google Colab) 제작으로 성능
+                                        기준점 재수립</li>
                                     <li>대량 데이터 조회 시 타임아웃 에러 및 비동기 타이머 액션 불일치 등 정밀한 결함 다수 발견</li>
                                 </ul>
                             </div>

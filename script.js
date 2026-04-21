@@ -1,3 +1,30 @@
+// 1. Firebase 설정 (유비님이 복사한 값 적용)
+const firebaseConfig = {
+  apiKey: "AIzaSyCIPKUTDyNC0R0SAVbAAWgkCYpdogmw3w8",
+  authDomain: "yoobi-dashboard.firebaseapp.com",
+  projectId: "yoobi-dashboard",
+  storageBucket: "yoobi-dashboard.firebasestorage.app",
+  messagingSenderId: "92295175260",
+  appId: "1:92295175260:web:7a011ae9813573e3abda99"
+};
+
+// 2. Firebase 시작하기 (호환 모드 버전)
+firebase.initializeApp(firebaseConfig);
+
+// 3. 데이터베이스 도구 가져오기
+const db = firebase.firestore();
+
+// script.js 맨 위나 적절한 위치에 추가
+const DUMMY_KANBAN = [
+    { id: 'd1', title: '🚀 포트폴리오 웹사이트 고도화', desc: 'Firebase 연동 및 다크모드 버그 수정', priority: 'high', status: 'in-progress', date: '2026-04-30' },
+    { id: 'd2', title: '🎨 Three.js 배경 최적화', desc: '모바일 환경에서 프레임 드랍 해결하기', priority: 'medium', status: 'todo', date: '2026-05-10' },
+    { id: 'd3', title: '📝 QA 경력 기술서 정리', desc: '현대자동차 프로젝트 성과 위주로 업데이트', priority: 'low', status: 'done', date: '2026-04-15' }
+];
+
+const DUMMY_EVENTS = [
+    { id: 'e1', title: '프론트엔드 면접 스터디', start: '2026-04-22', color: '#3182f6' },
+    { id: 'e2', title: 'Three.js 강의 수강', start: '2026-04-25', color: '#ff4d4f' }
+];
 // ==========================================
 // 🚦 1. 전역 변수 및 통합 SPA 라우팅 엔진 (최상단 배치)
 // ==========================================
@@ -368,13 +395,26 @@ function getDragAfterElement(container, y) {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
-// ⭐️ 데이터 로드 (v2)
+// ⭐️ 데이터 로드 (v2) - 비어있을 때 더미 데이터 로드 로직 추가
 document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('yoobiTasks_v2');
-    if (saved) {
+    
+    // 저장된 데이터가 있고, 그 내용이 비어있지 않은지 확인합니다.
+    if (saved && JSON.parse(saved).length > 0) {
         kanbanData = JSON.parse(saved);
-        renderBoard();
+    } else {
+        // 데이터가 아예 없거나 빈 배열일 경우, 상단에 정의한 DUMMY_KANBAN을 로드합니다.
+        console.log("새 방문자를 위한 샘플 할 일을 로드합니다. 🚀");
+        kanbanData = DUMMY_KANBAN.map(task => ({
+            ...task,
+            id: Date.now() + Math.random(), // ID 중복 방지
+            dueDate: task.date,             // 데이터 필드명 맞춤 (date -> dueDate)
+            status: task.status || 'todo'
+        }));
+        // 샘플을 로컬 스토리지에 저장해둡니다.
+        localStorage.setItem('yoobiTasks_v2', JSON.stringify(kanbanData));
     }
+    renderBoard();
 });
 
 /**
@@ -407,6 +447,29 @@ if (themeCheckbox) {
 const todayDate = new Date();
 let currentCalYear = todayDate.getFullYear();
 let currentCalMonth = todayDate.getMonth();
+
+// 🗓️ 캘린더 샘플 데이터를 날짜별 저장소에 심어주는 함수
+function seedCalendarDummy() {
+    const hasSeeded = localStorage.getItem('yoobi_calendar_seeded');
+    if (hasSeeded) return; // 이미 심었다면 다시 실행하지 않음
+
+    DUMMY_EVENTS.forEach(event => {
+        // '2026-04-22' 형태를 '2026_3_22' 형태로 변환 (JS Month는 0부터 시작)
+        const dateParts = event.start.split('-');
+        const year = dateParts[0];
+        const month = parseInt(dateParts[1]) - 1;
+        const day = parseInt(dateParts[2]);
+        
+        const key = `yoobiMemo_${year}_${month}_${day}`;
+        
+        // 해당 날짜에 데이터가 없을 때만 샘플을 심음
+        if (!localStorage.getItem(key)) {
+            localStorage.setItem(key, JSON.stringify([event.title]));
+        }
+    });
+
+    localStorage.setItem('yoobi_calendar_seeded', 'true');
+}
 
 function renderCalendar() {
     const titleElement = document.getElementById('calendar-title');
@@ -481,7 +544,10 @@ function renderCalendar() {
     if (window.updateCalendarBadges) window.updateCalendarBadges();
 }
 
-document.addEventListener('DOMContentLoaded', () => { renderCalendar(); });
+document.addEventListener('DOMContentLoaded', () => {
+    seedCalendarDummy(); // 👈 1. 데이터를 먼저 심고
+    renderCalendar();    // 👈 2. 그다음에 달력을 그립니다.
+});
 
 const prevMonthBtn = document.getElementById('prev-month');
 if (prevMonthBtn) {
@@ -827,7 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
             0, 0, 0, 0, 0, 0, 0,
             0, 1, 2, 4, 0, 3, 0,
             2, 1, 1, 1, 0, 0, 1,
-            1, 1, 0, 0, 0, 0, 0,
+            1, 1, 1, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0
         ];
 
@@ -1647,5 +1713,44 @@ function renderUpcomingEvent() {
         widget.classList.add('show');
     } else {
         widget.classList.remove('show');
+    }
+}
+
+async function fetchMonthlyCommits(username) {
+    const now = new Date();
+    // 이번 달 1일의 ISO 날짜 구하기
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    
+    try {
+        // GitHub API 호출 (공개 레포지토리 기준)
+        const response = await fetch(`https://api.github.com/search/commits?q=author:${username}+committer-date:>=${firstDayOfMonth}`);
+        const data = await response.json();
+        
+        const countElement = document.getElementById('github-commits');
+        if (countElement && data.total_count !== undefined) {
+            countElement.innerText = data.total_count + '+';
+        }
+    } catch (error) {
+        console.error("GitHub 데이터를 가져오는데 실패했습니다:", error);
+    }
+}
+
+// DOM 로드 시 실행 (유비님의 깃허브 ID를 입력하세요)
+document.addEventListener('DOMContentLoaded', () => {
+    fetchMonthlyCommits('yoobilee'); 
+});
+
+// 데스크탑 데이터를 서버로 강제 업로드 (나중에 콘솔에서 실행)
+async function uploadMasterData(secretKey) {
+    const kanban = JSON.parse(localStorage.getItem('yoobiTasks_v2')) || [];
+    
+    try {
+        await db.collection("dashboards").doc(secretKey).set({
+            tasks: kanban,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log("✅ 데이터 업로드 성공! 이제 다른 기기에서 연동 가능합니다.");
+    } catch (e) {
+        console.error("❌ 업로드 실패:", e);
     }
 }
