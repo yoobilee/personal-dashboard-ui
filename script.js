@@ -1740,62 +1740,114 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchMonthlyCommits('yoobilee'); 
 });
 
-// 모든 데이터(칸반, 메모, 타임라인)를 한꺼번에 서버로 올리는 함수입니다.
+// ── 데스크탑: 날짜별로 흩어진 데이터를 모두 긁어모아 서버로 업로드 ──
 async function uploadMasterData(secretKey) {
-    // 1. 칸반보드 데이터를 로컬 스토리지에서 가져옵니다. (없으면 빈 배열)
+    // 1. 칸반보드 데이터는 이름이 고정되어 있으므로 바로 가져옵니다.
     const tasks = JSON.parse(localStorage.getItem('yoobiTasks_v2')) || [];
-    // 2. 캘린더 메모 데이터를 로컬 스토리지에서 가져옵니다. (없으면 빈 배열)
-    const memos = JSON.parse(localStorage.getItem('yoobiMemos')) || [];
-    // 3. 타임라인 일정 데이터를 로컬 스토리지에서 가져옵니다. (없으면 빈 배열)
-    const timeline = JSON.parse(localStorage.getItem('yoobiTimeline')) || [];
     
-    // 에러 발생에 대비하여 실행 단위를 try-catch로 감쌉니다.
+    // 2. 수많은 날짜별 메모들을 한데 담을 큰 바구니(객체)를 만듭니다.
+    const memos = {};
+    // 3. 수많은 날짜별 타임라인을 한데 담을 큰 바구니(객체)를 만듭니다.
+    const timeline = {};
+
+    // 4. 로컬 스토리지(창고)에 있는 모든 상자의 개수만큼 반복문을 돌려 검사합니다.
+    for (let i = 0; i < localStorage.length; i++) {
+        // 5. 현재 순서에 있는 상자의 진짜 이름(Key)을 확인합니다.
+        const key = localStorage.key(i);
+        
+        // 6. 만약 상자 이름이 'yoobiMemo_'로 시작한다면? (예: yoobiMemo_2026_3_16)
+        if (key.startsWith('yoobiMemo_')) {
+            // 7. 메모 바구니에 그 이름 그대로 데이터를 꺼내서 담아둡니다.
+            memos[key] = JSON.parse(localStorage.getItem(key));
+        } 
+        // 8. 만약 상자 이름이 'yoobiTimeline_'으로 시작한다면?
+        else if (key.startsWith('yoobiTimeline_')) {
+            // 9. 타임라인 바구니에 그 이름 그대로 데이터를 꺼내서 담아둡니다.
+            timeline[key] = JSON.parse(localStorage.getItem(key));
+        }
+    }
+
+    // 10. 긁어모은 모든 데이터를 파이어베이스 서버로 쏘아 올립니다.
     try {
-        // 4. 파이어베이스의 'dashboards' 폴더 내 시크릿 코드 문서에 3가지 데이터를 모두 저장합니다.
+        // 11. 지정한 시크릿 키 이름의 문서에 데이터를 저장합니다.
         await db.collection("dashboards").doc(secretKey).set({
-            tasks: tasks,       // 칸반 데이터 저장
-            memos: memos,       // 메모 데이터 저장
-            timeline: timeline, // 타임라인 데이터 저장
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp() // 업로드 시간 기록
+            // 12. 칸반 데이터 묶음을 저장합니다.
+            tasks: tasks,
+            // 13. 날짜별로 꽉꽉 채운 메모 바구니를 통째로 저장합니다.
+            memos: memos,
+            // 14. 날짜별로 꽉꽉 채운 타임라인 바구니를 통째로 저장합니다.
+            timeline: timeline,
+            // 15. 서버에 업로드된 현재 시간을 기록합니다.
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        // 5. 업로드가 성공하면 콘솔창에 완료 메시지를 띄웁니다.
-        console.log("✅ 모든 데이터(칸반/메모/타임라인) 업로드 성공!");
+        // 16. 업로드가 성공하면 콘솔창에 축하 메시지를 띄웁니다.
+        console.log("✅ 날짜별 메모/타임라인 싹쓸이 업로드 완료!");
     } catch (e) {
-        // 6. 실패할 경우 에러 내용을 콘솔창에 출력합니다.
+        // 17. 서버 전송 중 문제가 생기면 에러 메시지를 띄웁니다.
         console.error("❌ 업로드 실패:", e);
     }
 }
 
-// 서버에 저장된 모든 데이터를 노트북으로 내려받는 함수입니다.
+// ── 노트북: 서버에서 받은 바구니를 날짜별 상자로 다시 나누어 저장 ──
 async function downloadDataFromServer(secretKey) {
-    // 실행 중 발생할 수 있는 에러를 처리하기 위해 try-catch를 사용합니다.
+    // 1. 에러를 대비하여 try-catch 문 안에서 실행합니다.
     try {
-        // 1. 'dashboards' 폴더에서 유비님의 시크릿 코드로 된 문서를 찾습니다.
+        // 2. 파이어베이스 서버에서 내 시크릿 키가 적힌 문서를 찾습니다.
         const docRef = db.collection('dashboards').doc(secretKey);
-        // 2. 해당 문서의 데이터를 서버로부터 가져옵니다.
+        // 3. 서버에 문서를 달라고 요청하여 가져옵니다.
         const docSnap = await docRef.get();
 
-        // 3. 문서가 서버에 실제로 존재하는지 확인합니다.
+        // 4. 문서가 실제로 서버에 잘 도착했는지(존재하는지) 확인합니다.
         if (docSnap.exists) {
-            // 4. 문서 내부에 저장된 전체 데이터를 가져옵니다.
+            // 5. 문서 안에 들어있는 진짜 데이터 알맹이만 빼냅니다.
             const data = docSnap.data();
-            
-            // 5. 서버의 칸반 데이터를 노트북 로컬 스토리지에 덮어씁니다.
+
+            // 6. 노트북에 원래 있던 옛날 메모/타임라인 찌꺼기를 지우기 위한 목록을 만듭니다.
+            const keysToRemove = [];
+            // 7. 노트북 로컬 스토리지의 모든 항목을 검사합니다.
+            for (let i = 0; i < localStorage.length; i++) {
+                // 8. 노트북 상자의 이름을 확인합니다.
+                const key = localStorage.key(i);
+                // 9. 이름이 메모나 타임라인이면 지울 목록에 추가합니다. (유령 데이터 방지)
+                if (key.startsWith('yoobiMemo_') || key.startsWith('yoobiTimeline_')) {
+                    // 10. 지울 목록 배열에 해당 키를 밀어 넣습니다.
+                    keysToRemove.push(key);
+                }
+            }
+            // 11. 수집한 옛날 상자들을 노트북에서 전부 깨끗하게 삭제합니다.
+            keysToRemove.forEach(k => localStorage.removeItem(k));
+
+            // 12. 서버에서 가져온 칸반 데이터를 덮어씁니다. (없으면 빈 배열)
             localStorage.setItem('yoobiTasks_v2', JSON.stringify(data.tasks || []));
-            // 6. 서버의 메모 데이터를 노트북 로컬 스토리지에 덮어씁니다.
-            localStorage.setItem('yoobiMemos', JSON.stringify(data.memos || []));
-            // 7. 서버의 타임라인 데이터를 노트북 로컬 스토리지에 덮어씁니다.
-            localStorage.setItem('yoobiTimeline', JSON.stringify(data.timeline || []));
-            
-            // 8. 성공 메시지를 출력하고 화면을 새로고침하여 데이터를 반영합니다.
-            console.log("✅ 모든 데이터 동기화 완료! 화면을 새로고침합니다.");
+
+            // 13. 서버 데이터에 메모 바구니가 존재한다면?
+            if (data.memos) {
+                // 14. 바구니 안의 (이름, 데이터) 쌍을 하나씩 꺼내서 반복합니다.
+                for (const [key, value] of Object.entries(data.memos)) {
+                    // 15. 꺼낸 이름(날짜) 그대로 노트북 스토리지에 새롭게 저장합니다.
+                    localStorage.setItem(key, JSON.stringify(value));
+                }
+            }
+
+            // 16. 서버 데이터에 타임라인 바구니가 존재한다면?
+            if (data.timeline) {
+                // 17. 타임라인 바구니 안의 (이름, 데이터) 쌍을 하나씩 꺼내서 반복합니다.
+                for (const [key, value] of Object.entries(data.timeline)) {
+                    // 18. 꺼낸 이름(날짜) 그대로 노트북 스토리지에 새롭게 저장합니다.
+                    localStorage.setItem(key, JSON.stringify(value));
+                }
+            }
+
+            // 19. 모든 정리가 끝나면 완료 메시지를 콘솔에 띄웁니다.
+            console.log("✅ 날짜별 데이터 동기화 완벽 완료! 화면을 새로고침합니다.");
+            // 20. 저장된 새 데이터를 화면에 띄우기 위해 브라우저를 새로고침합니다.
             location.reload(); 
         } else {
-            // 9. 만약 해당 코드로 저장된 데이터가 없다면 경고 메시지를 띄웁니다.
-            console.error("❌ 해당 시크릿 코드로 저장된 데이터가 없습니다. 업로드를 먼저 확인해 주세요.");
+            // 21. 문서가 없으면 에러 메시지를 띄웁니다.
+            console.error("❌ 데이터가 없습니다. 시크릿 코드를 확인하세요.");
         }
     } catch (error) {
-        // 10. 네트워크 문제 등 예외 상황 발생 시 에러를 출력합니다.
+        // 22. 통신 에러 등 예기치 못한 문제가 생기면 로그를 남깁니다.
         console.error("❌ 다운로드 중 에러 발생:", error);
     }
 }
