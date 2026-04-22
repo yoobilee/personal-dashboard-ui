@@ -1754,3 +1754,24 @@ async function uploadMasterData(secretKey) {
         console.error("❌ 업로드 실패:", e);
     }
 }
+
+// 클라우드에서 데이터 내려받기 (다운로드)
+async function downloadDataFromServer(secretKey) {
+    try {
+        const docRef = db.collection('master_data').doc(secretKey);
+        const docSnap = await docRef.get();
+
+        if (docSnap.exists) {
+            const data = docSnap.data();
+            // 로컬 스토리지에 데이터 덮어쓰기
+            localStorage.setItem('yoobiTasks_v2', JSON.stringify(data.kanban || []));
+            
+            console.log("✅ 데이터 다운로드 완료! 화면을 새로고침합니다.");
+            location.reload(); // 다운로드 완료 후 화면 자동 갱신
+        } else {
+            console.error("❌ 해당 시크릿 코드로 저장된 데이터가 없습니다. 코드를 확인해 주세요!");
+        }
+    } catch (error) {
+        console.error("❌ 다운로드 중 에러 발생:", error);
+    }
+}
