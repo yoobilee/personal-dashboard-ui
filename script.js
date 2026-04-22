@@ -1740,50 +1740,47 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchMonthlyCommits('yoobilee'); 
 });
 
-// 데스크탑 데이터를 서버로 강제 업로드 (나중에 콘솔에서 실행)
+// 모든 데이터를 서버로 통합 업로드
 async function uploadMasterData(secretKey) {
-    const kanban = JSON.parse(localStorage.getItem('yoobiTasks_v2')) || [];
+    // 1. 각 저장소에서 데이터를 싹 긁어모읍니다.
+    const tasks = JSON.parse(localStorage.getItem('yoobiTasks_v2')) || [];
+    const memos = JSON.parse(localStorage.getItem('yoobiMemos')) || [];
+    const timeline = JSON.parse(localStorage.getItem('yoobiTimeline')) || [];
     
     try {
+        // 2. 'dashboards'라는 방에 세 종류의 데이터를 한꺼번에 집어넣습니다.
         await db.collection("dashboards").doc(secretKey).set({
-            tasks: kanban,
+            tasks: tasks,
+            memos: memos,
+            timeline: timeline,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        console.log("✅ 데이터 업로드 성공! 이제 다른 기기에서 연동 가능합니다.");
+        console.log("✅ 전 종목(칸반/메모/타임라인) 업로드 성공!");
     } catch (e) {
         console.error("❌ 업로드 실패:", e);
     }
 }
 
-// 클라우드에서 데이터 내려받기 (다운로드)
+// 서버에서 모든 데이터 내려받기
 async function downloadDataFromServer(secretKey) {
-    // 에러 발생을 대비하여 try-catch 문으로 감쌉니다.
     try {
-        // ⭐️ 수정 1: 'master_data'가 아닌 'dashboards' 컬렉션(폴더)에서 문서를 찾습니다.
         const docRef = db.collection('dashboards').doc(secretKey);
-        
-        // 파이어베이스 서버에 해당 문서의 데이터를 요청하여 가져옵니다.
         const docSnap = await docRef.get();
 
-        // 가져온 문서가 실제로 서버에 존재하는지 확인합니다.
         if (docSnap.exists) {
-            // 문서 안의 실제 데이터를 자바스크립트 객체 형태로 꺼냅니다.
             const data = docSnap.data();
             
-            // ⭐️ 수정 2: 'data.kanban'이 아닌 'data.tasks'를 가져와서 로컬 스토리지에 덮어씁니다.
+            // ⭐️ 서버에서 받아온 묶음을 각각의 로컬 스토리지 키에 맞게 분배합니다.
             localStorage.setItem('yoobiTasks_v2', JSON.stringify(data.tasks || []));
+            localStorage.setItem('yoobiMemos', JSON.stringify(data.memos || []));
+            localStorage.setItem('yoobiTimeline', JSON.stringify(data.timeline || []));
             
-            // 데이터 다운로드 및 저장이 완료되었음을 개발자 도구 콘솔에 알립니다.
-            console.log("✅ 데이터 다운로드 완료! 화면을 새로고침합니다.");
-            
-            // 변경된 데이터를 화면에 반영하기 위해 브라우저를 즉시 새로고침합니다.
+            console.log("✅ 모든 데이터 동기화 완료! 화면을 새로고침합니다.");
             location.reload(); 
         } else {
-            // 문서가 존재하지 않을 경우 에러 메시지를 콘솔에 출력합니다.
-            console.error("❌ 해당 시크릿 코드로 저장된 데이터가 없습니다. 코드를 확인해 주세요!");
+            console.error("❌ 해당 코드로 저장된 데이터가 없습니다.");
         }
     } catch (error) {
-        // 네트워크 에러 등 예기치 못한 문제가 발생하면 콘솔에 에러 내용을 출력합니다.
         console.error("❌ 다운로드 중 에러 발생:", error);
     }
 }
