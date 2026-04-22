@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateVoyageProgress();
 
                 // 2. 방금 맨 밑에서 지웠던 토스트 알림을 여기에 안전하게 넣습니다!
-                showToast(isCompleting ? `${phaseName} 단계를 완료했습니다!` : `${phaseName} 단계가 취소되었습니다.`);
+                showToast(isCompleting ? `${phaseName} 단계를 완료했습니다.` : `${phaseName} 단계가 취소되었습니다.`);
             });
         });
     }
@@ -260,7 +260,7 @@ if (modalAddBtn) {
         const input = document.getElementById('modal-task-input');
         const priorityInput = document.getElementById('modal-task-priority'); // ⭐️ 새로 추가된 드롭다운
 
-        if (!input.value.trim()) return showToast('할 일을 입력해 주세요! ✏️');
+        if (!input.value.trim()) return showToast('할 일을 입력해 주세요.');
 
         kanbanData.push({
             id: Date.now(),
@@ -275,7 +275,7 @@ if (modalAddBtn) {
         input.value = '';
         if (priorityInput) priorityInput.value = 'low'; // 다음을 위해 '낮음'으로 초기화
         taskModal.style.display = 'none';
-        showToast('빠른 할 일이 추가되었습니다. ⚡');
+        showToast('할 일이 추가되었습니다.');
     });
 }
 
@@ -289,7 +289,7 @@ if (detailSaveBtn) {
         const priorityInput = document.getElementById('edit-card-priority').value;
         const dateInput = document.getElementById('edit-card-date').value;
 
-        if (!titleInput.trim()) return showToast('제목을 입력해 주세요! ✏️');
+        if (!titleInput.trim()) return showToast('제목을 입력해 주세요.');
 
         if (idValue === '') {
             // ⭐️ ID가 비어있다 = 칸반 보드에서 새로 만들기를 눌렀다!
@@ -301,7 +301,7 @@ if (detailSaveBtn) {
                 dueDate: dateInput,
                 status: 'todo' // 무조건 To Do 기둥으로 들어감
             });
-            showToast('상세한 할 일이 추가되었습니다. 📋');
+            showToast('할 일이 추가되었습니다.');
         } else {
             // ⭐️ ID가 있다 = 기존 카드를 클릭해서 수정 중이다!
             const id = parseInt(idValue);
@@ -311,7 +311,7 @@ if (detailSaveBtn) {
                 cardObj.desc = descInput;
                 cardObj.priority = priorityInput;
                 cardObj.dueDate = dateInput;
-                showToast('변경 사항이 저장되었습니다. ✨');
+                showToast('변경 사항이 저장되었습니다.');
             }
         }
 
@@ -334,7 +334,7 @@ if (deleteConfirmBtn) {
             renderBoard(); // 화면 다시 그리기
 
             deleteModal.style.display = 'none'; // 팝업 닫기
-            showToast('일정이 안전하게 삭제되었습니다. 🗑️');
+            showToast('삭제되었습니다.');
             cardToDeleteId = null; // 임시 타겟 초기화
         }
     });
@@ -375,7 +375,7 @@ columns.forEach((column, index) => {
             if (cardObj.status !== newStatus) {
                 cardObj.status = newStatus;
                 renderBoard(); // 상태가 변했으므로 화면을 다시 그립니다.
-                showToast(`상태 변경: ${newStatus.toUpperCase()} 🚀`);
+                showToast(`상태 변경: ${newStatus.toUpperCase()}`);
             }
         }
     });
@@ -417,29 +417,30 @@ document.addEventListener('DOMContentLoaded', () => {
     renderBoard();
 });
 
-/**
- * [Phase 5] 스타일리시 다크 모드 스위치 연동
- */
-const themeCheckbox = document.getElementById('theme-checkbox');
+// ── 다크모드 토글
 const body = document.body;
-const savedTheme = localStorage.getItem('yoobiTheme');
 
-if (savedTheme === 'dark') {
-    body.classList.add('dark-mode');
-    if (themeCheckbox) themeCheckbox.checked = true;
-}
+(function() {
+    if (localStorage.getItem('yoobiTheme') === 'dark') body.classList.add('dark-mode');
+})();
 
-if (themeCheckbox) {
-    themeCheckbox.addEventListener('change', () => {
-        if (themeCheckbox.checked) {
-            body.classList.add('dark-mode');
-            localStorage.setItem('yoobiTheme', 'dark');
-        } else {
-            body.classList.remove('dark-mode');
-            localStorage.setItem('yoobiTheme', 'light');
-        }
-    });
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const btn   = document.getElementById('theme-toggle-btn');
+    const label = document.getElementById('theme-toggle-label');
+
+    function syncLabel() {
+        if (label) label.textContent = body.classList.contains('dark-mode') ? 'Light' : 'Dark';
+    }
+    syncLabel();
+
+    if (btn) {
+        btn.addEventListener('click', () => {
+            const isDark = body.classList.toggle('dark-mode');
+            localStorage.setItem('yoobiTheme', isDark ? 'dark' : 'light');
+            syncLabel();
+        });
+    }
+});
 
 /**
  * [Phase 7] 3페이지 유비의 캘린더 & 메모장 구동 로직
@@ -861,9 +862,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         statusMenu.querySelectorAll('li').forEach(item => {
             item.addEventListener('click', () => {
-                const icon = item.getAttribute('data-icon');
-                const text = item.getAttribute('data-text');
-                if (statusIcon) statusIcon.innerText = icon;
+                const color = item.getAttribute('data-color') || '#22c55e';
+                const text  = item.getAttribute('data-text');
+                // 컬러 도트 SVG로 아이콘 갱신
+                if (statusIcon) statusIcon.innerHTML = `<svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="${color}"/></svg>`;
                 if (statusText) statusText.innerText = text;
                 statusMenu.classList.remove('show');
                 showToast(`${text} 상태로 변경되었습니다.`);
@@ -980,7 +982,7 @@ function getTodayInfo() {
 if (btnQuickNote) {
     btnQuickNote.addEventListener('click', () => {
         const { label } = getTodayInfo();
-        if (memoModalDate) memoModalDate.innerText = `📅 ${label}`;
+        if (memoModalDate) memoModalDate.innerText = `${label}`;
         if (dailyMemoInput) dailyMemoInput.value = '';
         if (dailyMemoModal) {
             dailyMemoModal.style.display = 'flex';
@@ -1002,7 +1004,7 @@ if (dailyMemoSaveBtn) {
         const text = dailyMemoInput ? dailyMemoInput.value.trim() : '';
 
         if (!text) {
-            showToast('내용을 입력해 주세요! ✏️');
+            showToast('내용을 입력해 주세요.');
             return;
         }
 
@@ -1031,7 +1033,7 @@ if (dailyMemoSaveBtn) {
         }
 
         if (dailyMemoModal) dailyMemoModal.style.display = 'none';
-        showToast(`${label} 메모가 추가되었습니다. 📝`);
+        showToast(`${label} 메모가 추가되었습니다.`);
 
         if (window.updateCalendarBadges) window.updateCalendarBadges();
     });
@@ -1108,7 +1110,7 @@ function renderMemoList(memoArray, memoKey) {
             currentArr.splice(index, 1);
             localStorage.setItem(memoKey, JSON.stringify(currentArr));
             renderMemoList(currentArr, memoKey);
-            showToast('메모가 삭제되었습니다. 🗑️');
+            showToast('메모가 삭제되었습니다.');
 
             if (window.updateCalendarBadges) {
                 window.updateCalendarBadges();
@@ -1139,7 +1141,7 @@ if (btnViewMemo && btnViewTimeline) {
         btnViewTimeline.classList.remove('active');
 
         if (memoInput) memoInput.placeholder = "새로운 메모를 추가해보세요...";
-        if (saveMemoBtn) saveMemoBtn.innerText = "메모 추가하기 💾";
+        if (saveMemoBtn) saveMemoBtn.innerText = "메모 추가하기";
 
         const baseKey = saveMemoBtn.getAttribute('data-base-key');
         if (baseKey) {
@@ -1155,7 +1157,7 @@ if (btnViewMemo && btnViewTimeline) {
         btnViewMemo.classList.remove('active');
 
         if (memoInput) memoInput.placeholder = "일정을 입력하세요 (예: 14:00 미팅)";
-        if (saveMemoBtn) saveMemoBtn.innerText = "일정 추가하기 ⏰";
+        if (saveMemoBtn) saveMemoBtn.innerText = "일정 추가하기";
 
         const baseKey = saveMemoBtn.getAttribute('data-base-key');
         if (baseKey) {
@@ -1168,16 +1170,16 @@ if (btnViewMemo && btnViewTimeline) {
 if (saveMemoBtn) {
     saveMemoBtn.addEventListener('click', () => {
         const baseKey = saveMemoBtn.getAttribute('data-base-key');
-        if (!baseKey) return showToast('왼쪽 달력에서 날짜를 먼저 선택해주세요! 📅');
+        if (!baseKey) return showToast('날짜를 먼저 선택해주세요.');
 
         const text = memoInput.value.trim();
-        if (!text) return showToast('내용을 입력해 주세요! ✏️');
+        if (!text) return showToast('내용을 입력해 주세요.');
 
         const isTimelineMode = btnViewTimeline.classList.contains('active');
 
         if (isTimelineMode) {
             if (!/(\d{1,2}:\d{2})/.test(text)) {
-                return showToast('시간을 포함해주세요! (예: 14:00 미팅) ⏰');
+                return showToast('시간을 포함해주세요. (예: 14:00 미팅)');
             }
             const timeKey = `yoobiTimeline_${baseKey}`;
             const timeArray = JSON.parse(localStorage.getItem(timeKey) || '[]');
@@ -1185,7 +1187,7 @@ if (saveMemoBtn) {
             localStorage.setItem(timeKey, JSON.stringify(timeArray));
 
             renderTimeline(timeArray, timeKey);
-            showToast('타임라인 일정이 추가되었습니다. ⏰');
+            showToast('타임라인 일정이 추가되었습니다.');
         } else {
             const memoKey = `yoobiMemo_${baseKey}`;
             const memoArray = JSON.parse(localStorage.getItem(memoKey) || '[]');
@@ -1193,7 +1195,7 @@ if (saveMemoBtn) {
             localStorage.setItem(memoKey, JSON.stringify(memoArray));
 
             renderMemoList(memoArray, memoKey);
-            showToast('새로운 메모가 추가되었습니다. 📝');
+            showToast('메모가 추가되었습니다.');
         }
 
         memoInput.value = '';
@@ -1240,7 +1242,7 @@ function renderTimeline(timeArray, timeKey) {
             currentArr.splice(item.originalIndex, 1);
             localStorage.setItem(timeKey, JSON.stringify(currentArr));
             renderTimeline(currentArr, timeKey);
-            showToast('일정이 삭제되었습니다. 🗑️');
+            showToast('일정이 삭제되었습니다.');
             if (window.updateCalendarBadges) window.updateCalendarBadges();
         });
 
@@ -1370,9 +1372,13 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 function updateSystemBriefing() {
     // ── 1. 할 일 카드 통계 ──
-    const cards = JSON.parse(localStorage.getItem('yoobiTasks') || '[]');
-    const totalCount   = cards.length;
-    const pendingCount = cards.filter(c => c.status !== 'done').length;
+    const cards = JSON.parse(localStorage.getItem('yoobiTasks_v2') || '[]');
+    
+    // 전체 카운트 (할 일 + 진행 중 + 완료)
+    const totalCount = cards.length;
+    
+    // [수정됨] 상태가 'doing' 이거나 'in-progress'인 카드를 모두 셉니다!
+    const pendingCount = cards.filter(c => c.status === 'doing' || c.status === 'in-progress').length;
 
     const taskEl      = document.getElementById('briefing-task-count');
     const taskBar     = document.getElementById('bento-task-bar');
@@ -1380,6 +1386,7 @@ function updateSystemBriefing() {
 
     if (taskEl) taskEl.textContent = pendingCount;
     if (taskTotalEl) taskTotalEl.textContent = `/ ${totalCount} total`;
+    
     if (taskBar) {
         const pct = totalCount > 0 ? Math.round((pendingCount / totalCount) * 100) : 0;
         setTimeout(() => { taskBar.style.width = pct + '%'; }, 200);
@@ -1851,3 +1858,37 @@ async function downloadDataFromServer(secretKey) {
         console.error("❌ 다운로드 중 에러 발생:", error);
     }
 }
+
+// ── ⭐️ 자동 저장 (Auto-Save) 기능 추가 ──
+
+// 1. 타이머 변수 (연속 입력을 묶어주기 위한 장치)
+let autoSaveTimeout = null;
+
+// 2. 자동 저장 트리거 함수 (입력이 멈추고 2초 뒤에 실행됨)
+function triggerAutoSave() {
+    // 이미 타이머가 돌고 있다면 취소하고 다시 처음부터 센다 (타닥타닥 방지)
+    if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
+    
+    autoSaveTimeout = setTimeout(() => {
+        // ⭐️ 여기에 유비님의 시크릿 코드를 고정으로 넣어주세요!
+        const MY_SECRET_KEY = 'YB-Master-Key-01'; 
+        
+        console.log("⏳ 변경사항 감지! 백그라운드 자동 저장을 시작합니다...");
+        // 아까 만들어둔 전체 싹쓸이 업로드 함수를 조용히 실행!
+        uploadMasterData(MY_SECRET_KEY);
+    }, 2000); // 2000ms = 2초 뒤에 실행
+}
+
+// 3. 브라우저의 저장소(localStorage.setItem) 기능 자체를 해킹해서 업그레이드!
+const originalSetItem = localStorage.setItem;
+
+localStorage.setItem = function(key, value) {
+    // 일단 원래 하던 대로 컴퓨터(로컬) 창고에 데이터를 저장합니다.
+    originalSetItem.apply(this, arguments);
+
+    // 만약 방금 저장한 데이터가 '칸반', '메모', '타임라인' 중 하나라면?
+    if (key === 'yoobiTasks_v2' || key.startsWith('yoobiMemo_') || key.startsWith('yoobiTimeline_')) {
+        // 눈치채지 못하게 백그라운드 자동 저장을 발동시킵니다.
+        triggerAutoSave();
+    }
+};

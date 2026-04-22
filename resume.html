@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,269 +8,358 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="resume.css">
 </head>
+
 <body>
 
-<!-- 포트폴리오와 테마 동기화 -->
-<script>
-    (function() {
-        const saved = localStorage.getItem('yoobiTheme');
-        if (saved === 'dark') document.body.classList.add('dark-mode');
-    })();
-</script>
+    <script>
+        (function () {
+            const saved = localStorage.getItem('yoobiTheme');
+            if (saved === 'dark') document.body.classList.add('dark-mode');
+        })();
+    </script>
 
-<div class="resume-root">
+    <div class="resume-root">
 
-    <!-- Dynamic Island 네비 -->
-    <nav class="resume-island">
-        <a href="index.html#portfolio" class="resume-island-logo">YB</a>
-        <div class="resume-island-divider"></div>
-        <a href="index.html#portfolio" class="resume-island-back">
-            ← Portfolio
-        </a>
-        <button class="resume-island-print" onclick="window.print()">
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                <path d="M4 6V2h8v4M4 12H2V7h12v5h-2M4 10h8v4H4v-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-            </svg>
-            Print / PDF
+        <nav class="resume-island">
+            <a href="index.html" class="resume-island-logo">YB</a>
+
+            <div class="resume-island-divider"></div>
+
+            <a href="index.html#portfolio" class="resume-island-back">
+                <span class="back-arrow">←</span><span class="back-text"> Portfolio</span>
+            </a>
+
+            <button class="resume-island-print" onclick="window.print()">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                    <path d="M4 6V2h8v4M4 12H2V7h12v5h-2M4 10h8v4H4v-4z" stroke="currentColor" stroke-width="1.6"
+                        stroke-linejoin="round" />
+                </svg>
+                <span class="print-text">Print / PDF</span>
+            </button>
+        </nav>
+
+        <div class="resume-body">
+
+            <header class="resume-header">
+                <div class="resume-header-left">
+                    <span class="resume-eyebrow">Resume · 이력서</span>
+                    <h1 class="resume-name">
+                        이유비
+                        <span class="resume-name-en">/ YooBi LEE</span>
+                    </h1>
+                    <p class="resume-tagline">QA 엔지니어의 꼼꼼한 시선으로<br>사용자 경험을 직접 설계하는 프론트엔드 개발자</p>
+                </div>
+                <div class="resume-header-right">
+                    <a href="mailto:yoobi.dev@gmail.com" class="resume-contact-item">
+                        <span class="resume-contact-icon">
+                            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                                <path d="M2 4l6 5 6-5M2 4h12v9H2V4z" stroke="#3182f6" stroke-width="1.5"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        yoobi.dev@gmail.com
+                    </a>
+                    <a href="https://github.com/yoobilee" target="_blank" class="resume-contact-item">
+                        <span class="resume-contact-icon">
+                            <svg width="13" height="13" viewBox="0 0 16 16" fill="#3182f6">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38v-1.34C3.73 14.3 3.28 13 3.28 13c-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.21 1.87.86 2.33.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 014 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                        </span>
+                        github.com/yoobilee
+                    </a>
+                    <span class="resume-contact-item">
+                        <span class="resume-contact-icon">
+                            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                                <path
+                                    d="M8 1.5A4.5 4.5 0 018 10.5M8 1.5A4.5 4.5 0 018 10.5M8 1.5C9.4 3 10.5 5 10.5 8S9.4 13 8 14.5M8 1.5C6.6 3 5.5 5 5.5 8S6.6 13 8 14.5M1.5 8h13"
+                                    stroke="#3182f6" stroke-width="1.4" stroke-linecap="round" />
+                            </svg>
+                        </span>
+                        서울특별시 거주
+                    </span>
+                </div>
+            </header>
+
+            <div class="resume-section resume-full-width" style="padding-top: 40px;">
+                <div class="resume-section-label">About</div>
+                <p class="resume-about-text">
+                    화려한 UI 뒤에 숨겨진 '단단한 기본기'를 중시합니다. 2년여의 소프트웨어 품질 검증(QA) 경험은 저에게 <strong>엣지 케이스를 예측하고 렌더링 성능을 최적화하는 날카로운
+                        시야</strong>를 길러주었습니다.
+                    단순히 동작하는 화면을 넘어서, 어떤 환경에서도 끊김 없는 사용자 경험과 무결점의 인터페이스를 구축하는 프론트엔드 개발자로 성장하고 있습니다.
+                </p>
+            </div>
+
+            <div class="resume-grid">
+
+                <div class="resume-sidebar">
+
+                    <div class="resume-section">
+                        <div class="resume-section-label">Skills</div>
+
+                        <div class="resume-skill-group">
+                            <div class="resume-skill-group-title">Frontend</div>
+                            <div class="resume-tag-list">
+                                <span class="resume-tag">JavaScript</span>
+                                <span class="resume-tag">HTML5 / CSS3</span>
+                                <span class="resume-tag">SPA Architecture</span>
+                                <span class="resume-tag">Three.js</span>
+                                <span class="resume-tag resume-tag-dim">React</span>
+                                <span class="resume-tag resume-tag-dim">TypeScript</span>
+                            </div>
+                        </div>
+
+                        <div class="resume-skill-group">
+                            <div class="resume-skill-group-title">QA & Engineering</div>
+                            <div class="resume-tag-list">
+                                <span class="resume-tag">TC/TS Design</span>
+                                <span class="resume-tag">Performance Testing</span>
+                                <span class="resume-tag">Log Analysis</span>
+                                <span class="resume-tag">API Testing</span>
+                                <span class="resume-tag">GameBench Pro</span>
+                            </div>
+                        </div>
+
+                        <div class="resume-skill-group">
+                            <div class="resume-skill-group-title">Collaboration & Tools</div>
+                            <div class="resume-tag-list">
+                                <span class="resume-tag">Git / GitHub</span>
+                                <span class="resume-tag">Jira / Confluence</span>
+                                <span class="resume-tag">Zephyr</span>
+                                <span class="resume-tag">Figma</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="resume-section">
+                        <div class="resume-section-label">Education</div>
+
+                        <div class="resume-edu-item">
+                            <div class="resume-edu-school">경기대학교</div>
+                            <div class="resume-edu-dept">컴퓨터공학부 (학사편입 졸업)</div>
+                            <div class="resume-edu-date">2022.03 — 2024.02</div>
+                        </div>
+
+                        <div class="resume-edu-item">
+                            <div class="resume-edu-school">국가평생교육진흥원 (학점은행제)</div>
+                            <div class="resume-edu-dept">컴퓨터공학 학사 취득</div>
+                            <div class="resume-edu-date">2017.09 — 2022.02</div>
+                            <div class="resume-edu-desc" style="font-size: 11px; color: #8b95a1; margin-top: 4px;">
+                                * 2018.02 — 2019.10 군 복무 및 학업 병행
+                            </div>
+                        </div>
+
+                        <div class="resume-edu-item" style="opacity: 0.7;">
+                            <div class="resume-edu-school">한국교통대학교</div>
+                            <div class="resume-edu-dept">에너지시스템공학과 (자퇴)</div>
+                            <div class="resume-edu-date">2016.03 — 2017.08</div>
+                        </div>
+
+                        <div class="resume-section-label">Military</div>
+                        <div class="resume-edu-item">
+                            <div class="resume-edu-school">대한민국 육군 병장 전역</div>
+                            <div class="resume-edu-date">2018.02 — 2019.10</div>
+                        </div>
+                    </div>
+
+                    <div class="resume-section">
+                        <div class="resume-section-label">Links</div>
+                        <div class="resume-link-row">
+                            <a href="https://github.com/yoobilee" target="_blank" class="resume-ext-link">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                                    <path
+                                        d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38v-1.34C3.73 14.3 3.28 13 3.28 13c-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.21 1.87.86 2.33.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 014 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z" />
+                                </svg>
+                                github.com/yoobilee
+                            </a>
+                            <a href="index.html#portfolio" class="resume-ext-link">
+                                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                    <rect x="1" y="2" width="14" height="11" rx="2" stroke="currentColor"
+                                        stroke-width="1.5" />
+                                    <path d="M5 2v11M1 7h14" stroke="currentColor" stroke-width="1.5" />
+                                </svg>
+                                Portfolio Site
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="resume-main">
+
+                    <div class="resume-section">
+                        <div class="resume-section-label">Experience</div>
+
+                        <div class="resume-exp-item">
+                            <div class="resume-exp-head">
+                                <span class="resume-exp-role">QA Engineer</span>
+                                <span class="resume-exp-date">2025.12 — 2026.03</span>
+                            </div>
+                            <div class="resume-exp-company">컴즈(주) | 현대자동차 통합모바일 서비스</div>
+                            <ul class="resume-exp-list">
+                                <li>정비 효율화를 위한 태블릿 앱 Phase 1 개발 단계 QA 및 성능 테스트 리딩</li>
+                                <li>핵심 모듈(RO) 데이터 요청/수신 안정성 검증을 위한 1,000개 이상의 TC/TS 설계 및 수행</li>
+                                <li>GameBench Pro를 활용한 성능 데이터 수집 및 P90(90분위수) 지표 기반의 시각화 리포트(Google Colab) 제작으로 성능 기준점
+                                    재수립</li>
+                                <li>대량 데이터 조회 시 타임아웃 에러 및 비동기 타이머 액션 불일치 등 정밀한 결함 다수 발견</li>
+                            </ul>
+                        </div>
+
+                        <div class="resume-exp-item">
+                            <div class="resume-exp-head">
+                                <span class="resume-exp-role">QA Engineer</span>
+                                <span class="resume-exp-date">2025.10 — 2025.11</span>
+                            </div>
+                            <div class="resume-exp-company">컴즈(주) | 현대자동차 국내판매시스템</div>
+                            <ul class="resume-exp-list">
+                                <li>판매금융 파트 대대적 개편에 따른 기획서 기반의 TC 설계 및 상시 업데이트</li>
+                                <li>높은 기획 변동성에 대응하여 금융 프로세스별 예외 케이스와 비즈니스 로직 정밀 검증</li>
+                            </ul>
+                        </div>
+
+                        <div class="resume-exp-item">
+                            <div class="resume-exp-head">
+                                <span class="resume-exp-role">QA Engineer</span>
+                                <span class="resume-exp-date">2025.09 — 2025.10</span>
+                            </div>
+                            <div class="resume-exp-company">컴즈(주) | 가상화폐 플랫폼 'Flipster'</div>
+                            <ul class="resume-exp-list">
+                                <li>안드로이드 부문 2,000개 이상의 Full TC 및 Regression 테스트 고속 수행</li>
+                                <li>API 환경 조작 및 계정별 조건 생성을 통한 데이터 기반의 이벤트 혜택 로직 검증</li>
+                                <li>투자 성과 데이터와 래더 페이지 순위 간의 정렬 로직 이슈 발견 및 정정 기여</li>
+                            </ul>
+                        </div>
+
+                        <div class="resume-exp-item">
+                            <div class="resume-exp-head">
+                                <span class="resume-exp-role">QA Engineer</span>
+                                <span class="resume-exp-date">2024.01 — 2025.08</span>
+                            </div>
+                            <div class="resume-exp-company">(주)와이즈와이어즈 | 현대오토에버 커넥티드 앱 프로젝트</div>
+                            <ul class="resume-exp-list">
+                                <li>기존 CCS(블루링크, Kia Connect) 유지보수 및 신규 CCI(MyHyundai, KIA) 통합 리뉴얼 프로젝트 참여</li>
+                                <li>로그 분석을 통한 데이터 무결성 검토 및 앱-차량 간 제어 신호(열선 시트 등) 동기화 결함 조기 발견</li>
+                                <li>소유자 환경별(멤버십, 사업자 명의 등) 권한 및 결제 약관 동의 프로세스 예외 케이스 설계 및 TC 수행</li>
+                                <li>지도 서비스 내 특정 액션 시 발생하는 런타임 크래시를 배포 전 다수 발견하여 출시 품질 안정화 기여</li>
+                                <li>차량 네비게이션 및 원격 제어 기능과 앱 간의 연동 안정성 평가를 위한 실차 테스트 수행</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="resume-section">
+                        <div class="resume-section-label">Projects</div>
+
+                        <div class="resume-proj-item">
+                            <div class="resume-proj-head">
+                                <span class="resume-proj-title">Personal Dashboard & Portfolio</span>
+                                <span class="resume-proj-status">완료</span>
+                            </div>
+                            <p class="resume-proj-desc">
+                                Vanilla JS 기반의 SPA로 구축된 개인화 관제탑입니다. 벤토 그리드 레이아웃을 통해 시각적 즐거움과 정보 전달력을 동시에 확보했으며,
+                                Three.js를 활용한 GPU 가속 렌더링 최적화 및 localStorage 기반의 칸반 보드 상태 관리 시스템을 구현했습니다.
+                            </p>
+                            <div class="resume-tag-list">
+                                <span class="resume-tag">Vanilla JS</span>
+                                <span class="resume-tag">Three.js</span>
+                                <span class="resume-tag">CSS3</span>
+                                <span class="resume-tag">LocalStorage</span>
+                            </div>
+                        </div>
+
+                        <div class="resume-proj-item">
+                            <div class="resume-proj-head">
+                                <span class="resume-proj-title">Minimalist Budget Manager</span>
+                                <span class="resume-proj-status wip">WIP</span>
+                            </div>
+                            <p class="resume-proj-desc">
+                                React와 Chart.js를 활용하여 지출 내역을 직관적으로 시각화하는 자산 관리 앱입니다. 불필요한 단계를 제거한 미니멀 UX와 데이터 무결성에 중점을
+                                두고, 입력값 유효성 검증 로직을 설계하고 있습니다.
+                            </p>
+                            <div class="resume-tag-list">
+                                <span class="resume-tag">React</span>
+                                <span class="resume-tag">Chart.js</span>
+                                <span class="resume-tag">State Management</span>
+                            </div>
+                        </div>
+
+                        <div class="resume-proj-item">
+                            <div class="resume-proj-head">
+                                <span class="resume-proj-title">Crosswalk Signal Monitor</span>
+                                <span class="resume-proj-status wip">WIP</span>
+                            </div>
+                            <p class="resume-proj-desc">
+                                실시간 공공 데이터를 활용하여 보행자 신호 상태를 실시간으로 제공하는 서비스입니다. REST API 기반 실시간 데이터 동기화와 스켈레톤 UI를 활용한 비동기
+                                렌더링 최적화 경험을 목표로 개발 중입니다.
+                            </p>
+                            <div class="resume-tag-list">
+                                <span class="resume-tag">REST API</span>
+                                <span class="resume-tag">Async/Await</span>
+                                <span class="resume-tag">Skeleton UI</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="resume-print-hint">
+                우측 하단 버튼 또는 상단 <strong>Print / PDF</strong>를 눌러 저장할 수 있습니다.
+            </div>
+
+        </div><button class="resume-theme-toggle" id="resume-theme-btn" title="테마 전환">
+            <span class="resume-toggle-icon">
+                <svg class="resume-toggle-moon" width="13" height="13" viewBox="0 0 20 20" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" fill="#3182f6" />
+                </svg>
+                <svg class="resume-toggle-sun" width="13" height="13" viewBox="0 0 20 20" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="4" fill="#60a5fa" />
+                    <path
+                        d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42"
+                        stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" />
+                </svg>
+            </span>
+            <span class="resume-toggle-label" id="resume-theme-label">Dark</span>
         </button>
-    </nav>
 
-    <div class="resume-body">
+        <script>
+            // 페이지 스크롤 시 네비게이션 바의 상태를 변경하는 함수입니다.
+            window.addEventListener('scroll', () => {
+                // 'resume-island' 클래스를 가진 요소를 선택합니다.
+                const nav = document.querySelector('.resume-island');
+                // 스크롤 높이가 50px을 초과하면 'scrolled' 클래스를 추가하고, 아니면 제거합니다.
+                if (window.scrollY > 50) {
+                    // 클래스가 추가되면 CSS에 정의된 축소 애니메이션이 실행됩니다.
+                    nav.classList.add('scrolled');
+                } else {
+                    // 위로 올라오면 다시 원래 상태로 복구합니다.
+                    nav.classList.remove('scrolled');
+                }
+            });
 
-        <!-- ── HEADER ── -->
-        <header class="resume-header">
-            <div class="resume-header-left">
-                <span class="resume-eyebrow">Resume · 이력서</span>
-                <h1 class="resume-name">
-                    이유비
-                    <span class="resume-name-en">/ YooBi LEE</span>
-                </h1>
-                <p class="resume-tagline">QA 엔지니어의 꼼꼼한 시선으로<br>사용자 경험을 직접 설계하는 프론트엔드 개발자</p>
-            </div>
-            <div class="resume-header-right">
-                <a href="mailto:yoobi.dev@gmail.com" class="resume-contact-item">
-                    <span class="resume-contact-icon">
-                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                            <path d="M2 4l6 5 6-5M2 4h12v9H2V4z" stroke="#3182f6" stroke-width="1.5" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                    yoobi.dev@gmail.com
-                </a>
-                <a href="https://github.com/yoobilee" target="_blank" class="resume-contact-item">
-                    <span class="resume-contact-icon">
-                        <svg width="13" height="13" viewBox="0 0 16 16" fill="#3182f6">
-                            <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38v-1.34C3.73 14.3 3.28 13 3.28 13c-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.21 1.87.86 2.33.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 014 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/>
-                        </svg>
-                    </span>
-                    github.com/yoobilee
-                </a>
-                <span class="resume-contact-item">
-                    <span class="resume-contact-icon">
-                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                            <path d="M8 1.5A4.5 4.5 0 018 10.5M8 1.5A4.5 4.5 0 018 10.5M8 1.5C9.4 3 10.5 5 10.5 8S9.4 13 8 14.5M8 1.5C6.6 3 5.5 5 5.5 8S6.6 13 8 14.5M1.5 8h13" stroke="#3182f6" stroke-width="1.4" stroke-linecap="round"/>
-                        </svg>
-                    </span>
-                    서울특별시 거주
-                </span>
-            </div>
-        </header>
+            // ⭐️ 2. 글자(Dark/Light)도 함께 바뀌도록 자바스크립트 업데이트
+            const themeBtn = document.getElementById('resume-theme-btn');
+            const themeLabel = document.getElementById('resume-theme-label');
 
-        <!-- ── 자기소개 (전체 너비) ── -->
-        <div class="resume-section resume-full-width" style="padding-top: 40px;">
-            <div class="resume-section-label">About</div>
-            <p class="resume-about-text">
-                2년간 QA 엔지니어로서 서비스 품질 보증 프로세스를 설계하고 자동화 테스트 스크립트를 운영했습니다.
-                <strong>버그를 찾는 눈</strong>이 아닌, <strong>버그가 생기지 않는 코드</strong>를 짜는 개발자로 전환하는 것이 목표입니다.
-                꼼꼼한 QA 관점을 바탕으로 사용자 경험을 세심하게 설계하는 프론트엔드 개발자를 지향합니다.
-            </p>
-        </div>
+            function syncTheme() {
+                const isDark = document.body.classList.contains('dark-mode');
+                // SVG는 CSS에서 display로 컨트롤하고, 글자만 JS로 변경합니다.
+                if (themeLabel) {
+                    themeLabel.textContent = isDark ? 'Light' : 'Dark';
+                }
+            }
 
-        <!-- ── 2단 레이아웃 ── -->
-        <div class="resume-grid">
+            syncTheme();
 
-            <!-- 좌측 컬럼 -->
-            <div class="resume-sidebar">
-
-                <!-- 기술 스택 -->
-                <div class="resume-section">
-                    <div class="resume-section-label">Skills</div>
-
-                    <div class="resume-skill-group">
-                        <div class="resume-skill-group-title">Frontend</div>
-                        <div class="resume-tag-list">
-                            <span class="resume-tag">HTML5</span>
-                            <span class="resume-tag">CSS3</span>
-                            <span class="resume-tag">JavaScript</span>
-                            <span class="resume-tag">React</span>
-                            <span class="resume-tag">Three.js</span>
-                        </div>
-                    </div>
-
-                    <div class="resume-skill-group">
-                        <div class="resume-skill-group-title">QA & Tools</div>
-                        <div class="resume-tag-list">
-                            <span class="resume-tag">Selenium</span>
-                            <span class="resume-tag">Cypress</span>
-                            <span class="resume-tag">Jest</span>
-                            <span class="resume-tag">Git</span>
-                            <span class="resume-tag">Figma</span>
-                        </div>
-                    </div>
-
-                    <div class="resume-skill-group">
-                        <div class="resume-skill-group-title">Learning</div>
-                        <div class="resume-tag-list">
-                            <span class="resume-tag resume-tag-dim">TypeScript</span>
-                            <span class="resume-tag resume-tag-dim">Next.js</span>
-                            <span class="resume-tag resume-tag-dim">Node.js</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 학력 -->
-                <div class="resume-section">
-                    <div class="resume-section-label">Education</div>
-                    <div class="resume-edu-item">
-                        <div class="resume-edu-school">OO대학교</div>
-                        <div class="resume-edu-dept">사회복지학과</div>
-                        <div class="resume-edu-date">2018 — 2024</div>
-                    </div>
-                </div>
-
-                <!-- 링크 -->
-                <div class="resume-section">
-                    <div class="resume-section-label">Links</div>
-                    <div class="resume-link-row">
-                        <a href="https://github.com/yoobilee" target="_blank" class="resume-ext-link">
-                            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38v-1.34C3.73 14.3 3.28 13 3.28 13c-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.21 1.87.86 2.33.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 014 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/>
-                            </svg>
-                            github.com/yoobilee
-                        </a>
-                        <a href="index.html#portfolio" class="resume-ext-link">
-                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                                <rect x="1" y="2" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                                <path d="M5 2v11M1 7h14" stroke="currentColor" stroke-width="1.5"/>
-                            </svg>
-                            Portfolio Site
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- 우측 컬럼 -->
-            <div class="resume-main">
-
-                <!-- 경력 -->
-                <div class="resume-section">
-                    <div class="resume-section-label">Experience</div>
-
-                    <div class="resume-exp-item">
-                        <div class="resume-exp-head">
-                            <span class="resume-exp-role">Senior QA Engineer</span>
-                            <span class="resume-exp-date">2023.01 — 2025.03</span>
-                        </div>
-                        <div class="resume-exp-company">OO 테크</div>
-                        <ul class="resume-exp-list">
-                            <li>서비스 품질 보증 프로세스 설계 및 팀 리딩</li>
-                            <li>Selenium 기반 자동화 테스트 스크립트 작성으로 릴리즈 안정성 확보</li>
-                            <li>UX 개선점 제안 및 기획팀 협업을 통한 사용자 경험 향상</li>
-                            <li>신규 서비스 런칭 QA 프로세스 수립 및 결함 예방 체계 구축</li>
-                        </ul>
-                    </div>
-
-                    <div class="resume-exp-item">
-                        <div class="resume-exp-head">
-                            <span class="resume-exp-role">QA Engineer</span>
-                            <span class="resume-exp-date">2022.07 — 2022.12</span>
-                        </div>
-                        <div class="resume-exp-company">OO 테크</div>
-                        <ul class="resume-exp-list">
-                            <li>웹/앱 서비스 기능 테스트 및 결함 보고</li>
-                            <li>테스트 케이스 작성 및 회귀 테스트 수행</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 프로젝트 -->
-                <div class="resume-section">
-                    <div class="resume-section-label">Projects</div>
-
-                    <div class="resume-proj-item">
-                        <div class="resume-proj-head">
-                            <span class="resume-proj-title">Personal Dashboard</span>
-                            <span class="resume-proj-status">완료</span>
-                        </div>
-                        <p class="resume-proj-desc">
-                            글래스모피즘 기반의 개인화 관제탑 SPA. 포트폴리오 페이지와 대시보드(칸반 보드·캘린더·커리어 로드맵)를 해시 라우팅으로 통합 구현. Three.js Neural Network 인터랙티브 배경 적용.
-                        </p>
-                        <div class="resume-tag-list">
-                            <span class="resume-tag">Vanilla JS</span>
-                            <span class="resume-tag">Three.js</span>
-                            <span class="resume-tag">CSS3</span>
-                            <span class="resume-tag">LocalStorage</span>
-                        </div>
-                    </div>
-
-                    <div class="resume-proj-item">
-                        <div class="resume-proj-head">
-                            <span class="resume-proj-title">가계부 앱</span>
-                            <span class="resume-proj-status wip">WIP</span>
-                        </div>
-                        <p class="resume-proj-desc">
-                            수입·지출 시각화와 카테고리별 분석 기능을 갖춘 개인 가계부 웹 애플리케이션.
-                        </p>
-                        <div class="resume-tag-list">
-                            <span class="resume-tag">React</span>
-                            <span class="resume-tag">Chart.js</span>
-                        </div>
-                    </div>
-
-                    <div class="resume-proj-item">
-                        <div class="resume-proj-head">
-                            <span class="resume-proj-title">신호등 프로젝트</span>
-                            <span class="resume-proj-status wip">WIP</span>
-                        </div>
-                        <p class="resume-proj-desc">준비 중입니다.</p>
-                        <div class="resume-tag-list">
-                            <span class="resume-tag resume-tag-dim">TBD</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="resume-print-hint">
-            우측 하단 버튼 또는 상단 <strong>Print / PDF</strong>를 눌러 저장할 수 있습니다.
-        </div>
-
-    </div><!-- /resume-body -->
-
-</div><!-- /resume-root -->
-
-<!-- 다크모드 토글 -->
-<button class="resume-theme-toggle" id="resume-theme-btn" title="테마 전환">🌙</button>
-
-<script>
-    // 테마 토글
-    const themeBtn = document.getElementById('resume-theme-btn');
-
-    function syncTheme() {
-        const isDark = document.body.classList.contains('dark-mode');
-        themeBtn.textContent = isDark ? '☀️' : '🌙';
-    }
-
-    syncTheme();
-
-    themeBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('yoobiTheme', isDark ? 'dark' : 'light');
-        syncTheme();
-    });
-</script>
+            themeBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('yoobiTheme', isDark ? 'dark' : 'light');
+                syncTheme();
+            });
+        </script>
 
 </body>
+
 </html>

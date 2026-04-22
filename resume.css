@@ -1,7 +1,22 @@
+@charset "UTF-8";
+
 /* =====================================================
-Resume — 포트폴리오와 동일한 디자인 언어
+   Resume — YooBi LEE
+   [Table of Contents]
+   01. Base & Layout
+   02. Dynamic Island (Navigation)
+   03. Header & Contact
+   04. Common Sections
+   05. Skills
+   06. Education & Links
+   07. Experience & Projects
+   08. Theme Toggle Button
+   09. Print Styles
 ===================================================== */
 
+/* =====================================================
+   01. Base & Layout
+===================================================== */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -21,7 +36,22 @@ body.dark-mode .resume-root {
   color: #f0f6ff;
 }
 
-/* ── Dynamic Island (포트폴리오와 동일) ── */
+.resume-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 100px 32px 80px;
+}
+
+.resume-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.85fr;
+  gap: 0 56px;
+  margin-top: 48px;
+}
+
+/* =====================================================
+   02. Dynamic Island (Navigation)
+===================================================== */
 .resume-island {
   position: fixed;
   top: 16px;
@@ -38,7 +68,7 @@ body.dark-mode .resume-root {
   align-items: center;
   gap: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  transition: all 0.4s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.dark-mode .resume-island {
@@ -47,116 +77,83 @@ body.dark-mode .resume-island {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* ── YB 로고: 포트폴리오 스타일과 100% 동일하게 수정 ── */
+/* ── YB 로고 ── */
 .resume-island-logo {
-  position: relative; /* 빛 반사 효과의 기준점 설정 */
-  overflow: hidden; /* 빛이 원형 영역 밖으로 나가지 않도록 설정 */
-  width: 32px; /* 로고 버튼의 너비 설정 */
-  height: 32px; /* 로고 버튼의 높이 설정 */
-  border-radius: 50%; /* 로고 버튼을 완벽한 원형으로 설정 */
-  background: transparent; /* 배경을 투명하게 설정 */
-  color: #191f28; /* 라이트 모드 기본 글자색 설정 */
-  display: flex; /* 내부 요소 정렬을 위해 플렉스 박스 사용 */
-  align-items: center; /* 세로 방향 중앙 정렬 */
-  justify-content: center; /* 가로 방향 중앙 정렬 */
-  font-weight: 900; /* 글자 두께를 아주 두껍게 설정 */
-  font-size: 14px; /* 글자 크기 설정 */
-  text-decoration: none; /* 밑줄 등 기본 텍스트 장식 제거 */
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* 부드러운 애니메이션 효과 설정 */
-  border: none; /* 테두리 제거 */
-}
-
-/* ── YB 로고: 알약 크기 고정 및 글자 전용 유리 질감 ── */
-.resume-island-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* ⭐️ 알약이 넓어지지 않도록 크기를 32px로 엄격히 고정 */
+  display: inline-block;
   width: 32px;
   height: 32px;
-  flex-shrink: 0;               /* 부모 요소 안에서 찌그러지지 않게 설정 */
-  
+  line-height: 32px;
+  text-align: center;
+  padding: 0 4px;
+  flex-shrink: 0;
   text-decoration: none;
   font-weight: 900;
-  font-size: 14px;              /* ⭐️ 요구사항: 14px 고정 */
-  
-  /* ⭐️ 글자 내부에만 빛이 흐르도록 마스킹 설정 */
-  background: linear-gradient(
-    120deg, 
-    #191f28 40%, 
-    rgba(255, 255, 255, 0.7) 50%, 
-    #191f28 60%
-  );
+  font-size: 14px;
+  overflow: visible;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(120deg, #191f28 40%, rgba(255, 255, 255, 0.7) 50%, #191f28 60%);
   background-size: 300% 100%;
   background-position: 100% 0;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  
-  /* 확대 효과(transform) 없이 색상과 위치만 부드럽게 전환 */
-  transition: background-position 0.6s cubic-bezier(0.23, 1, 0.32, 1), 
-              background-image 0.3s ease;
-  border: none;
-  cursor: pointer;
+  transition: background-position 0.6s cubic-bezier(0.23, 1, 0.32, 1), background-image 0.3s ease, all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 마우스 호버 시: 글자색이 파란색으로 변하며 빛이 글자만 통과 */
 .resume-island-logo:hover {
-  background-position: 0% 0;    /* 빛줄기 이동 */
-  background-image: linear-gradient(
-    120deg, 
-    #3182f6 40%,                /* 호버 시 시그니처 블루 */
-    rgba(255, 255, 255, 0.9) 50%, 
-    #3182f6 60%
-  );
+  background-position: 0% 0;
+  background-image: linear-gradient(120deg, #3182f6 40%, rgba(255, 255, 255, 0.9) 50%, #3182f6 60%);
 }
 
-/* ── 다크모드 대응 ── */
 body.dark-mode .resume-island-logo {
-  background-image: linear-gradient(
-    120deg, 
-    #ffffff 40%, 
-    rgba(255, 255, 255, 0.6) 50%, 
-    #ffffff 60%
-  );
+  background-image: linear-gradient(120deg, #ffffff 40%, rgba(255, 255, 255, 0.6) 50%, #ffffff 60%);
 }
 
 body.dark-mode .resume-island-logo:hover {
-  background-image: linear-gradient(
-    120deg, 
-    #3182f6 40%, 
-    rgba(255, 255, 255, 0.8) 50%, 
-    #3182f6 60%
-  );
+  background-image: linear-gradient(120deg, #3182f6 40%, rgba(255, 255, 255, 0.8) 50%, #3182f6 60%);
 }
 
+/* ── 구분선 ── */
 .resume-island-divider {
   width: 1px;
   height: 14px;
   background: rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.dark-mode .resume-island-divider {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.resume-island-back {
+/* ── 버튼 공통 및 텍스트 ── */
+.resume-island-back,
+.resume-island-print {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.back-text,
+.print-text {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── 뒤로가기 버튼 ── */
+.resume-island-back {
   background: #f1f5f9;
   color: #4e5968;
   text-decoration: none;
   padding: 6px 14px;
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 700;
-  transition: all 0.25s ease;
-}
-
-body.dark-mode .resume-island-back {
-  background: rgba(255, 255, 255, 0.07);
-  color: #94a3b8;
 }
 
 .resume-island-back:hover {
@@ -164,19 +161,28 @@ body.dark-mode .resume-island-back {
   color: #fff;
 }
 
+body.dark-mode .resume-island-back {
+  background: rgba(255, 255, 255, 0.07);
+  color: #94a3b8;
+}
+
+body.dark-mode .resume-island-back:hover {
+  background: #3182f6;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3);
+}
+
+body.dark-mode .resume-island-back:hover .back-arrow {
+  color: #fff;
+  stroke: #fff;
+}
+
+/* ── 프린트 버튼 ── */
 .resume-island-print {
-  display: flex;
-  align-items: center;
-  gap: 6px;
   background: #3182f6;
   color: #fff;
   border: none;
   padding: 6px 14px;
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.25s ease;
 }
 
 .resume-island-print:hover {
@@ -185,14 +191,38 @@ body.dark-mode .resume-island-back {
   box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3);
 }
 
-/* ── 레이아웃 ── */
-.resume-body {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 100px 32px 80px;
+body.dark-mode .resume-island-print:hover svg path {
+  stroke: #ffffff;
 }
 
-/* ── Header ── */
+/* ── 스크롤 상태 (알약 축소) ── */
+.resume-island.scrolled {
+  padding: 6px;
+  gap: 6px;
+}
+
+.resume-island.scrolled .resume-island-logo,
+.resume-island.scrolled .resume-island-divider,
+.resume-island.scrolled .back-text,
+.resume-island.scrolled .print-text {
+  display: none;
+}
+
+.resume-island.scrolled .resume-island-back,
+.resume-island.scrolled .resume-island-print {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* =====================================================
+   03. Header & Contact
+===================================================== */
 .resume-header {
   padding-bottom: 48px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.07);
@@ -205,8 +235,6 @@ body.dark-mode .resume-island-back {
 body.dark-mode .resume-header {
   border-bottom-color: rgba(255, 255, 255, 0.07);
 }
-
-.resume-header-left {}
 
 .resume-eyebrow {
   font-size: 11px;
@@ -295,15 +323,10 @@ body.dark-mode .resume-contact-icon {
   background: rgba(96, 165, 250, 0.1);
 }
 
-/* ── 2단 레이아웃 ── */
-.resume-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.85fr;
-  gap: 0 56px;
-  margin-top: 48px;
-}
 
-/* ── 섹션 공통 ── */
+/* =====================================================
+   04. Common Sections
+===================================================== */
 .resume-section {
   margin-bottom: 40px;
 }
@@ -324,7 +347,53 @@ body.dark-mode .resume-section-label {
   border-bottom-color: rgba(96, 165, 250, 0.15);
 }
 
-/* ── 스킬 태그 ── */
+.resume-full-width {
+  grid-column: 1 / -1;
+  padding-bottom: 40px;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+body.dark-mode .resume-full-width {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.resume-about-text {
+  font-size: 14px;
+  color: #4e5968;
+  line-height: 1.75;
+}
+
+body.dark-mode .resume-about-text {
+  color: #94a3b8;
+}
+
+.resume-about-text strong {
+  color: #191f28;
+  font-weight: 700;
+}
+
+body.dark-mode .resume-about-text strong {
+  color: #f0f6ff;
+}
+
+
+/* =====================================================
+   05. Skills
+===================================================== */
+.resume-skill-group {
+  margin-bottom: 18px;
+}
+
+.resume-skill-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8b95a1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 7px;
+}
+
 .resume-tag-list {
   display: flex;
   flex-wrap: wrap;
@@ -357,21 +426,10 @@ body.dark-mode .resume-tag-dim {
   color: #64748b;
 }
 
-/* ── 스킬 그룹 ── */
-.resume-skill-group {
-  margin-bottom: 18px;
-}
 
-.resume-skill-group-title {
-  font-size: 11px;
-  font-weight: 700;
-  color: #8b95a1;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 7px;
-}
-
-/* ── 학력 ── */
+/* =====================================================
+   06. Education & Links
+===================================================== */
 .resume-edu-item {
   margin-bottom: 16px;
 }
@@ -402,7 +460,6 @@ body.dark-mode .resume-edu-dept {
   color: #8b95a1;
 }
 
-/* ── 링크 ── */
 .resume-link-row {
   display: flex;
   flex-direction: column;
@@ -424,6 +481,10 @@ body.dark-mode .resume-edu-dept {
   opacity: 0.7;
 }
 
+
+/* =====================================================
+   07. Experience & Projects
+===================================================== */
 /* ── 경력 타임라인 ── */
 .resume-exp-item {
   padding: 24px 0;
@@ -569,39 +630,83 @@ body.dark-mode .resume-proj-desc {
   color: #94a3b8;
 }
 
-/* ── 자기소개 ── */
-.resume-about-text {
-  font-size: 14px;
-  color: #4e5968;
-  line-height: 1.75;
+
+/* =====================================================
+   08. Theme Toggle Button
+===================================================== */
+.resume-theme-toggle {
+  position: fixed;
+  top: 24px;
+  right: 36px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px 7px 10px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
-body.dark-mode .resume-about-text {
+body.dark-mode .resume-theme-toggle {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.resume-theme-toggle:hover {
+  border-color: rgba(49, 130, 246, 0.3);
+  box-shadow: 0 4px 16px rgba(49, 130, 246, 0.12);
+  transform: translateY(-1px);
+}
+
+body.dark-mode .resume-theme-toggle:hover {
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.resume-toggle-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(49, 130, 246, 0.08);
+  flex-shrink: 0;
+  transition: background 0.25s ease;
+}
+
+body.dark-mode .resume-toggle-icon {
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.resume-toggle-moon { display: block; }
+.resume-toggle-sun  { display: none;  }
+body.dark-mode .resume-toggle-moon { display: none;  }
+body.dark-mode .resume-toggle-sun  { display: block; }
+
+.resume-toggle-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4e5968;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+body.dark-mode .resume-toggle-label {
   color: #94a3b8;
 }
 
-.resume-about-text strong {
-  color: #191f28;
-  font-weight: 700;
-}
 
-body.dark-mode .resume-about-text strong {
-  color: #f0f6ff;
-}
-
-/* ── 우측 컬럼 상단 자기소개 전체 너비 ── */
-.resume-full-width {
-  grid-column: 1 / -1;
-  padding-bottom: 40px;
-  margin-bottom: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-}
-
-body.dark-mode .resume-full-width {
-  border-bottom-color: rgba(255, 255, 255, 0.06);
-}
-
-/* ── 인쇄 버튼 영역 ── */
+/* =====================================================
+   09. Print Styles
+===================================================== */
 .resume-print-hint {
   text-align: center;
   padding: 40px 0 0;
@@ -609,11 +714,10 @@ body.dark-mode .resume-full-width {
   color: #8b95a1;
 }
 
-/* ── @media print ── */
 @media print {
-
   .resume-island,
-  .resume-print-hint {
+  .resume-print-hint,
+  .resume-theme-toggle {
     display: none !important;
   }
 
@@ -643,35 +747,4 @@ body.dark-mode .resume-full-width {
   .resume-tagline {
     color: #4e5968 !important;
   }
-}
-
-/* ── 다크모드 토글 ── */
-.resume-theme-toggle {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 1000;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  transition: all 0.25s ease;
-}
-
-body.dark-mode .resume-theme-toggle {
-  background: rgba(30, 41, 59, 0.85);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.resume-theme-toggle:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }

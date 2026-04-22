@@ -13,13 +13,21 @@
 </head>
 
 <body>
-    <label class="super-stylish-switch">
-        <input type="checkbox" id="theme-checkbox">
-        <span class="slider">
-            <span class="stars"></span>
-            <span class="sun-moon"></span>
+    <!-- 다크모드 토글 -->
+    <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="테마 전환">
+        <span class="theme-toggle-icon">
+            <!-- 달 (라이트 모드) -->
+            <svg class="theme-icon-moon" width="13" height="13" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" fill="#3182f6"/>
+            </svg>
+            <!-- 태양 (다크 모드) -->
+            <svg class="theme-icon-sun" width="13" height="13" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="10" r="4" fill="#60a5fa"/>
+                <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
         </span>
-    </label>
+        <span class="theme-toggle-label" id="theme-toggle-label">Dark</span>
+    </button>
 
     <main id="main-content">
 
@@ -40,7 +48,7 @@
                 <div class="hero-container">
                     <div id="hero-content-portfolio" class="hero-mode-content active">
                         <div class="hero-text-area">
-                            <span class="hero-badge">🚀 QA Engineer to Frontend Developer</span>
+                            <span class="hero-badge">QA Engineer → Frontend Developer</span>
 
                             <h1 class="hero-title">
                                 Do not just test code.<br />
@@ -162,7 +170,7 @@
 
                         <a href="#dashboard" class="island-btn">
                             <span class="btn-text">Dashboard</span>
-                            <span class="btn-icon">🚀</span>
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </a>
                     </div>
                 </nav>
@@ -423,15 +431,15 @@
 
                     <div class="status-dropdown-container">
                         <div class="status-toggle" id="status-toggle">
-                            <span id="status-icon">🟢</span>
+                            <span id="status-icon"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#22c55e"/></svg></span>
                             <span id="status-text">구직 준비 중</span>
                             <span class="status-arrow">▾</span>
                         </div>
                         <ul class="status-menu" id="status-menu">
-                            <li data-icon="🟢" data-text="구직 준비 중">🟢 구직 준비 중</li>
-                            <li data-icon="🔥" data-text="프로젝트 몰입">🔥 프로젝트 몰입</li>
-                            <li data-icon="📚" data-text="학습 중">📚 학습 중</li>
-                            <li data-icon="🌙" data-text="휴식 중">🌙 휴식 중</li>
+                            <li data-icon="●" data-color="#22c55e" data-text="구직 준비 중"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:6px;"></span>구직 준비 중</li>
+                            <li data-icon="●" data-color="#f97316" data-text="프로젝트 몰입"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f97316;margin-right:6px;"></span>프로젝트 몰입</li>
+                            <li data-icon="●" data-color="#3182f6" data-text="학습 중"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3182f6;margin-right:6px;"></span>학습 중</li>
+                            <li data-icon="●" data-color="#a855f7" data-text="휴식 중"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#a855f7;margin-right:6px;"></span>휴식 중</li>
                         </ul>
                     </div>
                 </div>
@@ -441,7 +449,7 @@
                     <ul class="quick-action-list">
 
                         <li id="go-to-portfolio-btn" class="action-btn">
-                            <span class="icon">💼</span>
+                            <span class="icon"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="5" width="13" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5 5V4a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
                             <span class="text">포트폴리오</span>
                             <span class="action-arrow">→</span>
                         </li>
@@ -449,12 +457,12 @@
                         <li class="nav-divider"></li>
 
                         <li id="btn-quick-task" class="action-btn">
-                            <span class="icon">➕</span>
+                            <span class="icon"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
                             <span class="text">새로운 할 일</span>
                             <span class="action-arrow">＋</span>
                         </li>
                         <li id="btn-quick-note" class="action-btn">
-                            <span class="icon">📝</span>
+                            <span class="icon"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="1.5" width="12" height="13" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5 5.5h6M5 8.5h6M5 11.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
                             <span class="text">데일리 메모</span>
                             <span class="action-arrow">＋</span>
                         </li>
@@ -496,7 +504,7 @@
                             </div>
                         </div>
                     </div>
-                    <p>📍 서울특별시 강동구 고덕로 130</p>
+                    <p style="display:flex;align-items:center;gap:5px;"><svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 1.5A4.5 4.5 0 003.5 6c0 3 4.5 8.5 4.5 8.5S12.5 9 12.5 6A4.5 4.5 0 008 1.5z" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.3"/></svg>서울특별시 거주</p>
                     <p>📧 <a href="/cdn-cgi/l/email-protection#2f5640404d46014b4a596f48424e4643014c4042"
                             style="color: inherit; text-decoration: none;"><span class="__cf_email__"
                                 data-cfemail="bfc6d0d0ddd691dbdac9ffd8d2ded6d391dcd0d2">[email&#160;protected]</span></a>
@@ -508,7 +516,7 @@
                 <section class="page">
                     <div class="progress-container">
                         <div class="progress-header">
-                            <span>🛰️ 커리어 항해 달성률</span>
+                            <span>커리어 항해 달성률</span>
                             <span id="progress-text">0%</span>
                         </div>
                         <div class="progress-bar-bg">
@@ -516,7 +524,7 @@
                         </div>
                     </div>
                     <div class="roadmap-container">
-                        <h2 class="roadmap-title">🛰️ Career Flight Path</h2>
+                        <h2 class="roadmap-title">Career Flight Path</h2>
                         <div class="treasure-map-area"> <svg class="path-svg" viewBox="0 0 1400 500">
                                 <defs>
                                     <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -528,49 +536,49 @@
                                     d="M 80 400 C 160 400, 200 360, 280 360 S 400 250, 480 250 S 580 300, 680 300 S 790 170, 890 170 S 1000 220, 1100 220 S 1240 100, 1320 100" />
                             </svg>
                             <div class="map-item completed" style="left: 5.7%; top: 80%;" data-phase="phase-1">
-                                <div class="map-marker">🛫</div>
+                                <div class="map-marker"><span class="marker-num">01</span></div>
                                 <div class="map-content">
                                     <h4>Phase 01</h4>
                                     <p>퇴사 및 직무 전환 준비<br>3.31 퇴사 절차 완료</p>
                                 </div>
                             </div>
                             <div class="map-item active" style="left: 20%; top: 72%;" data-phase="phase-2">
-                                <div class="map-marker">🛠️</div>
+                                <div class="map-marker"><span class="marker-num">02</span></div>
                                 <div class="map-content">
                                     <h4>Phase 02</h4>
                                     <p>포트폴리오 Project 01<br>개인 대시보드 개발 및 완성</p>
                                 </div>
                             </div>
                             <div class="map-item" style="left: 34.3%; top: 50%;" data-phase="phase-3">
-                                <div class="map-marker">📝</div>
+                                <div class="map-marker"><span class="marker-num">03</span></div>
                                 <div class="map-content">
                                     <h4>Phase 03</h4>
                                     <p>Project 02 설계 및 자격증 준비<br>가계부 프로젝트 시작 & 정처기 필기 공부</p>
                                 </div>
                             </div>
                             <div class="map-item" style="left: 48.6%; top: 60%;" data-phase="phase-4">
-                                <div class="map-marker">💰</div>
+                                <div class="map-marker"><span class="marker-num">04</span></div>
                                 <div class="map-content">
                                     <h4>Phase 04</h4>
                                     <p>Project 02 완성 및 차기작 착수<br>가계부 프로젝트 완료 & 신호등 프로젝트 시작</p>
                                 </div>
                             </div>
                             <div class="map-item" style="left: 63.6%; top: 34%;" data-phase="phase-5">
-                                <div class="map-marker">🚦</div>
+                                <div class="map-marker"><span class="marker-num">05</span></div>
                                 <div class="map-content">
                                     <h4>Phase 05</h4>
                                     <p>포트폴리오 완성 및 1차 검증<br>신호등 프로젝트 완료 & 정처기 필기 합격</p>
                                 </div>
                             </div>
                             <div class="map-item" style="left: 78.6%; top: 44%;" data-phase="phase-6">
-                                <div class="map-marker">🏅</div>
+                                <div class="map-marker"><span class="marker-num">06</span></div>
                                 <div class="map-content">
                                     <h4>Phase 06</h4>
                                     <p>취업 준비 최적화<br>3종 포트폴리오 및 이력서 최종 검수</p>
                                 </div>
                             </div>
                             <div class="map-item goal" style="left: 94.3%; top: 20%;" data-phase="phase-7">
-                                <div class="map-marker">💎</div>
+                                <div class="map-marker"><span class="marker-num">★</span></div>
                                 <div class="map-content">
                                     <h4>Final Goal</h4>
                                     <p>프론트엔드 개발자 재취업<br><strong>직무 전환 및 구직 활동 성공</strong></p>
@@ -636,7 +644,7 @@
                             <div id="planner-timeline" class="planner-timeline" style="display: none;"></div>
                             <div class="memo-input-area">
                                 <textarea id="memo-input" placeholder="새로운 메모를 추가해보세요..."></textarea>
-                                <button id="save-memo-btn">메모 추가하기 💾</button>
+                                <button id="save-memo-btn">메모 추가하기</button>
                             </div>
                         </div>
                     </div>
@@ -647,7 +655,7 @@
                         <div class="archive-header reveal-up">
                             <div class="archive-title-group">
                                 <span class="archive-eyebrow">Level Up Log</span>
-                                <h2>📚 Knowledge Archive</h2>
+                                <h2>Knowledge Archive</h2>
                                 <p>프론트엔드 엔지니어로 성장하며 영감이 된 기록들입니다.</p>
                             </div>
                             <div class="archive-filters">
@@ -689,7 +697,7 @@
     </main>
     <div id="task-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2>⚡ 빠른 할 일 추가</h2>
+            <h2>빠른 할 일 추가</h2>
             <input type="text" id="modal-task-input" placeholder="어떤 일을 하실 건가요?">
 
             <div class="custom-dropdown">
@@ -711,7 +719,7 @@
 
     <div id="delete-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2>🗑️ 일정 삭제</h2>
+            <h2>일정 삭제</h2>
             <p>정말 이 일정을 삭제하시겠습니까?</p> <br />
             <div class="modal-buttons"> <button id="delete-cancel-btn">취소</button> <button
                     id="delete-confirm-btn">삭제하기</button> </div>
@@ -721,19 +729,19 @@
     <!-- 데일리 메모 모달 -->
     <div id="daily-memo-modal" class="modal-overlay">
         <div class="modal-content daily-memo-content">
-            <h2>📝 데일리 메모</h2>
+            <h2>데일리 메모</h2>
             <p class="memo-modal-date" id="memo-modal-date"></p>
             <textarea id="daily-memo-input" placeholder="오늘 하루를 기록해 보세요...&#10;(배운 것, 느낀 것, 할 일 등)"></textarea>
             <div class="modal-buttons">
                 <button id="daily-memo-cancel-btn">취소</button>
-                <button id="daily-memo-save-btn">저장하기 💾</button>
+                <button id="daily-memo-save-btn">저장하기</button>
             </div>
         </div>
     </div>
 
     <div id="card-detail-modal" class="modal-overlay">
         <div class="modal-content card-detail-content">
-            <h2>🧐 할 일 상세 설정</h2>
+            <h2>할 일 상세 설정</h2>
             <input type="hidden" id="edit-card-id">
 
             <label>제목 <span class="require-mark">*</span></label>
@@ -763,7 +771,7 @@
 
             <div class="modal-buttons">
                 <button id="detail-cancel-btn">취소</button>
-                <button id="detail-save-btn">저장하기 💾</button>
+                <button id="detail-save-btn">저장하기</button>
             </div>
         </div>
     </div>
