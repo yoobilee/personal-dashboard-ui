@@ -1757,21 +1757,33 @@ async function uploadMasterData(secretKey) {
 
 // 클라우드에서 데이터 내려받기 (다운로드)
 async function downloadDataFromServer(secretKey) {
+    // 에러 발생을 대비하여 try-catch 문으로 감쌉니다.
     try {
-        const docRef = db.collection('master_data').doc(secretKey);
+        // ⭐️ 수정 1: 'master_data'가 아닌 'dashboards' 컬렉션(폴더)에서 문서를 찾습니다.
+        const docRef = db.collection('dashboards').doc(secretKey);
+        
+        // 파이어베이스 서버에 해당 문서의 데이터를 요청하여 가져옵니다.
         const docSnap = await docRef.get();
 
+        // 가져온 문서가 실제로 서버에 존재하는지 확인합니다.
         if (docSnap.exists) {
+            // 문서 안의 실제 데이터를 자바스크립트 객체 형태로 꺼냅니다.
             const data = docSnap.data();
-            // 로컬 스토리지에 데이터 덮어쓰기
-            localStorage.setItem('yoobiTasks_v2', JSON.stringify(data.kanban || []));
             
+            // ⭐️ 수정 2: 'data.kanban'이 아닌 'data.tasks'를 가져와서 로컬 스토리지에 덮어씁니다.
+            localStorage.setItem('yoobiTasks_v2', JSON.stringify(data.tasks || []));
+            
+            // 데이터 다운로드 및 저장이 완료되었음을 개발자 도구 콘솔에 알립니다.
             console.log("✅ 데이터 다운로드 완료! 화면을 새로고침합니다.");
-            location.reload(); // 다운로드 완료 후 화면 자동 갱신
+            
+            // 변경된 데이터를 화면에 반영하기 위해 브라우저를 즉시 새로고침합니다.
+            location.reload(); 
         } else {
+            // 문서가 존재하지 않을 경우 에러 메시지를 콘솔에 출력합니다.
             console.error("❌ 해당 시크릿 코드로 저장된 데이터가 없습니다. 코드를 확인해 주세요!");
         }
     } catch (error) {
+        // 네트워크 에러 등 예기치 못한 문제가 발생하면 콘솔에 에러 내용을 출력합니다.
         console.error("❌ 다운로드 중 에러 발생:", error);
     }
 }
