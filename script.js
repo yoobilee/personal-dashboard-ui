@@ -1740,47 +1740,62 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchMonthlyCommits('yoobilee'); 
 });
 
-// 모든 데이터를 서버로 통합 업로드
+// 모든 데이터(칸반, 메모, 타임라인)를 한꺼번에 서버로 올리는 함수입니다.
 async function uploadMasterData(secretKey) {
-    // 1. 각 저장소에서 데이터를 싹 긁어모읍니다.
+    // 1. 칸반보드 데이터를 로컬 스토리지에서 가져옵니다. (없으면 빈 배열)
     const tasks = JSON.parse(localStorage.getItem('yoobiTasks_v2')) || [];
+    // 2. 캘린더 메모 데이터를 로컬 스토리지에서 가져옵니다. (없으면 빈 배열)
     const memos = JSON.parse(localStorage.getItem('yoobiMemos')) || [];
+    // 3. 타임라인 일정 데이터를 로컬 스토리지에서 가져옵니다. (없으면 빈 배열)
     const timeline = JSON.parse(localStorage.getItem('yoobiTimeline')) || [];
     
+    // 에러 발생에 대비하여 실행 단위를 try-catch로 감쌉니다.
     try {
-        // 2. 'dashboards'라는 방에 세 종류의 데이터를 한꺼번에 집어넣습니다.
+        // 4. 파이어베이스의 'dashboards' 폴더 내 시크릿 코드 문서에 3가지 데이터를 모두 저장합니다.
         await db.collection("dashboards").doc(secretKey).set({
-            tasks: tasks,
-            memos: memos,
-            timeline: timeline,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            tasks: tasks,       // 칸반 데이터 저장
+            memos: memos,       // 메모 데이터 저장
+            timeline: timeline, // 타임라인 데이터 저장
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp() // 업로드 시간 기록
         });
-        console.log("✅ 전 종목(칸반/메모/타임라인) 업로드 성공!");
+        // 5. 업로드가 성공하면 콘솔창에 완료 메시지를 띄웁니다.
+        console.log("✅ 모든 데이터(칸반/메모/타임라인) 업로드 성공!");
     } catch (e) {
+        // 6. 실패할 경우 에러 내용을 콘솔창에 출력합니다.
         console.error("❌ 업로드 실패:", e);
     }
 }
 
-// 서버에서 모든 데이터 내려받기
+// 서버에 저장된 모든 데이터를 노트북으로 내려받는 함수입니다.
 async function downloadDataFromServer(secretKey) {
+    // 실행 중 발생할 수 있는 에러를 처리하기 위해 try-catch를 사용합니다.
     try {
+        // 1. 'dashboards' 폴더에서 유비님의 시크릿 코드로 된 문서를 찾습니다.
         const docRef = db.collection('dashboards').doc(secretKey);
+        // 2. 해당 문서의 데이터를 서버로부터 가져옵니다.
         const docSnap = await docRef.get();
 
+        // 3. 문서가 서버에 실제로 존재하는지 확인합니다.
         if (docSnap.exists) {
+            // 4. 문서 내부에 저장된 전체 데이터를 가져옵니다.
             const data = docSnap.data();
             
-            // ⭐️ 서버에서 받아온 묶음을 각각의 로컬 스토리지 키에 맞게 분배합니다.
+            // 5. 서버의 칸반 데이터를 노트북 로컬 스토리지에 덮어씁니다.
             localStorage.setItem('yoobiTasks_v2', JSON.stringify(data.tasks || []));
+            // 6. 서버의 메모 데이터를 노트북 로컬 스토리지에 덮어씁니다.
             localStorage.setItem('yoobiMemos', JSON.stringify(data.memos || []));
+            // 7. 서버의 타임라인 데이터를 노트북 로컬 스토리지에 덮어씁니다.
             localStorage.setItem('yoobiTimeline', JSON.stringify(data.timeline || []));
             
+            // 8. 성공 메시지를 출력하고 화면을 새로고침하여 데이터를 반영합니다.
             console.log("✅ 모든 데이터 동기화 완료! 화면을 새로고침합니다.");
             location.reload(); 
         } else {
-            console.error("❌ 해당 코드로 저장된 데이터가 없습니다.");
+            // 9. 만약 해당 코드로 저장된 데이터가 없다면 경고 메시지를 띄웁니다.
+            console.error("❌ 해당 시크릿 코드로 저장된 데이터가 없습니다. 업로드를 먼저 확인해 주세요.");
         }
     } catch (error) {
+        // 10. 네트워크 문제 등 예외 상황 발생 시 에러를 출력합니다.
         console.error("❌ 다운로드 중 에러 발생:", error);
     }
 }
