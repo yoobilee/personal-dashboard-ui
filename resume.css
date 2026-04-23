@@ -9,9 +9,11 @@
    04. Common Sections
    05. Skills
    06. Education & Links
-   07. Experience & Projects
-   08. Theme Toggle Button
-   09. Print Styles
+   07. Military
+   08. Awards
+   09. Experience & Projects
+   10. Theme Toggle Button
+   11. Print Styles
 ===================================================== */
 
 /* =====================================================
@@ -328,7 +330,12 @@ body.dark-mode .resume-contact-icon {
    04. Common Sections
 ===================================================== */
 .resume-section {
-  margin-bottom: 40px;
+  margin-bottom: 40px; /* 공통 간격 */
+}
+
+.resume-section:last-of-type {
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .resume-section-label {
@@ -351,7 +358,6 @@ body.dark-mode .resume-section-label {
   grid-column: 1 / -1;
   padding-bottom: 40px;
   margin-bottom: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 
 body.dark-mode .resume-full-width {
@@ -434,6 +440,10 @@ body.dark-mode .resume-tag-dim {
   margin-bottom: 16px;
 }
 
+.resume-edu-item:last-child {
+  margin-bottom: 0;
+}
+
 .resume-edu-school {
   font-size: 14px;
   font-weight: 700;
@@ -481,9 +491,70 @@ body.dark-mode .resume-edu-dept {
   opacity: 0.7;
 }
 
+/* =====================================================
+   07. Military
+===================================================== */
+.resume-military-item {
+  margin-bottom: 16px;
+}
+
+.resume-military-item:last-child {
+  margin-bottom: 0;
+}
+
+.resume-military-complete {
+  font-size: 14px;
+  font-weight: 700;
+  color: #191f28;
+  margin-bottom: 2px;
+}
+
+body.dark-mode .resume-military-complete {
+  color: #f0f6ff;
+}
+
+.resume-military-date {
+  font-size: 12px;
+  color: #8b95a1;
+}
 
 /* =====================================================
-   07. Experience & Projects
+   08. Awards
+===================================================== */
+.resume-award-item {
+  margin-bottom: 16px; /* Military 섹션 아이템 간격과 통일 */
+}
+
+.resume-award-item:last-child {
+  margin-bottom: 0;
+}
+
+.resume-award-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #191f28;
+  margin-bottom: 2px;
+  line-height: 1.4;
+}
+
+.resume-award-org {
+  font-size: 12px;
+  color: #4e5968;
+  margin-bottom: 2px;
+}
+
+.resume-award-date {
+  font-size: 12px;
+  color: #8b95a1;
+}
+
+/* 다크모드 보정 */
+body.dark-mode .resume-award-name { color: #f8f9fa; }
+body.dark-mode .resume-award-org { color: #b0b8c1; }
+body.dark-mode .resume-award-date { color: #6b7684; }
+
+/* =====================================================
+   09. Experience & Projects
 ===================================================== */
 /* ── 경력 타임라인 ── */
 .resume-exp-item {
@@ -493,6 +564,7 @@ body.dark-mode .resume-edu-dept {
 
 .resume-exp-item:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 body.dark-mode .resume-exp-item {
@@ -573,6 +645,7 @@ body.dark-mode .resume-exp-list li {
 
 .resume-proj-item:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 body.dark-mode .resume-proj-item {
@@ -632,7 +705,7 @@ body.dark-mode .resume-proj-desc {
 
 
 /* =====================================================
-   08. Theme Toggle Button
+   10. Theme Toggle Button
 ===================================================== */
 .resume-theme-toggle {
   position: fixed;
@@ -705,7 +778,7 @@ body.dark-mode .resume-toggle-label {
 
 
 /* =====================================================
-   09. Print Styles
+   11. Print Styles
 ===================================================== */
 .resume-print-hint {
   text-align: center;
@@ -747,4 +820,42 @@ body.dark-mode .resume-toggle-label {
   .resume-tagline {
     color: #4e5968 !important;
   }
+}
+
+/* --- Custom Scrollbar --- */
+
+/* 스크롤바 전체 너비를 설정합니다 */
+::-webkit-scrollbar {
+  width: 10px; /* 세로 스크롤바의 가로 폭을 10px로 지정합니다 */
+}
+
+/* 스크롤바가 지나가는 배경(트랙) 설정입니다 */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* 밝은 회색으로 배경을 깔아 깨끗한 느낌을 줍니다 */
+}
+
+/* 실제 마우스로 잡고 움직이는 막대(핸들) 설정입니다 */
+::-webkit-scrollbar-thumb {
+  background: #ccd2d9; /* 평소에는 눈에 띄지 않는 차분한 회색을 사용합니다 */
+  border-radius: 10px; /* 막대 끝을 둥글게 깎아 부드러운 인상을 줍니다 */
+  border: 2px solid #f1f1f1; /* 트랙과 같은 색의 테두리를 넣어 막대가 떠 있는 듯한 효과를 줍니다 */
+}
+
+/* 막대에 마우스를 올렸을 때의 색상 변화입니다 */
+::-webkit-scrollbar-thumb:hover {
+  background: #adb5bd; /* 마우스를 올리면 조금 더 진한 회색으로 변해 상호작용을 강조합니다 */
+}
+
+/* 다크모드일 때의 스크롤바 스타일 대응입니다 */
+body.dark-mode::-webkit-scrollbar-track {
+  background: #0a0f1a; /* 다크모드 배경색과 일치시켜 일체감을 줍니다 */
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #333d4b; /* 어두운 배경에 맞춰 막대 색상을 진한 회색으로 바꿉니다 */
+  border: 2px solid #0a0f1a; /* 배경과 같은 테두리를 넣어 깔끔하게 마감합니다 */
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #4e5968; /* 다크모드에서 마우스를 올리면 조금 더 밝은 색으로 변하게 합니다 */
 }
