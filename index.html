@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="images/favicon.png">
     <title>나만의 일정 대시보드</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -376,72 +376,117 @@
                 <section class="pf-section">
                     <div class="pf-label reveal-left">Projects</div>
                     <div class="pf-projects">
+
+                        <!-- 01. Personal Dashboard -->
                         <div class="pf-project-card reveal-up" style="--delay:.0s">
-                            <div class="pf-proj-num">01</div>
-                            <div class="pf-proj-body">
-                                <h3>Personal Dashboard & Portfolio</h3>
-                                <p>
-                                    Vanilla JS 기반의 SPA(Single Page Application)로 구축된 개인화 관제탑입니다.
-                                    벤토 그리드 레이아웃을 통해 시각적 즐거움과 정보 전달력을 동시에 확보했습니다.
-                                </p>
-                                <ul class="pf-achieve-list"
-                                    style="margin: 12px 0; padding-left: 18px; color: #9ca3af; font-size: 14px; line-height: 1.6;">
-                                    <li>Three.js를 활용한 GPU 가속 렌더링 최적화</li>
-                                    <li>localStorage 기반의 칸반 보드 상태 관리 시스템</li>
-                                    <li>FOUC(스타일 지연 깜빡임) 방지 로직 적용</li>
-                                </ul>
+                            <div class="pf-proj-thumbnail pf-thumb-dashboard">
+                                <div class="pf-thumb-img-wrap">
+                                    <img class="pf-thumb-img-back"
+                                         src="images/Portfolio_Page.png"
+                                         alt="Portfolio 메인화면">
+                                    <img class="pf-thumb-img-front"
+                                         src="images/Dashboard_Page.png"
+                                         alt="Dashboard 페이지">
+                                </div>
+                            </div>
+                            <div class="pf-proj-info">
+                                <div class="pf-proj-meta">
+                                    <span class="pf-proj-num-badge">01</span>
+                                    <span class="pf-proj-status pf-status-live">Live</span>
+                                </div>
+                                <h3 class="pf-proj-title">Personal Dashboard & Portfolio</h3>
+                                <p class="pf-proj-desc">Vanilla JS + Three.js 기반 SPA. 칸반 보드·캘린더·지식 아카이브를 통합한 개인화 대시보드 겸 포트폴리오. 글라스모피즘 UI와 hash 기반 라우팅, localStorage 상태 관리를 직접 구현했습니다.</p>
                                 <div class="pf-tag-list">
                                     <span class="pf-tag">Vanilla JS</span>
                                     <span class="pf-tag">Three.js</span>
-                                    <span class="pf-tag">Optimization</span>
+                                    <span class="pf-tag">CSS</span>
+                                    <span class="pf-tag">SPA</span>
+                                </div>
+                                <div class="pf-proj-links">
+                                    <a href="https://yoobilee.github.io/personal-dashboard-ui/" target="_blank" class="pf-proj-btn pf-proj-btn-primary">
+                                        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H6M12 4v6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        Live Demo
+                                    </a>
+                                    <a href="https://github.com/yoobilee/personal-dashboard-ui" target="_blank" class="pf-proj-btn pf-proj-btn-ghost">
+                                        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38v-1.34C3.73 14.3 3.28 13 3.28 13c-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.21 1.87.86 2.33.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 014 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                                        GitHub
+                                    </a>
                                 </div>
                             </div>
-                            <a href="#" class="pf-proj-link">View →</a>
                         </div>
 
+                        <!-- 02. Budget Manager -->
                         <div class="pf-project-card reveal-up" style="--delay:.1s">
-                            <div class="pf-proj-num">02</div>
-                            <div class="pf-proj-body">
-                                <h3>Minimalist Budget Manager <span class="pf-wip">WIP</span></h3>
-                                <p>
-                                    React와 Chart.js를 활용하여 지출 내역을 직관적으로 시각화하는 자산 관리 앱입니다.
-                                    불필요한 단계를 제거한 미니멀 UX와 데이터 무결성에 중점을 두었습니다.
-                                </p>
-                                <ul class="pf-achieve-list"
-                                    style="margin: 12px 0; padding-left: 18px; color: #9ca3af; font-size: 14px; line-height: 1.6;">
-                                    <li>Chart.js 기반의 동적 데이터 시각화 구현</li>
-                                    <li>입력값 유효성 검증(Validation) 로직 설계</li>
-                                </ul>
+                            <div class="pf-proj-thumbnail pf-thumb-budget">
+                                <div class="pf-thumb-browser">
+                                    <div class="pf-thumb-browser-bar">
+                                        <span></span><span></span><span></span>
+                                    </div>
+                                    <div class="pf-thumb-screen">
+                                        <div class="pf-thumb-chart">
+                                            <div class="pf-thumb-bar" style="height:60%"></div>
+                                            <div class="pf-thumb-bar" style="height:85%"></div>
+                                            <div class="pf-thumb-bar" style="height:45%"></div>
+                                            <div class="pf-thumb-bar" style="height:70%"></div>
+                                            <div class="pf-thumb-bar" style="height:55%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pf-proj-info">
+                                <div class="pf-proj-meta">
+                                    <span class="pf-proj-num-badge">02</span>
+                                    <span class="pf-proj-status pf-status-wip">WIP</span>
+                                </div>
+                                <h3 class="pf-proj-title">Minimalist Budget Manager</h3>
+                                <p class="pf-proj-desc">React + Chart.js 기반 가계부 앱. 지출 내역을 직관적으로 시각화하고 불필요한 단계를 제거한 미니멀 UX를 목표로 합니다. 입력값 유효성 검증과 데이터 무결성에 집중했습니다.</p>
                                 <div class="pf-tag-list">
                                     <span class="pf-tag">React</span>
                                     <span class="pf-tag">Chart.js</span>
-                                    <span class="pf-tag">State Management</span>
+                                    <span class="pf-tag">TypeScript</span>
+                                </div>
+                                <div class="pf-proj-links">
+                                    <a href="#" class="pf-proj-btn pf-proj-btn-ghost pf-btn-disabled">개발 중</a>
                                 </div>
                             </div>
-                            <a href="#" class="pf-proj-link">Planning...</a>
                         </div>
 
+                        <!-- 03. Crosswalk Signal Monitor -->
                         <div class="pf-project-card reveal-up" style="--delay:.2s">
-                            <div class="pf-proj-num">03</div>
-                            <div class="pf-proj-body">
-                                <h3>Crosswalk Signal Monitor <span class="pf-wip">WIP</span></h3>
-                                <p>
-                                    실시간 공공 데이터를 활용하여 보행자 신호 상태를 실시간으로 제공하는 서비스입니다.
-                                    비동기 데이터 처리와 네트워크 지연 대응이 핵심입니다.
-                                </p>
-                                <ul class="pf-achieve-list"
-                                    style="margin: 12px 0; padding-left: 18px; color: #9ca3af; font-size: 14px; line-height: 1.6;">
-                                    <li>REST API 기반 실시간 데이터 동기화</li>
-                                    <li>스켈레톤 UI를 활용한 비동기 렌더링 최적화</li>
-                                </ul>
+                            <div class="pf-proj-thumbnail pf-thumb-signal">
+                                <div class="pf-thumb-browser">
+                                    <div class="pf-thumb-browser-bar">
+                                        <span></span><span></span><span></span>
+                                    </div>
+                                    <div class="pf-thumb-screen pf-thumb-screen-dark">
+                                        <div class="pf-thumb-signal-light">
+                                            <div class="pf-thumb-light pf-thumb-light-red"></div>
+                                            <div class="pf-thumb-light"></div>
+                                            <div class="pf-thumb-light pf-thumb-light-green"></div>
+                                        </div>
+                                        <div class="pf-thumb-signal-text"></div>
+                                        <div class="pf-thumb-signal-text pf-thumb-signal-text-sm"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pf-proj-info">
+                                <div class="pf-proj-meta">
+                                    <span class="pf-proj-num-badge">03</span>
+                                    <span class="pf-proj-status pf-status-plan">Planning</span>
+                                </div>
+                                <h3 class="pf-proj-title">Crosswalk Signal Monitor</h3>
+                                <p class="pf-proj-desc">공공 API 기반 보행자 신호 실시간 모니터링 서비스. REST API 비동기 처리와 스켈레톤 UI를 활용한 렌더링 최적화, 네트워크 지연 대응 로직 설계가 핵심입니다.</p>
                                 <div class="pf-tag-list">
                                     <span class="pf-tag">REST API</span>
                                     <span class="pf-tag">Async/Await</span>
                                     <span class="pf-tag">Skeleton UI</span>
                                 </div>
+                                <div class="pf-proj-links">
+                                    <a href="#" class="pf-proj-btn pf-proj-btn-ghost pf-btn-disabled">Coming Soon</a>
+                                </div>
                             </div>
-                            <a href="#" class="pf-proj-link pf-proj-link-dim">Coming Soon</a>
                         </div>
+
                     </div>
                 </section>
 
@@ -572,11 +617,18 @@
                 </div>
             </aside>
 
+            <!-- 사이드바 토글 버튼 -->
+            <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="사이드바 접기/펼치기">
+                <svg class="sidebar-toggle-icon" width="10" height="10" viewBox="0 0 16 16" fill="none">
+                    <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+
             <div class="scroll-container">
                 <section class="page">
                     <div class="progress-container">
                         <div class="progress-header">
-                            <span>커리어 항해 달성률</span>
+                            <span>로드맵 진행률</span>
                             <span id="progress-text">0%</span>
                         </div>
                         <div class="progress-bar-bg">
@@ -584,8 +636,8 @@
                         </div>
                     </div>
                     <div class="roadmap-container">
-                        <h2 class="roadmap-title">Career Flight Path</h2>
-                        <div class="treasure-map-area"> <svg class="path-svg" viewBox="0 0 1400 500">
+                        <h2 class="roadmap-title">Career Roadmap</h2>
+                        <div class="roadmap-area"> <svg class="path-svg" viewBox="0 0 1400 500">
                                 <defs>
                                     <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                                         <stop offset="0%" stop-color="#3182f6" />
@@ -595,51 +647,51 @@
                                 <path class="dotted-path"
                                     d="M 80 400 C 160 400, 200 360, 280 360 S 400 250, 480 250 S 580 300, 680 300 S 790 170, 890 170 S 1000 220, 1100 220 S 1240 100, 1320 100" />
                             </svg>
-                            <div class="map-item completed" style="left: 5.7%; top: 80%;" data-phase="phase-1">
-                                <div class="map-marker"><span class="marker-num">01</span></div>
-                                <div class="map-content">
+                            <div class="roadmap-item completed" style="left: 5.7%; top: 80%;" data-phase="phase-1">
+                                <div class="roadmap-marker"><span class="marker-num">01</span></div>
+                                <div class="roadmap-content">
                                     <h4>Phase 01</h4>
                                     <p>퇴사 및 직무 전환 준비<br>3.31 퇴사 절차 완료</p>
                                 </div>
                             </div>
-                            <div class="map-item active" style="left: 20%; top: 72%;" data-phase="phase-2">
-                                <div class="map-marker"><span class="marker-num">02</span></div>
-                                <div class="map-content">
+                            <div class="roadmap-item active" style="left: 20%; top: 72%;" data-phase="phase-2">
+                                <div class="roadmap-marker"><span class="marker-num">02</span></div>
+                                <div class="roadmap-content">
                                     <h4>Phase 02</h4>
                                     <p>포트폴리오 Project 01<br>개인 대시보드 개발 및 완성</p>
                                 </div>
                             </div>
-                            <div class="map-item" style="left: 34.3%; top: 50%;" data-phase="phase-3">
-                                <div class="map-marker"><span class="marker-num">03</span></div>
-                                <div class="map-content">
+                            <div class="roadmap-item" style="left: 34.3%; top: 50%;" data-phase="phase-3">
+                                <div class="roadmap-marker"><span class="marker-num">03</span></div>
+                                <div class="roadmap-content">
                                     <h4>Phase 03</h4>
                                     <p>Project 02 설계 및 자격증 준비<br>가계부 프로젝트 시작 & 정처기 필기 공부</p>
                                 </div>
                             </div>
-                            <div class="map-item" style="left: 48.6%; top: 60%;" data-phase="phase-4">
-                                <div class="map-marker"><span class="marker-num">04</span></div>
-                                <div class="map-content">
+                            <div class="roadmap-item" style="left: 48.6%; top: 60%;" data-phase="phase-4">
+                                <div class="roadmap-marker"><span class="marker-num">04</span></div>
+                                <div class="roadmap-content">
                                     <h4>Phase 04</h4>
                                     <p>Project 02 완성 및 차기작 착수<br>가계부 프로젝트 완료 & 신호등 프로젝트 시작</p>
                                 </div>
                             </div>
-                            <div class="map-item" style="left: 63.6%; top: 34%;" data-phase="phase-5">
-                                <div class="map-marker"><span class="marker-num">05</span></div>
-                                <div class="map-content">
+                            <div class="roadmap-item" style="left: 63.6%; top: 34%;" data-phase="phase-5">
+                                <div class="roadmap-marker"><span class="marker-num">05</span></div>
+                                <div class="roadmap-content">
                                     <h4>Phase 05</h4>
                                     <p>포트폴리오 완성 및 1차 검증<br>신호등 프로젝트 완료 & 정처기 필기 합격</p>
                                 </div>
                             </div>
-                            <div class="map-item" style="left: 78.6%; top: 44%;" data-phase="phase-6">
-                                <div class="map-marker"><span class="marker-num">06</span></div>
-                                <div class="map-content">
+                            <div class="roadmap-item" style="left: 78.6%; top: 44%;" data-phase="phase-6">
+                                <div class="roadmap-marker"><span class="marker-num">06</span></div>
+                                <div class="roadmap-content">
                                     <h4>Phase 06</h4>
                                     <p>취업 준비 최적화<br>3종 포트폴리오 및 이력서 최종 검수</p>
                                 </div>
                             </div>
-                            <div class="map-item goal" style="left: 94.3%; top: 20%;" data-phase="phase-7">
-                                <div class="map-marker"><span class="marker-num">★</span></div>
-                                <div class="map-content">
+                            <div class="roadmap-item goal" style="left: 94.3%; top: 20%;" data-phase="phase-7">
+                                <div class="roadmap-marker"><span class="marker-num">★</span></div>
+                                <div class="roadmap-content">
                                     <h4>Final Goal</h4>
                                     <p>프론트엔드 개발자 재취업<br><strong>직무 전환 및 구직 활동 성공</strong></p>
                                 </div>
@@ -764,64 +816,108 @@
             </div>
         </nav>
     </main>
+    <!-- 빠른 할 일 추가 모달 -->
     <div id="task-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2>빠른 할 일 추가</h2>
-            <input type="text" id="modal-task-input" placeholder="어떤 일을 하실 건가요?">
-
-            <div class="custom-dropdown">
-                <div class="dropdown-selected" id="quick-priority-selected">낮음 (Low)</div>
-                <ul class="dropdown-list" id="quick-priority-list">
-                    <li data-value="low">낮음 (Low)</li>
-                    <li data-value="medium">보통 (Medium)</li>
-                    <li data-value="high">긴급 (High)</li>
-                </ul>
+            <div class="modal-header">
+                <div>
+                    <p class="modal-eyebrow">Quick Add</p>
+                    <h2>할 일 추가</h2>
+                </div>
+                <button class="modal-close-btn" id="modal-cancel-btn" aria-label="닫기">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </button>
             </div>
-            <input type="hidden" id="modal-task-priority" value="low">
-
+            <div class="modal-field">
+                <label class="modal-label">할 일</label>
+                <input type="text" id="modal-task-input" placeholder="어떤 일을 하실 건가요?">
+            </div>
+            <div class="modal-field">
+                <label class="modal-label">우선순위</label>
+                <div class="custom-dropdown">
+                    <div class="dropdown-selected" id="quick-priority-selected">낮음 (Low)</div>
+                    <ul class="dropdown-list" id="quick-priority-list">
+                        <li data-value="low">낮음 (Low)</li>
+                        <li data-value="medium">보통 (Medium)</li>
+                        <li data-value="high">긴급 (High)</li>
+                    </ul>
+                </div>
+                <input type="hidden" id="modal-task-priority" value="low">
+            </div>
             <div class="modal-buttons">
-                <button id="modal-cancel-btn">취소</button>
                 <button id="modal-add-btn">추가하기</button>
             </div>
         </div>
     </div>
 
+    <!-- 일정 삭제 모달 -->
     <div id="delete-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2>일정 삭제</h2>
-            <p>정말 이 일정을 삭제하시겠습니까?</p> <br />
-            <div class="modal-buttons"> <button id="delete-cancel-btn">취소</button> <button
-                    id="delete-confirm-btn">삭제하기</button> </div>
+            <div class="modal-header">
+                <div>
+                    <p class="modal-eyebrow">Calendar</p>
+                    <h2>일정 삭제</h2>
+                </div>
+            </div>
+            <p class="modal-desc">이 일정을 삭제할까요? 삭제된 일정은 복구할 수 없어요.</p>
+            <div class="modal-buttons">
+                <button id="delete-cancel-btn">취소</button>
+                <button id="delete-confirm-btn">삭제하기</button>
+            </div>
         </div>
     </div>
 
     <!-- 데일리 메모 모달 -->
     <div id="daily-memo-modal" class="modal-overlay">
         <div class="modal-content daily-memo-content">
-            <h2>데일리 메모</h2>
-            <p class="memo-modal-date" id="memo-modal-date"></p>
-            <textarea id="daily-memo-input" placeholder="오늘 하루를 기록해 보세요...&#10;(배운 것, 느낀 것, 할 일 등)"></textarea>
+            <div class="modal-header">
+                <div>
+                    <p class="modal-eyebrow" id="memo-modal-date"></p>
+                    <h2>데일리 메모</h2>
+                </div>
+                <button class="modal-close-btn" id="daily-memo-cancel-btn" aria-label="닫기">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-field">
+                <textarea id="daily-memo-input" placeholder="오늘 하루를 기록해 보세요...&#10;배운 것, 느낀 것, 할 일 등"></textarea>
+            </div>
             <div class="modal-buttons">
-                <button id="daily-memo-cancel-btn">취소</button>
                 <button id="daily-memo-save-btn">저장하기</button>
             </div>
         </div>
     </div>
 
+    <!-- 할 일 상세 설정 모달 -->
     <div id="card-detail-modal" class="modal-overlay">
         <div class="modal-content card-detail-content">
-            <h2>할 일 상세 설정</h2>
-            <input type="hidden" id="edit-card-id">
-
-            <label>제목 <span class="require-mark">*</span></label>
-            <input type="text" id="edit-card-title" placeholder="할 일 제목">
-
-            <label>상세 설명</label>
-            <textarea id="edit-card-desc" placeholder="상세한 내용을 적어주세요..."></textarea>
-
-            <div class="modal-row">
+            <div class="modal-header">
                 <div>
-                    <label>우선순위 <span class="require-mark">*</span></label>
+                    <p class="modal-eyebrow">Kanban</p>
+                    <h2>할 일 상세 설정</h2>
+                </div>
+                <button class="modal-close-btn" id="detail-cancel-btn" aria-label="닫기">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <input type="hidden" id="edit-card-id">
+            <div class="modal-field">
+                <label class="modal-label">제목 <span class="require-mark">*</span></label>
+                <input type="text" id="edit-card-title" placeholder="할 일 제목">
+            </div>
+            <div class="modal-field">
+                <label class="modal-label">상세 설명</label>
+                <textarea id="edit-card-desc" placeholder="상세한 내용을 적어주세요..."></textarea>
+            </div>
+            <div class="modal-row">
+                <div class="modal-field">
+                    <label class="modal-label">우선순위 <span class="require-mark">*</span></label>
                     <div class="custom-dropdown">
                         <div class="dropdown-selected" id="detail-priority-selected">낮음 (Low)</div>
                         <ul class="dropdown-list" id="detail-priority-list">
@@ -832,14 +928,13 @@
                     </div>
                     <input type="hidden" id="edit-card-priority" value="low">
                 </div>
-                <div>
-                    <label>마감일</label>
+                <div class="modal-field">
+                    <label class="modal-label">마감일</label>
                     <input type="date" id="edit-card-date">
                 </div>
             </div>
-
             <div class="modal-buttons">
-                <button id="detail-cancel-btn">취소</button>
+                <button id="detail-cancel-btn-2" onclick="document.getElementById('card-detail-modal').style.display='none'">취소</button>
                 <button id="detail-save-btn">저장하기</button>
             </div>
         </div>

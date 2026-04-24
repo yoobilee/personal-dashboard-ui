@@ -350,6 +350,10 @@ body.dark-mode .require-mark {
   margin-bottom: 15px;
 }
 
+.modal-field .custom-dropdown {
+  margin-bottom: 0;
+}
+
 .dropdown-selected {
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
@@ -442,7 +446,7 @@ body.dark-mode .dropdown-list li {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 12px;
-  padding: 12px 16px;
+  padding: 14px 16px;
   font-size: 15px;
   color: #333d4b;
   outline: none;
@@ -594,118 +598,197 @@ body.dark-mode .toast-msg {
 /* =========================================
    04. Modals
 ========================================= */
+/* =====================================================
+   모달 — 리디자인 (토스 + 글라스모피즘)
+   ===================================================== */
 .modal-overlay {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
   z-index: 2000;
   justify-content: center;
   align-items: center;
 }
 
 .modal-content {
-  background: rgba(255, 255, 255, 0.7);
-  padding: 30px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  padding: 28px;
   border-radius: 24px;
   width: 90%;
   max-width: 400px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-top: 1px solid rgba(255, 255, 255, 1);
+  box-shadow:
+    0 24px 48px rgba(71, 85, 105, 0.14),
+    0 4px 12px rgba(71, 85, 105, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  text-align: left;
 }
 
 body.dark-mode .modal-content {
-  background: rgba(30, 41, 59, 0.8);
+  background: rgba(15, 23, 42, 0.82);
+  border-color: rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
+
+/* 모달 헤더 */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.modal-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  color: #3182f6;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 4px;
+}
+
+body.dark-mode .modal-eyebrow { color: #60a5fa; }
 
 .modal-content h2 {
-  color: #191f28;
-  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0d1117;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
-body.dark-mode .modal-content h2 {
-  color: #f8fafc;
-}
+body.dark-mode .modal-content h2 { color: #f0f6ff; }
 
-.modal-row {
+/* X 닫기 버튼 */
+.modal-close-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
   display: flex;
-  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7684;
+  flex-shrink: 0;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.modal-row>div {
-  flex: 1;
-}
-
-.daily-memo-content {
-  max-width: 480px;
-  text-align: left;
-}
-
-.daily-memo-content h2 {
-  text-align: center;
-}
-
-.memo-modal-date {
-  text-align: center;
-  font-size: 13px;
-  color: #8b95a1;
-  font-weight: 600;
-  margin: -12px 0 20px;
-}
-
-body.dark-mode .memo-modal-date {
+body.dark-mode .modal-close-btn {
+  background: rgba(255, 255, 255, 0.08);
   color: #64748b;
 }
 
-.card-detail-content {
-  max-width: 450px;
-  text-align: left;
+.modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
 }
+
+/* 모달 설명 텍스트 */
+.modal-desc {
+  font-size: 14px;
+  color: #6b7684;
+  line-height: 1.6;
+  margin: -8px 0 24px;
+}
+
+body.dark-mode .modal-desc { color: #64748b; }
+
+/* 필드 그룹 */
+.modal-field {
+  margin-bottom: 16px;
+}
+
+.modal-field:last-of-type { margin-bottom: 0; }
+
+.modal-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #8b95a1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+body.dark-mode .modal-label { color: #475569; }
+
+.modal-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.modal-row .modal-field { flex: 1; margin-bottom: 0; }
+
+/* 같은 행 레이블 높이 고정 → 인풋 시작점 통일 */
+.modal-row .modal-label,
+.modal-row label {
+  display: block;
+  height: 20px;
+  line-height: 20px;
+}
+
+.daily-memo-content { max-width: 480px; }
+.card-detail-content { max-width: 460px; }
 
 .card-detail-content label {
   display: block;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
   color: #8b95a1;
-  margin: 15px 0 5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 7px;
 }
 
-/* 모달 버튼 공통 */
+body.dark-mode .card-detail-content label { color: #475569; }
+
+/* 모달 버튼 */
 .modal-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  margin-top: 20px;
 }
 
 .modal-buttons button {
   flex: 1;
-  padding: 14px;
+  padding: 13px;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
 }
 
+/* 주요 액션 버튼 */
 #modal-add-btn,
 #daily-memo-save-btn,
 #detail-save-btn,
 #save-memo-btn {
-  background: linear-gradient(135deg, #3182f6 0%, #a855f7 100%);
-  color: white;
+  background: linear-gradient(135deg, #3182f6 0%, #2563eb 100%);
+  color: #fff;
   border: none;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3);
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 4px 14px rgba(49, 130, 246, 0.3);
 }
 
 #save-memo-btn {
   width: 100%;
-  padding: 14px;
+  padding: 13px;
   border-radius: 12px;
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -713,39 +796,60 @@ body.dark-mode .memo-modal-date {
 #daily-memo-save-btn:hover,
 #detail-save-btn:hover,
 #save-memo-btn:hover {
-  transform: translateY(-2px) scale(1.02);
+  transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(49, 130, 246, 0.4);
-  filter: brightness(1.1);
 }
 
+/* 취소 버튼 */
 #modal-cancel-btn,
 #daily-memo-cancel-btn,
 #detail-cancel-btn,
+#detail-cancel-btn-2,
 #delete-cancel-btn {
   background: rgba(0, 0, 0, 0.05);
   color: #4e5968;
-  border: 1px solid rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.07);
   font-weight: 600;
-  transition: 0.2s;
+}
+
+body.dark-mode #modal-cancel-btn,
+body.dark-mode #daily-memo-cancel-btn,
+body.dark-mode #detail-cancel-btn,
+body.dark-mode #detail-cancel-btn-2,
+body.dark-mode #delete-cancel-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
 }
 
 #modal-cancel-btn:hover,
 #daily-memo-cancel-btn:hover,
 #detail-cancel-btn:hover,
+#detail-cancel-btn-2:hover,
 #delete-cancel-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.09);
 }
 
+body.dark-mode #modal-cancel-btn:hover,
+body.dark-mode #daily-memo-cancel-btn:hover,
+body.dark-mode #detail-cancel-btn:hover,
+body.dark-mode #detail-cancel-btn-2:hover,
+body.dark-mode #delete-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 삭제 버튼 */
 #delete-confirm-btn {
-  background: #ef4444 !important;
-  color: white;
-  font-weight: bold;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: #fff;
+  font-weight: 700;
   border: none;
-  transition: 0.2s;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 #delete-confirm-btn:hover {
-  background: #dc2626 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4) !important;
 }
 
 
@@ -1115,11 +1219,119 @@ body.dark-mode .back-to-top-btn {
   height: 100vh;
   position: relative;
   z-index: 50;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+              padding 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.36s ease;
 }
+
+/* 사이드바 접힌 상태 */
+.sidebar.collapsed {
+  width: 0;
+  padding: 40px 0;
+  border-color: transparent;
+}
+
+
 
 body.dark-mode .sidebar {
   background: transparent;
   border-color: rgba(255, 255, 255, 0.07);
+}
+
+body.dark-mode .sidebar.collapsed {
+  border-color: transparent;
+}
+
+/* 사이드바 내부 콘텐츠 — 접힐 때 사르르 사라짐 */
+.sidebar > * {
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.sidebar.collapsed > * {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── 사이드바 토글 버튼 ── */
+.sidebar-toggle-btn {
+  /* 사이드바와 같은 flex row에서 position: sticky로 경계에 고정 */
+  position: sticky;
+  top: calc(50vh - 22px);  /* 세로 중앙 — 핸들 높이 절반 */
+  height: 44px;
+  width: 18px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 60;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* 반원 핸들 — 버튼 안에 가상요소로 */
+.sidebar-toggle-btn::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-left: none;
+  border-radius: 0 22px 22px 0;
+  box-shadow: 3px 0 12px rgba(71, 85, 105, 0.08),
+              inset -1px 0 0 rgba(255,255,255,0.5);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.dark-mode .sidebar-toggle-btn::before {
+  background: rgba(15, 23, 42, 0.65);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 3px 0 12px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-toggle-btn:hover::before {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 3px 0 16px rgba(49, 130, 246, 0.12);
+}
+
+body.dark-mode .sidebar-toggle-btn:hover::before {
+  background: rgba(15, 23, 42, 0.85);
+}
+
+/* 아이콘 */
+.sidebar-toggle-icon {
+  position: relative;
+  z-index: 1;
+  color: #94a3b8;
+  transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+              color 0.2s ease;
+  margin-left: 3px;
+}
+
+body.dark-mode .sidebar-toggle-icon {
+  color: #475569;
+}
+
+.sidebar-toggle-btn:hover .sidebar-toggle-icon {
+  color: #3182f6;
+}
+
+body.dark-mode .sidebar-toggle-btn:hover .sidebar-toggle-icon {
+  color: #60a5fa;
+}
+
+#dashboard-view.sidebar-collapsed .sidebar-toggle-icon {
+  transform: rotate(180deg);
+  margin-left: -1px;
 }
 
 .profile-section {
@@ -1464,7 +1676,6 @@ body.dark-mode .github-tooltip {
 .github-wrapper:hover .github-tooltip {
   opacity: 1;
   visibility: visible;
-  transform: translateY(-50%) translateX(22px);
 }
 
 .github-layout {
@@ -1928,84 +2139,49 @@ body.dark-mode .stat-box p {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 15px 32px;
+  padding: 14px 28px;
   border-radius: 14px;
-  border: 1.5px solid rgba(49, 130, 246, 0.35);
-  background: transparent;
-  color: #3182f6;
+  border: none;
+  background: linear-gradient(135deg, #3182f6 0%, #2563eb 100%);
+  color: #fff;
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.01em;
   cursor: pointer;
   overflow: hidden;
-  isolation: isolate;   /* 독립적인 stacking context 생성 */
+  isolation: isolate;
+  box-shadow: 0 4px 16px rgba(49, 130, 246, 0.3);
   transition:
-    color 0.35s ease,
-    border-color 0.35s ease,
-    box-shadow 0.35s ease,
-    transform 0.25s ease;
-  z-index: 1;
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-body.dark-mode .go-dashboard-btn {
-  border-color: rgba(96, 165, 250, 0.4);
-  color: #60a5fa;
-}
-
-/* 호버 fill — 아래→위로 블루 그라데이션 슬라이드 */
+/* 좌상단 글라스 하이라이트 */
 .go-dashboard-btn::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #3182f6 0%, #2563eb 100%);
-  transform: translateY(100%);
-  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: -1;
-  border-radius: 12px;
-}
-
-/* 글라스 하이라이트 — 좌상단 고정 */
-.go-dashboard-btn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 60%;
-  height: 50%;
-  background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(255, 255, 255, 0.0) 100%);
-  border-radius: 12px 0 0 0;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  z-index: -1;
+  top: 0; left: 0;
+  width: 60%; height: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  border-radius: 14px 0 0 0;
   pointer-events: none;
 }
 
-/* 호버 상태 */
+.go-dashboard-btn::after { display: none; }
+
 .go-dashboard-btn:hover {
-  color: #fff;
-  border-color: transparent;
-  box-shadow:
-    0 8px 28px rgba(49, 130, 246, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(49, 130, 246, 0.45);
 }
 
-/* 다크모드 호버 텍스트 명시적으로 흰색 고정 */
+body.dark-mode .go-dashboard-btn {
+  box-shadow: 0 4px 20px rgba(49, 130, 246, 0.25);
+}
+
 body.dark-mode .go-dashboard-btn:hover {
-  color: #fff !important;
+  box-shadow: 0 8px 28px rgba(49, 130, 246, 0.4);
 }
 
-.go-dashboard-btn:hover::before {
-  transform: translateY(0%);
-}
-
-.go-dashboard-btn:hover::after {
-  opacity: 1;
-}
-
-/* 버튼 내부 아이콘 */
 .go-dashboard-btn .cta-icon {
   display: inline-flex;
   align-items: center;
@@ -2016,7 +2192,6 @@ body.dark-mode .go-dashboard-btn:hover {
   transform: translateX(4px);
 }
 
-/* active 클릭 시 살짝 눌리는 느낌 */
 .go-dashboard-btn:active {
   transform: translateY(0px) scale(0.98);
 }
@@ -2359,34 +2534,34 @@ body.dark-mode .hero-tag-dim {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 13px 22px;
+  padding: 14px 22px;
   border-radius: 14px;
-  border: 1.5px solid rgba(0,0,0,0.12);
-  background: rgba(255,255,255,0.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(0,0,0,0.1);
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #4e5968;
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
-  transition: all 0.25s ease;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, transform 0.2s ease;
   letter-spacing: -0.01em;
 }
 body.dark-mode .hero-ghost-btn {
-  border-color: rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
   color: #94a3b8;
 }
 .hero-ghost-btn:hover {
-  border-color: rgba(49,130,246,0.3);
-  color: #3182f6;
-  background: rgba(49,130,246,0.06);
+  border-color: rgba(0,0,0,0.18);
+  color: #191f28;
+  background: rgba(255,255,255,0.75);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(49,130,246,0.1);
 }
 body.dark-mode .hero-ghost-btn:hover {
-  color: #60a5fa;
-  border-color: rgba(96,165,250,0.3);
+  color: #f0f6ff;
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
 }
 
 
@@ -2571,10 +2746,11 @@ body.dark-mode .progress-bar-bg {
 }
 
 .roadmap-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   color: #191f28;
-  margin-bottom: 40px;
+  letter-spacing: -0.03em;
+  margin-bottom: 36px;
 }
 
 .upcoming-widget {
@@ -2664,7 +2840,7 @@ body.dark-mode .roadmap-title {
   color: #f8fafc;
 }
 
-.treasure-map-area {
+.roadmap-area {
   position: relative;
   width: 100%;
   max-width: 1400px;
@@ -2700,7 +2876,7 @@ body.dark-mode .roadmap-title {
   animation: flight-flow 30s linear infinite;
 }
 
-.map-item {
+.roadmap-item {
   position: absolute;
   z-index: 100 !important;
   display: flex;
@@ -2710,10 +2886,10 @@ body.dark-mode .roadmap-title {
   cursor: pointer;
 }
 
-.map-marker {
+.roadmap-marker {
   width: 44px;
   height: 44px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(49, 130, 246, 0.5);
   border-radius: 50%;
@@ -2724,6 +2900,12 @@ body.dark-mode .roadmap-title {
   box-shadow: 0 4px 15px rgba(71, 85, 105, 0.08);
   margin-bottom: 14px;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body.dark-mode .roadmap-marker {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(96, 165, 250, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .marker-num {
@@ -2739,12 +2921,12 @@ body.dark-mode .marker-num {
   color: #60a5fa;
 }
 
-.map-item.goal .marker-num {
+.roadmap-item.goal .marker-num {
   color: #a855f7;
   font-size: 14px;
 }
 
-.map-content {
+.roadmap-content {
   width: 135px;
   white-space: normal;
   word-break: keep-all;
@@ -2761,40 +2943,50 @@ body.dark-mode .marker-num {
   transform: translateZ(0);
 }
 
-.map-content h4 {
+.roadmap-content h4 {
   font-size: 14px;
   font-weight: 700;
   margin-bottom: 2px;
   color: #333d4b;
 }
 
-body.dark-mode .map-content h4 {
+body.dark-mode .roadmap-content h4 {
   color: #f8fafc;
 }
 
-.map-content p {
+.roadmap-content p {
   font-size: 11px;
   line-height: 1.5;
   color: #4e5968;
 }
 
-body.dark-mode .map-content p {
+body.dark-mode .roadmap-content p {
   color: #cbd5e1;
 }
 
-.map-item.completed .map-marker {
+.roadmap-item.completed .roadmap-marker {
   background: #e7f7ed;
   border-color: #00d082;
   box-shadow: 0 0 20px rgba(0, 208, 130, 0.4);
   color: #00d082;
 }
 
-.map-item.completed .map-content {
+body.dark-mode .roadmap-item.completed .roadmap-marker {
+  background: rgba(0, 208, 130, 0.12);
+  border-color: #00d082;
+  box-shadow: 0 0 20px rgba(0, 208, 130, 0.25);
+}
+
+.roadmap-item.completed .roadmap-content {
   border-color: rgba(0, 208, 130, 0.3);
   background: rgba(231, 247, 237, 0.1);
 }
 
-.map-item.completed .map-marker::after {
+body.dark-mode .roadmap-item.completed .roadmap-content {
+  background: rgba(0, 208, 130, 0.05);
+}
+
+.roadmap-item.completed .roadmap-marker::after {
   content: '✓';
   position: absolute;
   font-weight: 900;
@@ -2811,30 +3003,30 @@ body.dark-mode .map-content p {
   align-items: center;
 }
 
-.map-item:hover .map-content {
+.roadmap-item:hover .roadmap-content {
   transform: translateY(-8px) scale(1.03);
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(49, 130, 246, 0.3);
 }
 
-.map-item:hover .map-marker {
+.roadmap-item:hover .roadmap-marker {
   transform: translateY(-8px) scale(1.1);
 }
 
-.map-item.goal .map-marker {
+.roadmap-item.goal .roadmap-marker {
   border-color: rgba(168, 85, 247, 0.8);
   animation: goal-pulse 2s infinite ease-in-out;
 }
 
-.map-item.goal:hover .map-marker {
+.roadmap-item.goal:hover .roadmap-marker {
   animation: goal-pulse-hover 2s infinite ease-in-out;
 }
 
-.map-item:nth-child(even) .map-content {
+.roadmap-item:nth-child(even) .roadmap-content {
   top: 55px;
 }
 
-.map-item:nth-child(odd) .map-content {
+.roadmap-item:nth-child(odd) .roadmap-content {
   bottom: 55px;
 }
 
@@ -3831,81 +4023,330 @@ body.dark-mode .pf-label {
 }
 
 /* Portfolio Projects */
+/* ── 프로젝트 카드 (썸네일 + 정보) ── */
 .pf-projects {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 20px;
 }
 
 .pf-project-card {
   display: grid;
-  grid-template-columns: 48px 1fr auto;
-  gap: 24px;
-  align-items: start;
-  padding: 28px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-  transition: background 0.2s;
+  grid-template-columns: 340px 1fr;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  background: #fff;
+  transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s ease, border-color 0.28s ease;
+  box-shadow: 0 2px 8px rgba(71,85,105,0.06);
+  min-height: 220px;
 }
 
-.pf-project-card:first-child {
-  padding-top: 0;
+.pf-project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(71,85,105,0.1);
+  border-color: rgba(49,130,246,0.18);
 }
 
-.pf-project-card:last-child {
-  border-bottom: none !important;
+body.dark-mode .pf-project-card {
+  background: rgba(15,23,42,0.7);
+  border-color: rgba(255,255,255,0.07);
 }
 
-.pf-proj-num {
-  font-size: 13px;
-  font-weight: 800;
-  color: rgba(0, 0, 0, 0.15);
-  padding-top: 4px;
-  letter-spacing: -0.02em;
+body.dark-mode .pf-project-card:hover {
+  border-color: rgba(96,165,250,0.2);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
 }
 
-.pf-proj-body h3 {
-  font-size: 17px;
-  font-weight: 700;
-  color: #0d1117;
-  margin: 0 0 8px;
+/* ── 썸네일 영역 ── */
+.pf-proj-thumbnail {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+}
+
+/* 각 프로젝트별 배경 */
+.pf-thumb-dashboard {
+  background: linear-gradient(135deg, #e8eef8 0%, #dde6f5 100%);
+}
+body.dark-mode .pf-thumb-dashboard {
+  background: linear-gradient(135deg, #1e3a5f 0%, #1e1b4b 100%);
+}
+.pf-thumb-budget {
+  background: linear-gradient(135deg, #064e3b 0%, #1e3a5f 100%);
+}
+.pf-thumb-signal {
+  background: linear-gradient(135deg, #1c1917 0%, #292524 100%);
+}
+
+/* ── 실제 이미지 겹침 래퍼 ── */
+.pf-thumb-img-wrap {
+  position: relative;
+  width: 90%;
+  height: 88%;
+}
+
+/* 뒤 이미지 (포트폴리오) — 살짝 기울어져 뒤에 */
+.pf-thumb-img-back {
+  position: absolute;
+  width: 82%;
+  border-radius: 10px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.18);
+  object-fit: cover;
+  object-position: top;
+  top: 10%;
+  right: 0;
+  transform: rotate(2.5deg) translateY(6px);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+/* 앞 이미지 (대시보드) — 살짝 반대로 기울어져 앞에 */
+.pf-thumb-img-front {
+  position: absolute;
+  width: 82%;
+  border-radius: 10px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+  object-fit: cover;
+  object-position: top;
+  bottom: 0;
+  left: 0;
+  transform: rotate(-2deg);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+/* 브라우저 목업 (02, 03용 유지) */
+.pf-thumb-browser {
+  width: 78%;
+  height: 75%;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px 10px 6px 6px;
+  border: 1px solid rgba(255,255,255,0.12);
+  overflow: hidden;
+}
+
+.pf-thumb-browser-bar {
+  height: 22px;
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  flex-shrink: 0;
+}
+
+.pf-thumb-browser-bar span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+}
+
+.pf-thumb-screen {
+  display: flex;
+  height: calc(100% - 22px);
+  gap: 6px;
+  padding: 8px;
+  background: rgba(0,0,0,0.2);
+}
+
+.pf-thumb-screen-dark {
+  background: rgba(0,0,0,0.5);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pf-thumb-sidebar {
+  width: 28%; height: 100%;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px; flex-shrink: 0;
+}
+
+.pf-thumb-main {
+  flex: 1; display: flex;
+  flex-direction: column; gap: 5px;
+}
+
+.pf-thumb-card {
+  flex: 1; background: rgba(255,255,255,0.1); border-radius: 4px;
+}
+.pf-thumb-card-sm { flex: 0.6; }
+
+.pf-thumb-chart {
+  width: 100%; height: 100%;
+  display: flex; align-items: flex-end;
+  gap: 6px; padding: 8px; box-sizing: border-box;
+}
+.pf-thumb-bar {
+  flex: 1; background: rgba(52,211,153,0.6);
+  border-radius: 3px 3px 0 0;
+}
+
+.pf-thumb-signal-light {
+  display: flex; flex-direction: column; gap: 6px;
+  align-items: center;
+  background: rgba(255,255,255,0.06);
+  padding: 12px 16px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.pf-thumb-light {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.pf-thumb-light-red  { background: rgba(239,68,68,0.8); box-shadow: 0 0 8px rgba(239,68,68,0.5); }
+.pf-thumb-light-green { background: rgba(34,197,94,0.8); box-shadow: 0 0 8px rgba(34,197,94,0.5); }
+.pf-thumb-signal-text {
+  width: 60%; height: 5px;
+  background: rgba(255,255,255,0.2); border-radius: 3px;
+}
+.pf-thumb-signal-text-sm { width: 40%; opacity: 0.5; }
+
+/* ── 카드 정보 영역 ── */
+.pf-proj-info {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+
+.pf-proj-meta {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+.pf-proj-num-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #b0b8c1;
+  letter-spacing: 0.04em;
+}
+
+body.dark-mode .pf-proj-num-badge { color: #334155; }
+
+/* 상태 뱃지 */
+.pf-proj-status {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.pf-status-live {
+  background: rgba(34,197,94,0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34,197,94,0.2);
+}
+
+.pf-status-wip {
+  background: rgba(249,115,22,0.1);
+  color: #f97316;
+  border: 1px solid rgba(249,115,22,0.2);
+}
+
+.pf-status-plan {
+  background: rgba(139,149,161,0.1);
+  color: #8b95a1;
+  border: 1px solid rgba(139,149,161,0.15);
+}
+
+.pf-proj-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0d1117;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.3;
+}
+
+body.dark-mode .pf-proj-title { color: #f0f6ff; }
+
+.pf-proj-desc {
+  font-size: 14px;
+  color: #6b7684;
+  line-height: 1.7;
+  margin: 0;
+}
+
+body.dark-mode .pf-proj-desc { color: #64748b; }
+
+/* 링크 버튼 */
+.pf-proj-links {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.pf-proj-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+}
+
+.pf-proj-btn-primary {
+  background: linear-gradient(135deg, #3182f6 0%, #2563eb 100%);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(49,130,246,0.25);
+}
+
+.pf-proj-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(49,130,246,0.35);
+}
+
+.pf-proj-btn-ghost {
+  background: rgba(0,0,0,0.05);
+  color: #4e5968;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+body.dark-mode .pf-proj-btn-ghost {
+  background: rgba(255,255,255,0.06);
+  color: #94a3b8;
+  border-color: rgba(255,255,255,0.08);
+}
+
+.pf-proj-btn-ghost:hover {
+  background: rgba(0,0,0,0.09);
+  color: #191f28;
+}
+
+body.dark-mode .pf-proj-btn-ghost:hover {
+  background: rgba(255,255,255,0.1);
+  color: #f0f6ff;
+}
+
+.pf-btn-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* 기존 호환 클래스 유지 */
 .pf-wip {
   font-size: 10px;
   font-weight: 700;
   padding: 2px 7px;
   border-radius: 4px;
-  background: rgba(251, 146, 60, 0.1);
+  background: rgba(251,146,60,0.1);
   color: #f97316;
   letter-spacing: 0.05em;
-}
-
-.pf-proj-body p {
-  font-size: 14px;
-  color: #6b7684;
-  line-height: 1.65;
-  margin: 0 0 12px;
-}
-
-.pf-proj-link {
-  font-size: 13px;
-  font-weight: 700;
-  color: #3182f6;
-  text-decoration: none;
-  white-space: nowrap;
-  padding-top: 4px;
-  transition: opacity 0.2s;
-}
-
-.pf-proj-link:hover {
-  opacity: 0.6;
-}
-
-.pf-proj-link-dim {
-  color: #8b95a1;
 }
 
 /* Portfolio Footer */
@@ -4377,6 +4818,15 @@ body.dark-mode .archive-card:hover .arc-arrow { color: #60a5fa; }
 /* =========================================
    13. Media Queries
 ========================================= */
+
+/* =====================================================
+   최소 너비 고정 — 1280px 이하에서 가로 스크롤
+   대시보드/포트폴리오는 데스크탑 전용 레이아웃
+   ===================================================== */
+body {
+  min-width: 1280px;
+}
+
 @media (max-width: 1440px),
 (max-height: 850px) {
   .sidebar {
@@ -4423,7 +4873,7 @@ body.dark-mode .archive-card:hover .arc-arrow { color: #60a5fa; }
     margin-top: -30px;
   }
 
-  .map-content {
+  .roadmap-content {
     width: 125px;
     padding: 8px 10px;
   }
@@ -4462,6 +4912,7 @@ body.dark-mode .archive-card:hover .arc-arrow { color: #60a5fa; }
     margin-bottom: 2px;
   }
 }
+
 
 /* =========================================
    🚀 탭 전환 UI (렌더링 버그 해결 버전)
@@ -4660,7 +5111,7 @@ body.dark-mode .bento-year-bar-bg {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: #0d1117;
+  background: linear-gradient(135deg, #3182f6 0%, #2563eb 100%);
   color: #fff;
   border: none;
   padding: 13px 24px;
@@ -4672,33 +5123,27 @@ body.dark-mode .bento-year-bar-bg {
   margin-top: 8px;
   position: relative;
   overflow: hidden;
-  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 14px rgba(49,130,246,0.28);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 .engage-btn::after {
   content: '';
   position: absolute;
   top: 0; left: 0;
   width: 55%; height: 50%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 100%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 100%);
   border-radius: 10px 0 0 0;
-  opacity: 0;
-  transition: opacity 0.25s ease;
   pointer-events: none;
 }
-.engage-btn:hover::after { opacity: 1; }
 body.dark-mode .engage-btn {
-  background: rgba(240,246,255,0.9);
-  color: #0d1117;
+  box-shadow: 0 4px 14px rgba(49,130,246,0.2);
 }
 .engage-btn:hover {
-  background: #3182f6;
-  color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(49,130,246,0.3);
+  box-shadow: 0 8px 20px rgba(49,130,246,0.4);
 }
 body.dark-mode .engage-btn:hover {
-  background: #3182f6;
-  color: #fff;
+  box-shadow: 0 8px 20px rgba(49,130,246,0.35);
 }
 
 /* ── 공통 라벨 ── */

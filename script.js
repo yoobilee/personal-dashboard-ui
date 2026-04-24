@@ -1,3 +1,42 @@
+// ── GitHub 잔디밭 툴팁 — 사이드바 overflow 탈출
+document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.getElementById('github-wrapper');
+    const tooltip = wrapper ? wrapper.querySelector('.github-tooltip') : null;
+
+    if (!wrapper || !tooltip) return;
+
+    function positionTooltip() {
+        const rect = wrapper.getBoundingClientRect();
+        tooltip.style.position = 'fixed';
+        tooltip.style.top = (rect.top + rect.height / 2) + 'px';
+        tooltip.style.left = (rect.right + 22) + 'px';
+        tooltip.style.transform = 'translateY(-50%)';
+    }
+
+    wrapper.addEventListener('mouseenter', positionTooltip);
+});
+
+// ── 사이드바 접기/펼치기 토글
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('sidebar-toggle-btn');
+    const sidebar   = document.querySelector('.sidebar');
+    const dashView  = document.getElementById('dashboard-view');
+
+    if (!toggleBtn || !sidebar || !dashView) return;
+
+    toggleBtn.addEventListener('click', () => {
+        const isCollapsed = sidebar.classList.toggle('collapsed');
+        dashView.classList.toggle('sidebar-collapsed', isCollapsed);
+        localStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0');
+    });
+
+    // 마지막 상태 복원
+    if (localStorage.getItem('sidebarCollapsed') === '1') {
+        sidebar.classList.add('collapsed');
+        dashView.classList.add('sidebar-collapsed');
+    }
+});
+
 function updateSidebarStats() {
     // 오늘 날짜
     const now = new Date();
@@ -113,9 +152,20 @@ document.addEventListener('DOMContentLoaded', handleRouting);
 // 버튼 클릭 시 주소 변경 (사이드바 및 대문 버튼)
 if (goDashboardBtn) goDashboardBtn.addEventListener('click', () => { window.location.hash = 'dashboard'; });
 if (goToPortfolioBtn) goToPortfolioBtn.addEventListener('click', () => { window.location.hash = 'portfolio'; });
+
+// 포트폴리오 페이지 YB 로고 → 무조건 포트폴리오 탭
+const islandLogo = document.querySelector('.island-logo');
+if (islandLogo) {
+    islandLogo.addEventListener('click', (e) => {
+        e.preventDefault();
+        goHome();
+    });
+}
 if (profileImage) {
-    profileImage.style.cursor = 'pointer'; // 마우스를 올리면 손가락 모양으로 변하게 합니다.
-    profileImage.addEventListener('click', () => { window.location.hash = 'home'; });
+    profileImage.style.cursor = 'pointer';
+    profileImage.addEventListener('click', () => {
+        goHome();
+    });
 }
 
 // ==========================================
@@ -127,14 +177,14 @@ if (profileImage) {
  */
 document.addEventListener('DOMContentLoaded', () => {
     // 1. 필요한 요소들을 가져옵니다.
-    const roadmapItems = document.querySelectorAll('.map-item');
+    const roadmapItems = document.querySelectorAll('.roadmap-item');
     const fill = document.getElementById('progress-fill');
     const text = document.getElementById('progress-text');
 
     // 2. [핵심] 달성률을 계산하고 UI를 업데이트하는 함수입니다.
     function updateVoyageProgress() {
         const total = roadmapItems.length;
-        const completed = document.querySelectorAll('.map-item.completed').length;
+        const completed = document.querySelectorAll('.roadmap-item.completed').length;
 
         const percentage = total > 0 ? (completed / total) * 100 : 0;
         const finalPercent = percentage.toFixed(1);
@@ -145,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // ⭐️ 현재 완료 상태를 브라우저(localStorage)에 저장합니다.
-        const completedPhases = Array.from(document.querySelectorAll('.map-item.completed'))
+        const completedPhases = Array.from(document.querySelectorAll('.roadmap-item.completed'))
             .map(item => item.getAttribute('data-phase'));
         localStorage.setItem('roadmap_status', JSON.stringify(completedPhases));
     }
@@ -606,6 +656,11 @@ if (nextMonthBtn) {
 
 // ── 포트폴리오 메인화면 Three.js 제거됨
 // 글래스 카드는 CSS animation으로 구현
+// 메인화면 복귀 함수 — 현재 페이지 hash 기준으로 탭 자동 결정
+function goHome() {
+    window.location.hash = 'home';
+}
+
 window.yoobiDashMode = 'portfolio';
 
 
@@ -628,6 +683,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             const type = tab.getAttribute('data-type');
 
+            // 탭 전환 시 항상 현재 탭 기록
+            sessionStorage.setItem('activeHomeTab', type);
+
             // 탭 active 전환
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
@@ -645,7 +703,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const threeCanvas = homeViewEl ? homeViewEl.querySelector('canvas') : null;
                 if (threeCanvas) threeCanvas.style.opacity = '0';
             } else {
-                window.yoobiDashMode = 'portfolio';
+
+window.yoobiDashMode = 'portfolio';
                 // ⭐️ 포트폴리오 탭: mesh gradient 배경 OFF, Three.js 배경 복구
                 if (homeViewEl) homeViewEl.classList.remove('dash-mode');
                 const threeCanvas = homeViewEl ? homeViewEl.querySelector('canvas') : null;
@@ -655,7 +714,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (ctaBtnPort) ctaBtnPort.onclick = () => { window.location.hash = 'portfolio'; };
-    if (ctaBtnDash) ctaBtnDash.onclick = () => { window.location.hash = 'dashboard'; };
+    if (ctaBtnDash) ctaBtnDash.onclick = () => {
+        window.location.hash = 'dashboard';
+    };
+
+    // 포트폴리오 페이지 상단 대시보드 알약 버튼
+    const islandDashBtn = document.querySelector('.island-btn');
+    if (islandDashBtn) {
+        islandDashBtn.addEventListener('click', () => {
+            });
+    }
 
     // 초기: 포트폴리오 탭 활성화
     tabs[0].click();
@@ -665,9 +733,9 @@ document.addEventListener('DOMContentLoaded', () => {
 /**
  * [Phase 12] 딥 다이내믹 쉐도우 (Deep Lighting)
  */
-const mapItems = document.querySelectorAll('.map-item');
+const mapItems = document.querySelectorAll('.roadmap-item');
 mapItems.forEach(item => {
-    const content = item.querySelector('.map-content');
+    const content = item.querySelector('.roadmap-content');
     item.addEventListener('mousemove', (e) => {
         const rect = content.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;

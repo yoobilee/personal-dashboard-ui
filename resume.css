@@ -65,13 +65,14 @@ body.dark-mode .resume-root {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 100px;
-  padding: 6px 6px 6px 18px;
+  padding: 6px 8px;
+  transition: padding 0.35s cubic-bezier(0.22,1,0.36,1), gap 0.35s ease, box-shadow 0.35s ease;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 
 body.dark-mode .resume-island {
   background: rgba(30, 41, 59, 0.75);
@@ -142,13 +143,7 @@ body.dark-mode .resume-island-divider {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.back-text,
-.print-text {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+
 
 /* ── 뒤로가기 버튼 ── */
 .resume-island-back {
@@ -198,27 +193,71 @@ body.dark-mode .resume-island-print:hover svg path {
 }
 
 /* ── 스크롤 상태 (알약 축소) ── */
+.resume-island {
+  transition: padding 0.35s cubic-bezier(0.22,1,0.36,1),
+              gap 0.35s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.35s ease;
+}
+
 .resume-island.scrolled {
-  padding: 6px;
+  padding: 5px !important;
   gap: 6px;
 }
 
+/* 로고·구분선 — visibility로 공간까지 제거 */
+.resume-island-logo {
+  flex-shrink: 0;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+
+.resume-island-divider {
+  flex-shrink: 0;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  width: 1px;
+  height: 14px;
+}
+
 .resume-island.scrolled .resume-island-logo,
-.resume-island.scrolled .resume-island-divider,
+.resume-island.scrolled .resume-island-divider {
+  display: none;
+}
+
+/* 텍스트 — 사르르 사라짐 */
+.back-text,
+.print-text {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100px;
+  opacity: 1;
+  vertical-align: middle;
+  transition: opacity 0.2s ease,
+              max-width 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+
 .resume-island.scrolled .back-text,
 .resume-island.scrolled .print-text {
-  display: none;
+  opacity: 0;
+  max-width: 0;
+}
+
+/* 버튼 — 원형으로 */
+.resume-island-back,
+.resume-island-print {
+  transition: padding 0.3s cubic-bezier(0.22,1,0.36,1),
+              border-radius 0.3s ease,
+              background 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s ease;
 }
 
 .resume-island.scrolled .resume-island-back,
 .resume-island.scrolled .resume-island-print {
-  width: 34px;
-  height: 34px;
-  padding: 0;
+  padding: 9px !important;
   border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  gap: 0;
 }
 
 
