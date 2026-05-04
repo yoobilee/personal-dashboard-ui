@@ -1,78 +1,3 @@
-// ── GitHub 잔디밭 툴팁 — 사이드바 overflow 탈출
-document.addEventListener('DOMContentLoaded', () => {
-    const wrapper = document.getElementById('github-wrapper');
-    const tooltip = wrapper ? wrapper.querySelector('.github-tooltip') : null;
-
-    if (!wrapper || !tooltip) return;
-
-    function positionTooltip() {
-        const rect = wrapper.getBoundingClientRect();
-        tooltip.style.position = 'fixed';
-        tooltip.style.top = (rect.top + rect.height / 2) + 'px';
-        tooltip.style.left = (rect.right + 22) + 'px';
-        tooltip.style.transform = 'translateY(-50%)';
-    }
-
-    wrapper.addEventListener('mouseenter', positionTooltip);
-});
-
-// ── 사이드바 접기/펼치기 토글
-document.addEventListener('DOMContentLoaded', () => {
-    const toggleBtn = document.getElementById('sidebar-toggle-btn');
-    const sidebar   = document.querySelector('.sidebar');
-    const dashView  = document.getElementById('dashboard-view');
-
-    if (!toggleBtn || !sidebar || !dashView) return;
-
-    toggleBtn.addEventListener('click', () => {
-        const isCollapsed = sidebar.classList.toggle('collapsed');
-        dashView.classList.toggle('sidebar-collapsed', isCollapsed);
-        localStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0');
-    });
-
-    // 마지막 상태 복원
-    if (localStorage.getItem('sidebarCollapsed') === '1') {
-        sidebar.classList.add('collapsed');
-        dashView.classList.add('sidebar-collapsed');
-    }
-});
-
-function updateSidebarStats() {
-    // 오늘 날짜
-    const now = new Date();
-    const todayEl = document.getElementById('sb-today');
-    if (todayEl) {
-        const days = ['일','월','화','수','목','금','토'];
-        todayEl.textContent = `${now.getMonth()+1}/${now.getDate()} (${days[now.getDay()]})`;
-    }
-
-    // 연도 달성률
-    const start = new Date(now.getFullYear(), 0, 1);
-    const end   = new Date(now.getFullYear() + 1, 0, 1);
-    const pct   = Math.round((now - start) / (end - start) * 100);
-    const yearPctEl = document.getElementById('sb-year-pct');
-    const yearBarEl = document.getElementById('sb-year-bar');
-    if (yearPctEl) yearPctEl.textContent = pct + '%';
-    if (yearBarEl) yearBarEl.style.width = pct + '%';
-
-    // 오늘 타임라인 일정
-    const todayEventsEl = document.getElementById('sb-today-events');
-    if (todayEventsEl) {
-        const todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-        const timeline = JSON.parse(localStorage.getItem(`yoobiTimeline_${todayKey}`) || '[]');
-        if (timeline.length === 0) {
-            todayEventsEl.innerHTML = '<span class="sb-no-event">일정 없음</span>';
-        } else {
-            todayEventsEl.innerHTML = timeline.slice(0, 3).map(ev => {
-                const timeMatch = ev.text.match(/^(\d{1,2}:\d{2})/);
-                const time = timeMatch ? `<span class="sb-event-time">${timeMatch[1]}</span>` : '';
-                const title = timeMatch ? ev.text.replace(timeMatch[1], '').trim() : ev.text;
-                return `<div class="sb-event-item">${time}<span style="overflow:hidden;text-overflow:ellipsis;">${title}</span></div>`;
-            }).join('');
-        }
-    }
-}
-
 // 1. Firebase 설정 (유비님이 복사한 값 적용)
 const firebaseConfig = {
   apiKey: "AIzaSyCIPKUTDyNC0R0SAVbAAWgkCYpdogmw3w8",
@@ -152,20 +77,9 @@ document.addEventListener('DOMContentLoaded', handleRouting);
 // 버튼 클릭 시 주소 변경 (사이드바 및 대문 버튼)
 if (goDashboardBtn) goDashboardBtn.addEventListener('click', () => { window.location.hash = 'dashboard'; });
 if (goToPortfolioBtn) goToPortfolioBtn.addEventListener('click', () => { window.location.hash = 'portfolio'; });
-
-// 포트폴리오 페이지 YB 로고 → 무조건 포트폴리오 탭
-const islandLogo = document.querySelector('.island-logo');
-if (islandLogo) {
-    islandLogo.addEventListener('click', (e) => {
-        e.preventDefault();
-        goHome();
-    });
-}
 if (profileImage) {
-    profileImage.style.cursor = 'pointer';
-    profileImage.addEventListener('click', () => {
-        goHome();
-    });
+    profileImage.style.cursor = 'pointer'; // 마우스를 올리면 손가락 모양으로 변하게 합니다.
+    profileImage.addEventListener('click', () => { window.location.hash = 'home'; });
 }
 
 // ==========================================
@@ -177,14 +91,14 @@ if (profileImage) {
  */
 document.addEventListener('DOMContentLoaded', () => {
     // 1. 필요한 요소들을 가져옵니다.
-    const roadmapItems = document.querySelectorAll('.roadmap-item');
+    const roadmapItems = document.querySelectorAll('.map-item');
     const fill = document.getElementById('progress-fill');
     const text = document.getElementById('progress-text');
 
     // 2. [핵심] 달성률을 계산하고 UI를 업데이트하는 함수입니다.
     function updateVoyageProgress() {
         const total = roadmapItems.length;
-        const completed = document.querySelectorAll('.roadmap-item.completed').length;
+        const completed = document.querySelectorAll('.map-item.completed').length;
 
         const percentage = total > 0 ? (completed / total) * 100 : 0;
         const finalPercent = percentage.toFixed(1);
@@ -195,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // ⭐️ 현재 완료 상태를 브라우저(localStorage)에 저장합니다.
-        const completedPhases = Array.from(document.querySelectorAll('.roadmap-item.completed'))
+        const completedPhases = Array.from(document.querySelectorAll('.map-item.completed'))
             .map(item => item.getAttribute('data-phase'));
         localStorage.setItem('roadmap_status', JSON.stringify(completedPhases));
     }
@@ -656,11 +570,6 @@ if (nextMonthBtn) {
 
 // ── 포트폴리오 메인화면 Three.js 제거됨
 // 글래스 카드는 CSS animation으로 구현
-// 메인화면 복귀 함수 — 현재 페이지 hash 기준으로 탭 자동 결정
-function goHome() {
-    window.location.hash = 'home';
-}
-
 window.yoobiDashMode = 'portfolio';
 
 
@@ -683,9 +592,6 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             const type = tab.getAttribute('data-type');
 
-            // 탭 전환 시 항상 현재 탭 기록
-            sessionStorage.setItem('activeHomeTab', type);
-
             // 탭 active 전환
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
@@ -703,8 +609,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const threeCanvas = homeViewEl ? homeViewEl.querySelector('canvas') : null;
                 if (threeCanvas) threeCanvas.style.opacity = '0';
             } else {
-
-window.yoobiDashMode = 'portfolio';
+                window.yoobiDashMode = 'portfolio';
                 // ⭐️ 포트폴리오 탭: mesh gradient 배경 OFF, Three.js 배경 복구
                 if (homeViewEl) homeViewEl.classList.remove('dash-mode');
                 const threeCanvas = homeViewEl ? homeViewEl.querySelector('canvas') : null;
@@ -714,16 +619,7 @@ window.yoobiDashMode = 'portfolio';
     });
 
     if (ctaBtnPort) ctaBtnPort.onclick = () => { window.location.hash = 'portfolio'; };
-    if (ctaBtnDash) ctaBtnDash.onclick = () => {
-        window.location.hash = 'dashboard';
-    };
-
-    // 포트폴리오 페이지 상단 대시보드 알약 버튼
-    const islandDashBtn = document.querySelector('.island-btn');
-    if (islandDashBtn) {
-        islandDashBtn.addEventListener('click', () => {
-            });
-    }
+    if (ctaBtnDash) ctaBtnDash.onclick = () => { window.location.hash = 'dashboard'; };
 
     // 초기: 포트폴리오 탭 활성화
     tabs[0].click();
@@ -733,9 +629,9 @@ window.yoobiDashMode = 'portfolio';
 /**
  * [Phase 12] 딥 다이내믹 쉐도우 (Deep Lighting)
  */
-const mapItems = document.querySelectorAll('.roadmap-item');
+const mapItems = document.querySelectorAll('.map-item');
 mapItems.forEach(item => {
-    const content = item.querySelector('.roadmap-content');
+    const content = item.querySelector('.map-content');
     item.addEventListener('mousemove', (e) => {
         const rect = content.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
@@ -790,12 +686,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     const githubGrid = document.getElementById('github-grid');
-    const githubMonth = document.getElementById('github-month');
-    if (githubMonth) {
-        const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-        githubMonth.innerText = monthNames[new Date().getMonth()];
-    }
+    const githubMonth = document.querySelector('.github-month');
+
     if (githubGrid) {
+        if (githubMonth) {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const currentMonthIndex = new Date().getMonth();
+            githubMonth.innerText = monthNames[currentMonthIndex];
+        }
 
         const myContributions = [
             0, 0, 0, 0, 0, 0, 0,
@@ -1527,7 +1425,6 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
     renderArchive();
-    updateSidebarStats();
 });
 
 // ==========================================
@@ -1645,99 +1542,97 @@ async function uploadMasterData(secretKey) {
 }
 
 // ── 노트북: 서버에서 받은 바구니를 날짜별 상자로 다시 나누어 저장 ──
+// ── Firebase 자동 동기화 (config.js의 SYNC_KEY 사용) ──
+
+const originalSetItem = localStorage.setItem;
+let autoSaveTimeout = null;
+
+// ── 다운로드 (originalSetItem 직접 사용 → 자동저장 발동 안 함) ──
 async function downloadDataFromServer(secretKey) {
-    // 1. 에러를 대비하여 try-catch 문 안에서 실행합니다.
     try {
-        // 2. 파이어베이스 서버에서 내 시크릿 키가 적힌 문서를 찾습니다.
         const docRef = db.collection('dashboards').doc(secretKey);
-        // 3. 서버에 문서를 달라고 요청하여 가져옵니다.
         const docSnap = await docRef.get();
 
-        // 4. 문서가 실제로 서버에 잘 도착했는지(존재하는지) 확인합니다.
         if (docSnap.exists) {
-            // 5. 문서 안에 들어있는 진짜 데이터 알맹이만 빼냅니다.
             const data = docSnap.data();
 
-            // 6. 노트북에 원래 있던 옛날 메모/타임라인 찌꺼기를 지우기 위한 목록을 만듭니다.
             const keysToRemove = [];
-            // 7. 노트북 로컬 스토리지의 모든 항목을 검사합니다.
             for (let i = 0; i < localStorage.length; i++) {
-                // 8. 노트북 상자의 이름을 확인합니다.
                 const key = localStorage.key(i);
-                // 9. 이름이 메모나 타임라인이면 지울 목록에 추가합니다. (유령 데이터 방지)
                 if (key.startsWith('yoobiMemo_') || key.startsWith('yoobiTimeline_')) {
-                    // 10. 지울 목록 배열에 해당 키를 밀어 넣습니다.
                     keysToRemove.push(key);
                 }
             }
-            // 11. 수집한 옛날 상자들을 노트북에서 전부 깨끗하게 삭제합니다.
             keysToRemove.forEach(k => localStorage.removeItem(k));
 
-            // 12. 서버에서 가져온 칸반 데이터를 덮어씁니다. (없으면 빈 배열)
-            localStorage.setItem('yoobiTasks_v2', JSON.stringify(data.tasks || []));
+            originalSetItem.call(localStorage, 'yoobiTasks_v2', JSON.stringify(data.tasks || []));
+            originalSetItem.call(localStorage, 'yoobiLastSync', String(data.updatedAt?.toMillis?.() || Date.now()));
 
-            // 13. 서버 데이터에 메모 바구니가 존재한다면?
             if (data.memos) {
-                // 14. 바구니 안의 (이름, 데이터) 쌍을 하나씩 꺼내서 반복합니다.
                 for (const [key, value] of Object.entries(data.memos)) {
-                    // 15. 꺼낸 이름(날짜) 그대로 노트북 스토리지에 새롭게 저장합니다.
-                    localStorage.setItem(key, JSON.stringify(value));
+                    originalSetItem.call(localStorage, key, JSON.stringify(value));
                 }
             }
-
-            // 16. 서버 데이터에 타임라인 바구니가 존재한다면?
             if (data.timeline) {
-                // 17. 타임라인 바구니 안의 (이름, 데이터) 쌍을 하나씩 꺼내서 반복합니다.
                 for (const [key, value] of Object.entries(data.timeline)) {
-                    // 18. 꺼낸 이름(날짜) 그대로 노트북 스토리지에 새롭게 저장합니다.
-                    localStorage.setItem(key, JSON.stringify(value));
+                    originalSetItem.call(localStorage, key, JSON.stringify(value));
                 }
             }
 
-            // 19. 모든 정리가 끝나면 완료 메시지를 콘솔에 띄웁니다.
-            console.log("✅ 날짜별 데이터 동기화 완벽 완료! 화면을 새로고침합니다.");
-            // 20. 저장된 새 데이터를 화면에 띄우기 위해 브라우저를 새로고침합니다.
-            location.reload(); 
+            console.log("✅ 동기화 완료! 화면을 새로고침합니다.");
+            location.reload();
         } else {
-            // 21. 문서가 없으면 에러 메시지를 띄웁니다.
             console.error("❌ 데이터가 없습니다. 시크릿 코드를 확인하세요.");
         }
     } catch (error) {
-        // 22. 통신 에러 등 예기치 못한 문제가 생기면 로그를 남깁니다.
         console.error("❌ 다운로드 중 에러 발생:", error);
     }
 }
 
-// ── ⭐️ 자동 저장 (Auto-Save) 기능 추가 ──
-
-// 1. 타이머 변수 (연속 입력을 묶어주기 위한 장치)
-let autoSaveTimeout = null;
-
-// 2. 자동 저장 트리거 함수 (입력이 멈추고 2초 뒤에 실행됨)
+// ── 자동 저장 트리거 ──
 function triggerAutoSave() {
-    // 이미 타이머가 돌고 있다면 취소하고 다시 처음부터 센다 (타닥타닥 방지)
+    if (typeof SYNC_KEY === 'undefined' || !SYNC_KEY) return;
     if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
-    
     autoSaveTimeout = setTimeout(() => {
-        // ⭐️ 여기에 유비님의 시크릿 코드를 고정으로 넣어주세요!
-        const MY_SECRET_KEY = 'YB-Master-Key-01'; 
-        
-        console.log("⏳ 변경사항 감지! 백그라운드 자동 저장을 시작합니다...");
-        // 아까 만들어둔 전체 싹쓸이 업로드 함수를 조용히 실행!
-        uploadMasterData(MY_SECRET_KEY);
-    }, 2000); // 2000ms = 2초 뒤에 실행
+        console.log("⏳ 변경사항 감지! 자동 업로드 중...");
+        uploadMasterData(SYNC_KEY).then(() => {
+            originalSetItem.call(localStorage, 'yoobiLastSync', String(Date.now()));
+        });
+    }, 2000);
 }
 
-// 3. 브라우저의 저장소(localStorage.setItem) 기능 자체를 해킹해서 업그레이드!
-const originalSetItem = localStorage.setItem;
-
+// localStorage.setItem override
 localStorage.setItem = function(key, value) {
-    // 일단 원래 하던 대로 컴퓨터(로컬) 창고에 데이터를 저장합니다.
     originalSetItem.apply(this, arguments);
-
-    // 만약 방금 저장한 데이터가 '칸반', '메모', '타임라인' 중 하나라면?
     if (key === 'yoobiTasks_v2' || key.startsWith('yoobiMemo_') || key.startsWith('yoobiTimeline_')) {
-        // 눈치채지 못하게 백그라운드 자동 저장을 발동시킵니다.
         triggerAutoSave();
     }
 };
+
+// ── 페이지 로드 시 자동 동기화 ──
+async function autoSyncOnLoad() {
+    if (typeof SYNC_KEY === 'undefined' || !SYNC_KEY || typeof db === 'undefined') return;
+
+    try {
+        const docRef = db.collection('dashboards').doc(SYNC_KEY);
+        const docSnap = await docRef.get();
+
+        if (!docSnap.exists) return;
+
+        const serverTime = docSnap.data().updatedAt?.toMillis?.() || 0;
+        const localTime  = parseInt(localStorage.getItem('yoobiLastSync') || '0');
+
+        if (serverTime > localTime) {
+            console.log("🔄 서버에 더 최신 데이터가 있습니다. 자동 다운로드 중...");
+            await downloadDataFromServer(SYNC_KEY);
+        } else {
+            console.log("✅ 로컬 데이터가 최신입니다.");
+        }
+    } catch (e) {
+        console.warn("동기화 확인 중 오류:", e);
+    }
+}
+
+window.addEventListener('load', () => {
+    setTimeout(autoSyncOnLoad, 1500);
+});
