@@ -1,3 +1,76 @@
+// ── 사이드바 접기/펼치기 토글
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('sidebar-toggle-btn');
+    const sidebar   = document.querySelector('.sidebar');
+    const dashView  = document.getElementById('dashboard-view');
+
+    if (!toggleBtn || !sidebar || !dashView) return;
+
+    toggleBtn.addEventListener('click', () => {
+        const isCollapsed = sidebar.classList.toggle('collapsed');
+        dashView.classList.toggle('sidebar-collapsed', isCollapsed);
+        localStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0');
+    });
+
+    if (localStorage.getItem('sidebarCollapsed') === '1') {
+        sidebar.classList.add('collapsed');
+        dashView.classList.add('sidebar-collapsed');
+    }
+});
+
+// ── 사이드바 하단 실용 정보 업데이트
+function updateSidebarStats() {
+    const now = new Date();
+    const days = ['일','월','화','수','목','금','토'];
+    const todayEl = document.getElementById('sb-today');
+    if (todayEl) todayEl.textContent = `${now.getMonth()+1}/${now.getDate()} (${days[now.getDay()]})`;
+
+    const start = new Date(now.getFullYear(), 0, 1);
+    const end   = new Date(now.getFullYear() + 1, 0, 1);
+    const pct   = Math.round((now - start) / (end - start) * 100);
+    const yearPctEl = document.getElementById('sb-year-pct');
+    const yearBarEl = document.getElementById('sb-year-bar');
+    if (yearPctEl) yearPctEl.textContent = pct + '%';
+    if (yearBarEl) yearBarEl.style.width = pct + '%';
+
+    const todayEventsEl = document.getElementById('sb-today-events');
+    if (todayEventsEl) {
+        const todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+        const timeline = JSON.parse(localStorage.getItem(`yoobiTimeline_${todayKey}`) || '[]');
+        if (timeline.length === 0) {
+            todayEventsEl.innerHTML = '<span class="sb-no-event">일정 없음</span>';
+        } else {
+            todayEventsEl.innerHTML = timeline.slice(0, 3).map(ev => {
+                const timeMatch = ev.text.match(/^(\d{1,2}:\d{2})/);
+                const time = timeMatch ? `<span class="sb-event-time">${timeMatch[1]}</span>` : '';
+                const title = timeMatch ? ev.text.replace(timeMatch[1], '').trim() : ev.text;
+                return `<div class="sb-event-item">${time}<span style="overflow:hidden;text-overflow:ellipsis;">${title}</span></div>`;
+            }).join('');
+        }
+    }
+}
+
+// ── 메인화면 복귀 함수 — 현재 페이지 hash 기준으로 탭 자동 결정
+function goHome() {
+    window.location.hash = 'home';
+}
+
+// ── GitHub 잔디밭 툴팁 — 사이드바 overflow 탈출
+document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.getElementById('github-wrapper');
+    const tooltip = wrapper ? wrapper.querySelector('.github-tooltip') : null;
+    if (!wrapper || !tooltip) return;
+
+    function positionTooltip() {
+        const rect = wrapper.getBoundingClientRect();
+        tooltip.style.position = 'fixed';
+        tooltip.style.top = (rect.top + rect.height / 2) + 'px';
+        tooltip.style.left = (rect.right + 22) + 'px';
+        tooltip.style.transform = 'translateY(-50%)';
+    }
+    wrapper.addEventListener('mouseenter', positionTooltip);
+});
+
 // 1. Firebase 설정 (유비님이 복사한 값 적용)
 const firebaseConfig = {
   apiKey: "AIzaSyCIPKUTDyNC0R0SAVbAAWgkCYpdogmw3w8",
@@ -76,10 +149,13 @@ document.addEventListener('DOMContentLoaded', handleRouting);
 
 // 버튼 클릭 시 주소 변경 (사이드바 및 대문 버튼)
 if (goDashboardBtn) goDashboardBtn.addEventListener('click', () => { window.location.hash = 'dashboard'; });
-if (goToPortfolioBtn) goToPortfolioBtn.addEventListener('click', () => { window.location.hash = 'portfolio'; });
+if (goToPortfolioBtn) goToPortfolioBtn.addEventListener('click', () => {
+    sessionStorage.setItem('activeHomeTab', 'portfolio');
+    window.location.hash = 'portfolio';
+});
 if (profileImage) {
     profileImage.style.cursor = 'pointer'; // 마우스를 올리면 손가락 모양으로 변하게 합니다.
-    profileImage.addEventListener('click', () => { window.location.hash = 'home'; });
+    profileImage.addEventListener('click', () => { goHome(); });
 }
 
 // ==========================================
@@ -496,12 +572,43 @@ function renderCalendar() {
         datesElement.appendChild(emptySlot);
     }
 
+    // 2026년 한국 공휴일 (월-일 형식)
+    const holidays = {
+        '1-1':  '신정',
+        '2-17': '설날 연휴',
+        '2-18': '설날',
+        '2-19': '설날 연휴',
+        '3-1':  '삼일절',
+        '5-5':  '어린이날',
+        '5-25': '부처님오신날',
+        '6-6':  '현충일',
+        '8-15': '광복절',
+        '9-24': '추석 연휴',
+        '9-25': '추석',
+        '9-26': '추석 연휴',
+        '10-3': '개천절',
+        '10-9': '한글날',
+        '12-25':'성탄절',
+    };
+
     // 실제 날짜 채우기 (배지용 data-date 포함)
     for (let day = 1; day <= totalDaysInMonth; day++) {
         const dateSlot = document.createElement('div');
         dateSlot.innerText = day;
 
         dateSlot.setAttribute('data-date', day);
+
+        // 요일 계산 (0=일, 6=토)
+        const dayOfWeek = new Date(currentCalYear, currentCalMonth, day).getDay();
+        if (dayOfWeek === 0) dateSlot.classList.add('sunday');
+        if (dayOfWeek === 6) dateSlot.classList.add('saturday');
+
+        // 공휴일 체크
+        const monthDayKey = `${currentCalMonth + 1}-${day}`;
+        if (holidays[monthDayKey]) {
+            dateSlot.classList.add('holiday');
+            dateSlot.title = holidays[monthDayKey];
+        }
 
         if (isThisMonth && day === realToday.getDate()) {
             dateSlot.classList.add('today');
@@ -592,6 +699,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             const type = tab.getAttribute('data-type');
 
+            // 탭 전환 시 항상 현재 탭 기록
+            sessionStorage.setItem('activeHomeTab', type);
+
             // 탭 active 전환
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
@@ -619,10 +729,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (ctaBtnPort) ctaBtnPort.onclick = () => { window.location.hash = 'portfolio'; };
-    if (ctaBtnDash) ctaBtnDash.onclick = () => { window.location.hash = 'dashboard'; };
+    if (ctaBtnDash) ctaBtnDash.onclick = () => {
+        sessionStorage.setItem('activeHomeTab', 'dashboard');
+        window.location.hash = 'dashboard';
+    };
 
-    // 초기: 포트폴리오 탭 활성화
-    tabs[0].click();
+    // 포트폴리오 페이지 YB 로고 → 포트폴리오 탭으로 복귀
+    const islandLogo = document.querySelector('.island-logo');
+    if (islandLogo) {
+        islandLogo.addEventListener('click', (e) => {
+            e.preventDefault();
+            goHome();
+        });
+    }
+
+    // 포트폴리오 페이지 대시보드 알약 버튼
+    const islandDashBtn = document.querySelector('.island-btn');
+    if (islandDashBtn) {
+        islandDashBtn.addEventListener('click', () => {
+            sessionStorage.setItem('activeHomeTab', 'dashboard');
+        });
+    }
+
+    // 마지막으로 선택했던 탭 복원
+    const savedTab = sessionStorage.getItem('activeHomeTab') || 'portfolio';
+    const targetTab = Array.from(tabs).find(t => t.getAttribute('data-type') === savedTab);
+    if (targetTab) targetTab.click();
+    else tabs[0].click();
 });
 
 
@@ -687,29 +820,73 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const githubGrid = document.getElementById('github-grid');
     const githubMonth = document.getElementById('github-month');
+    if (!githubGrid) return;
 
-    if (githubGrid) {
-        if (githubMonth) {
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const currentMonthIndex = new Date().getMonth();
-            githubMonth.innerText = monthNames[currentMonthIndex];
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+    async function loadGithubContributions() {
+        try {
+            // GitHub Events API — 최근 90일 커밋 데이터
+            const res = await fetch('https://api.github.com/users/yoobilee/events?per_page=100');
+            if (!res.ok) throw new Error('API 실패');
+            const events = await res.json();
+
+            // 날짜별 커밋 횟수 집계
+            const commitMap = {};
+            events.forEach(ev => {
+                if (ev.type === 'PushEvent') {
+                    const date = ev.created_at.slice(0, 10); // YYYY-MM-DD
+                    commitMap[date] = (commitMap[date] || 0) + (ev.payload.commits?.length || 1);
+                }
+            });
+
+            // 이번 달 기준 5주(35칸) 렌더링
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+
+            if (githubMonth) githubMonth.innerText = monthNames[month];
+
+            // 이번 달 1일의 요일부터 시작
+            const firstDay = new Date(year, month, 1).getDay(); // 0=일
+            const lastDate = new Date(year, month + 1, 0).getDate();
+
+            githubGrid.innerHTML = '';
+
+            // 앞쪽 빈칸
+            for (let i = 0; i < firstDay; i++) {
+                const empty = document.createElement('div');
+                empty.classList.add('git-cube');
+                githubGrid.appendChild(empty);
+            }
+
+            // 날짜별 커밋
+            for (let d = 1; d <= lastDate; d++) {
+                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const count = commitMap[dateStr] || 0;
+                const level = count === 0 ? 0 : count <= 1 ? 1 : count <= 3 ? 2 : count <= 6 ? 3 : 4;
+
+                const cube = document.createElement('div');
+                cube.classList.add('git-cube');
+                if (level > 0) cube.classList.add(`git-lv-${level}`);
+                cube.title = `${dateStr}: ${count}개 커밋`;
+                githubGrid.appendChild(cube);
+            }
+
+        } catch (e) {
+            // API 실패 시 빈 그리드로 폴백
+            console.warn('GitHub API 연동 실패:', e);
+            const now = new Date();
+            if (githubMonth) githubMonth.innerText = monthNames[now.getMonth()];
+            for (let i = 0; i < 35; i++) {
+                const cube = document.createElement('div');
+                cube.classList.add('git-cube');
+                githubGrid.appendChild(cube);
+            }
         }
-
-        const myContributions = [
-            0, 0, 0, 0, 0, 0, 0,
-            0, 1, 2, 4, 0, 3, 0,
-            2, 1, 1, 1, 0, 0, 1,
-            1, 1, 1, 4, 1, 0, 0,
-            0, 0, 0, 0, 0, 0, 0
-        ];
-
-        myContributions.forEach(level => {
-            const cube = document.createElement('div');
-            cube.classList.add('git-cube');
-            if (level > 0) cube.classList.add(`git-lv-${level}`);
-            githubGrid.appendChild(cube);
-        });
     }
+
+    loadGithubContributions();
 });
 
 /**
@@ -1425,6 +1602,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 // 초기화
 document.addEventListener('DOMContentLoaded', () => {
     renderArchive();
+    updateSidebarStats();
 });
 
 // ==========================================

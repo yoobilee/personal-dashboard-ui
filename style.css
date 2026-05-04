@@ -1496,7 +1496,7 @@ body.dark-mode .sidebar-menu li {
 }
 
 .action-btn:hover,
-.sidebar-external-link:hover {
+.sidebar-external-link:hover:not(.github-link) {
   background: rgba(49, 130, 246, 0.07) !important;
   color: #3182f6 !important;
   transform: none !important;
@@ -1609,7 +1609,7 @@ body.dark-mode .sidebar-footer {
   align-items: center;
   gap: 10px;
   padding: 7px 12px;
-  margin: 0 0 4px;
+  margin: 0;
   background: transparent;
   border: none;
   border-radius: 8px;
@@ -1617,9 +1617,10 @@ body.dark-mode .sidebar-footer {
   font-weight: 600;
   color: #4e5968;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
   cursor: pointer;
   width: 100%;
+  box-sizing: border-box;
 }
 
 body.dark-mode .github-link {
@@ -1627,13 +1628,27 @@ body.dark-mode .github-link {
 }
 
 .github-link:hover {
-  background: rgba(49, 130, 246, 0.07);
-  color: #3182f6;
-  box-shadow: none;
+  background: rgba(49, 130, 246, 0.07) !important;
+  color: #3182f6 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  border-radius: 8px !important;
 }
 
 body.dark-mode .github-link:hover {
-  color: #60a5fa;
+  color: #60a5fa !important;
+  background: rgba(96, 165, 250, 0.07) !important;
+}
+
+/* 화살표 아이콘 — 호버 시 파란색으로 */
+.github-link .action-arrow {
+  margin-left: auto;
+  opacity: 0.35;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.github-link:hover .action-arrow {
+  opacity: 1;
 }
 
 .github-tooltip {
@@ -3464,6 +3479,33 @@ body.dark-mode .calendar-dates div:hover {
   box-shadow: none;
 }
 
+
+/* 캘린더 요일 색상 */
+.calendar-dates div.saturday {
+  color: #3182f6;
+  font-weight: 700;
+}
+
+.calendar-dates div.sunday,
+.calendar-dates div.holiday {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.calendar-dates div.saturday.today,
+.calendar-dates div.sunday.today,
+.calendar-dates div.holiday.today {
+  color: #fff;
+}
+
+body.dark-mode .calendar-dates div.saturday {
+  color: #60a5fa;
+}
+
+body.dark-mode .calendar-dates div.sunday,
+body.dark-mode .calendar-dates div.holiday {
+  color: #f87171;
+}
 .calendar-dates div.today {
   background: #3182f6;
   color: white;
@@ -3471,7 +3513,34 @@ body.dark-mode .calendar-dates div:hover {
   border: none;
 }
 
-body.dark-mode .calendar-dates div.today {
+body.dark-mode 
+/* 캘린더 요일 색상 */
+.calendar-dates div.saturday {
+  color: #3182f6;
+  font-weight: 700;
+}
+
+.calendar-dates div.sunday,
+.calendar-dates div.holiday {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.calendar-dates div.saturday.today,
+.calendar-dates div.sunday.today,
+.calendar-dates div.holiday.today {
+  color: #fff;
+}
+
+body.dark-mode .calendar-dates div.saturday {
+  color: #60a5fa;
+}
+
+body.dark-mode .calendar-dates div.sunday,
+body.dark-mode .calendar-dates div.holiday {
+  color: #f87171;
+}
+.calendar-dates div.today {
   background: #3182f6 !important;
   color: #ffffff !important;
   border: none !important;
