@@ -1,0 +1,6 @@
+# 시크릿 키 파일 — GitHub에 올리지 않음
+config.js
+
+# OS
+.DS_Store
+Thumbs.db
