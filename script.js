@@ -91,14 +91,14 @@ if (profileImage) {
  */
 document.addEventListener('DOMContentLoaded', () => {
     // 1. 필요한 요소들을 가져옵니다.
-    const roadmapItems = document.querySelectorAll('.map-item');
+    const roadmapItems = document.querySelectorAll('.roadmap-item');
     const fill = document.getElementById('progress-fill');
     const text = document.getElementById('progress-text');
 
     // 2. [핵심] 달성률을 계산하고 UI를 업데이트하는 함수입니다.
     function updateVoyageProgress() {
         const total = roadmapItems.length;
-        const completed = document.querySelectorAll('.map-item.completed').length;
+        const completed = document.querySelectorAll('.roadmap-item.completed').length;
 
         const percentage = total > 0 ? (completed / total) * 100 : 0;
         const finalPercent = percentage.toFixed(1);
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // ⭐️ 현재 완료 상태를 브라우저(localStorage)에 저장합니다.
-        const completedPhases = Array.from(document.querySelectorAll('.map-item.completed'))
+        const completedPhases = Array.from(document.querySelectorAll('.roadmap-item.completed'))
             .map(item => item.getAttribute('data-phase'));
         localStorage.setItem('roadmap_status', JSON.stringify(completedPhases));
     }
@@ -629,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /**
  * [Phase 12] 딥 다이내믹 쉐도우 (Deep Lighting)
  */
-const mapItems = document.querySelectorAll('.map-item');
+const mapItems = document.querySelectorAll('.roadmap-item');
 mapItems.forEach(item => {
     const content = item.querySelector('.map-content');
     item.addEventListener('mousemove', (e) => {
@@ -686,7 +686,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     const githubGrid = document.getElementById('github-grid');
-    const githubMonth = document.querySelector('.github-month');
+    const githubMonth = document.getElementById('github-month');
 
     if (githubGrid) {
         if (githubMonth) {
@@ -1610,6 +1610,24 @@ localStorage.setItem = function(key, value) {
 };
 
 // ── 페이지 로드 시 자동 동기화 ──
+// ── GitHub 잔디밭 툴팁 — 사이드바 overflow 탈출
+document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.getElementById('github-wrapper');
+    const tooltip = wrapper ? wrapper.querySelector('.github-tooltip') : null;
+
+    if (!wrapper || !tooltip) return;
+
+    function positionTooltip() {
+        const rect = wrapper.getBoundingClientRect();
+        tooltip.style.position = 'fixed';
+        tooltip.style.top = (rect.top + rect.height / 2) + 'px';
+        tooltip.style.left = (rect.right + 22) + 'px';
+        tooltip.style.transform = 'translateY(-50%)';
+    }
+
+    wrapper.addEventListener('mouseenter', positionTooltip);
+});
+
 async function autoSyncOnLoad() {
     if (typeof SYNC_KEY === 'undefined' || !SYNC_KEY || typeof db === 'undefined') return;
 
