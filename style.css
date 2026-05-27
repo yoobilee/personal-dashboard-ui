@@ -1281,21 +1281,20 @@ body.dark-mode .sidebar.collapsed {
   position: absolute;
   width: 18px;
   height: 44px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: #eef1f7;
+  border: 1px solid rgba(0, 0, 0, 0.07);
   border-left: none;
   border-radius: 0 22px 22px 0;
-  box-shadow: 3px 0 12px rgba(71, 85, 105, 0.08),
-              inset -1px 0 0 rgba(255,255,255,0.5);
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 3px 0 10px rgba(71, 85, 105, 0.1);
+  transition: background 0s,
+              border-color 0s,
+              box-shadow 0.2s ease;
 }
 
 body.dark-mode .sidebar-toggle-btn::before {
-  background: rgba(15, 23, 42, 0.65);
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 3px 0 12px rgba(0, 0, 0, 0.3);
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.35);
 }
 
 .sidebar-toggle-btn:hover::before {
@@ -3348,6 +3347,9 @@ body.dark-mode .task-title {
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 8px 32px rgba(71, 85, 105, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 body.dark-mode .calendar-container {
@@ -3437,11 +3439,14 @@ body.dark-mode .calendar-days {
 .calendar-dates {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
+  grid-auto-rows: 1fr;
+  gap: 6px;
+  flex: 1;
 }
 
 .calendar-dates div {
-  height: 80px;
+  height: auto;
+  min-height: 60px;
   padding: 10px;
   font-size: 14px;
   position: relative;
@@ -3624,6 +3629,12 @@ body.dark-mode #memo-date-title {
 
 .memo-item:hover {
   transform: translateX(2px);
+}
+
+body.dark-mode .memo-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #f0f6ff;
 }
 
 .memo-text {
