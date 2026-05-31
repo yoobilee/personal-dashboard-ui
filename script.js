@@ -331,7 +331,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // 로드맵 딥 다이내믹 섀도
 const mapItems = document.querySelectorAll('.roadmap-item');
 mapItems.forEach(item => {
-    const content = item.querySelector('.map-content');
+    const content = item.querySelector('.roadmap-content');
+    if (!content) return;
     item.addEventListener('mousemove', (e) => {
         const rect    = content.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
@@ -342,6 +343,7 @@ mapItems.forEach(item => {
         content.style.setProperty('--sh-y', `${(moveY * -5) + 10}px`);
     });
     item.addEventListener('mouseleave', () => {
+        if (!content) return;
         content.style.setProperty('--sh-x', '0px');
         content.style.setProperty('--sh-y', '20px');
     });
@@ -1569,6 +1571,22 @@ localStorage.setItem = function(key, value) {
 };
 
 // 페이지 로드 시 서버와 타임스탬프 비교 후 자동 다운로드
+// ── 콘솔에서 동기화 활성화 (config.js 없는 환경용)
+function enableSync(key) {
+    window.SYNC_KEY = key;
+    console.log('%c✅ 동기화 활성화됨! 자동저장 및 자동 다운로드가 시작됩니다.', 'color:#22c55e; font-weight:bold;');
+    autoSyncOnLoad();
+}
+
+// config.js 없는 환경에서 안내 메시지 출력
+window.addEventListener('load', () => {
+    if (typeof SYNC_KEY === 'undefined' || !SYNC_KEY) {
+        console.log('%c💡 동기화 비활성화 상태', 'color:#f97316; font-weight:bold;');
+        console.log('%c  활성화하려면 콘솔에서 아래 명령어를 입력하세요:', 'color:#8b95a1;');
+        console.log('%c  enableSync("YOUR-SYNC-KEY")', 'color:#3182f6; font-weight:bold;');
+    }
+});
+
 async function autoSyncOnLoad() {
     if (typeof SYNC_KEY === 'undefined' || !SYNC_KEY || typeof db === 'undefined') return;
     try {
@@ -1600,3 +1618,125 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('load', () => {
     setTimeout(autoSyncOnLoad, 1500);
 });
+
+// ── 콘솔 전용 개발자 도구 ──
+// analyzeStack() — 기술 스택 분석
+// detectBugs()   — 버그/이슈 감지
+
+function analyzeStack() {
+    const html = document.documentElement.innerHTML;
+    const scripts = Array.from(document.querySelectorAll('script[src]')).map(s => s.src);
+    const links = Array.from(document.querySelectorAll('link[href]')).map(l => l.href);
+    const allSrc = [...scripts, ...links].join(' ');
+
+    const stack = { 'Core': [], 'UI / Style': [], 'Libraries': [], 'Hosting': [] };
+
+    if (!allSrc.includes('react') && !allSrc.includes('vue') && !allSrc.includes('angular'))
+        stack['Core'].push('Vanilla JS (No Framework)');
+    if (allSrc.includes('react')) stack['Core'].push('React');
+    if (allSrc.includes('vue')) stack['Core'].push('Vue.js');
+    stack['Core'].push('HTML5 / CSS3');
+
+    if (html.includes('backdrop-filter') || html.includes('glassmorphism'))
+        stack['UI / Style'].push('Glassmorphism');
+    if (html.includes('var(--') || document.styleSheets.length > 0)
+        stack['UI / Style'].push('CSS Custom Properties');
+    if (allSrc.includes('Pretendard') || html.includes('Pretendard'))
+        stack['UI / Style'].push('Pretendard Font');
+    if (html.includes('tailwind') || allSrc.includes('tailwind'))
+        stack['UI / Style'].push('Tailwind CSS');
+
+    if (allSrc.includes('three') || typeof THREE !== 'undefined')
+        stack['Libraries'].push('Three.js');
+    if (allSrc.includes('firebase') || typeof firebase !== 'undefined')
+        stack['Libraries'].push('Firebase Firestore');
+
+    if (location.hostname.includes('github.io'))
+        stack['Hosting'].push('GitHub Pages');
+    else if (location.hostname.includes('netlify'))
+        stack['Hosting'].push('Netlify');
+    else if (location.protocol === 'file:')
+        stack['Hosting'].push('Local (file://)');
+    else
+        stack['Hosting'].push(location.hostname);
+
+    const line = '━'.repeat(44);
+    console.log(`%c\n🔍 YooBi Portfolio & Dashboard — 기술 스택 분석\n${line}`, 'color:#3182f6; font-weight:bold;');
+    let total = 0;
+    for (const [category, items] of Object.entries(stack)) {
+        if (items.length === 0) continue;
+        console.log(`%c\n⚙️  ${category}`, 'color:#8b95a1; font-weight:bold;');
+        items.forEach(item => { console.log(`%c  • ${item}`, 'color:#f0f6ff;'); total++; });
+    }
+    console.log(`%c\n${line}\n총 ${total}개 기술 감지됨\n`, 'color:#3182f6; font-weight:bold;');
+}
+
+async function detectBugs() {
+    const line = '━'.repeat(44);
+    console.log(`%c\n🐛 YooBi Portfolio & Dashboard — 버그 감지 시작\n${line}`, 'color:#f97316; font-weight:bold;');
+
+    const issues = [], warnings = [], passed = [];
+
+    // 1. 깨진 이미지 감지
+    Array.from(document.querySelectorAll('img')).forEach(img => {
+        if (!img.complete || img.naturalWidth === 0)
+            issues.push(`깨진 이미지: ${img.src || img.getAttribute('src')}`);
+        else
+            passed.push(`이미지 정상: ${img.alt || img.src.split('/').pop()}`);
+    });
+
+    // 2. 깨진 링크 감지 (same-origin, file:// 환경 제외)
+    if (location.protocol !== 'file:') {
+        const links = Array.from(document.querySelectorAll('a[href]'))
+            .filter(a => a.href.startsWith(location.origin) && !a.href.includes('#'));
+        for (const a of links) {
+            try {
+                const res = await fetch(a.href, { method: 'HEAD' });
+                if (!res.ok) issues.push(`깨진 링크 (${res.status}): ${a.href}`);
+                else passed.push(`링크 정상: ${a.textContent.trim() || a.href}`);
+            } catch { warnings.push(`링크 확인 불가 (CORS): ${a.href}`); }
+        }
+    } else {
+        warnings.push('링크 체크 스킵: 로컬(file://) 환경');
+    }
+
+    // 3. console.error 감지
+    const origErr = console.error;
+    const caughtErrors = [];
+    console.error = (...args) => { caughtErrors.push(args.join(' ')); origErr.apply(console, args); };
+    await new Promise(r => setTimeout(r, 500));
+    console.error = origErr;
+    caughtErrors.forEach(e => warnings.push(`콘솔 에러: ${e}`));
+
+    // 4. localStorage 용량 체크
+    let lsSize = 0;
+    for (const key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) lsSize += (localStorage[key].length + key.length) * 2;
+    }
+    const lsKB = (lsSize / 1024).toFixed(1);
+    if (lsSize > 4 * 1024 * 1024) issues.push(`localStorage 용량 초과 위험: ${lsKB}KB / 5120KB`);
+    else passed.push(`localStorage 용량 정상: ${lsKB}KB / 5120KB`);
+
+    // 5. 필수 DOM 요소 확인
+    ['dashboard-view', 'sidebar-toggle-btn', 'github-grid', 'progress-fill', 'progress-text'].forEach(id => {
+        if (!document.getElementById(id)) issues.push(`필수 요소 없음: #${id}`);
+        else passed.push(`필수 요소 확인: #${id}`);
+    });
+
+    if (issues.length > 0) {
+        console.log(`%c\n🔴 이슈 (${issues.length}건)`, 'color:#ef4444; font-weight:bold;');
+        issues.forEach(i => console.log(`%c  ✕ ${i}`, 'color:#ef4444;'));
+    }
+    if (warnings.length > 0) {
+        console.log(`%c\n🟡 경고 (${warnings.length}건)`, 'color:#f59e0b; font-weight:bold;');
+        warnings.forEach(w => console.log(`%c  ⚠ ${w}`, 'color:#f59e0b;'));
+    }
+    if (passed.length > 0) {
+        console.log(`%c\n🟢 정상 (${passed.length}건)`, 'color:#22c55e; font-weight:bold;');
+        passed.forEach(p => console.log(`%c  ✓ ${p}`, 'color:#22c55e;'));
+    }
+
+    const status = issues.length === 0 ? '✅ 이슈 없음' : `❌ ${issues.length}개 이슈 발견`;
+    console.log(`%c\n${line}\n${status} | 경고 ${warnings.length}건 | 정상 ${passed.length}건\n`,
+        `color:${issues.length === 0 ? '#3182f6' : '#ef4444'}; font-weight:bold;`);
+}

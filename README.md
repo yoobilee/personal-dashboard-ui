@@ -62,6 +62,12 @@ cp config.example.js config.js
 # config.js 안의 시크릿 키를 본인 키로 수정
 ```
 
+**배포 환경 (GitHub Pages / Vercel 등)** 에서는 `config.js` 없이 콘솔에서 직접 활성화할 수 있습니다.
+
+```javascript
+enableSync("YOUR-SYNC-KEY")  // 동기화 활성화 — 이후 로컬과 동일하게 동작
+```
+
 <br/>
 
 ## 구현 포인트
@@ -70,7 +76,13 @@ cp config.example.js config.js
 `window.location.hash`로 페이지 전환을 처리하며 새로고침 시에도 마지막 위치를 복원합니다. 다크모드 상태는 `localStorage`를 통해 resume.html까지 모든 페이지에서 동기화됩니다.
 
 **Firebase 멀티 디바이스 자동 동기화**
-데이터 변경 시 2초 후 Firebase에 자동 업로드합니다. 페이지 로드 시 서버의 `updatedAt` 타임스탬프와 로컬의 `lastSync`를 비교해 서버가 더 최신이면 자동 다운로드합니다. 다운로드 중에는 `localStorage.setItem` override를 우회해 자동 업로드가 발동되지 않도록 처리했습니다.
+데이터 변경 시 2초 후 Firebase에 자동 업로드합니다. 페이지 로드 시 서버의 `updatedAt` 타임스탬프와 로컬의 `lastSync`를 비교해 서버가 더 최신이면 자동 다운로드합니다. 다운로드 중에는 `localStorage.setItem` override를 우회해 자동 업로드가 발동되지 않도록 처리했습니다. 배포 환경에서는 콘솔에서 `enableSync(key)`로 활성화합니다.
+
+**GitHub API 연동**
+`api.github.com/users/yoobilee/events`에서 실제 PushEvent를 가져와 날짜별 커밋 횟수를 집계해 잔디밭을 렌더링합니다. 월이 바뀌면 자동으로 업데이트되며 API 실패 시 빈 그리드로 fallback 처리했습니다.
+
+**콘솔 개발자 도구**
+QA 경험을 살려 브라우저 콘솔에서 실행 가능한 두 가지 도구를 구현했습니다. `analyzeStack()`은 script/link 태그를 분석해 프로젝트의 기술 스택을 자동으로 감지하고, `detectBugs()`는 깨진 이미지, 깨진 링크, 콘솔 에러, localStorage 용량, 필수 DOM 요소 존재 여부를 자동으로 점검합니다.
 
 **글라스모피즘 렌더링 최적화**
 다중 글라스 요소 겹침 시 발생하는 크롬 컴포지터 레이어 충돌을 `transform: translateZ(0)` + `will-change`로 GPU 레이어를 분리해 해결했습니다.
