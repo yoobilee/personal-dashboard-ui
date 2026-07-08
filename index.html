@@ -247,6 +247,8 @@
                                     성능을 최적화하는 날카로운 시야</strong>를 길러주었습니다.<br>
                                 단순히 동작하는 화면을 넘어서, 어떤 환경에서도 끊김 없는 사용자 경험과 무결점의 인터페이스를 구축하는 개발자로 성장하고 있습니다.
                             </p>
+                            <p class="pf-about-ai-note">모든 프로젝트는 Claude Code를 아키텍처 설계 및 구현 가속 도구로 활용해 개발했으며,
+                                직접 설계한 부분과 AI로 가속화한 부분은 각 프로젝트 README에 구체적으로 명시했습니다.</p>
                         </div>
                         <div class="pf-stat-row reveal-up" style="--delay:.1s">
                             <div class="pf-stat">
@@ -330,6 +332,7 @@
                                     <li>GameBench Pro를 활용한 성능 데이터 수집 및 P90(90분위수) 지표 기반의 시각화 리포트(Google Colab) 제작으로 성능
                                         기준점 재수립</li>
                                     <li>대량 데이터 조회 시 타임아웃 에러 및 비동기 타이머 액션 불일치 등 정밀한 결함 다수 발견</li>
+                                    <li class="pf-tl-connect">→ Worky v1.4.0에서 API 라우트에 쿼리 제한을 걸고 앱 레벨 에러/404 페이지를 별도로 구성한 이유이기도 합니다. "정상 케이스만 동작하는 앱"과 "비정상 케이스에서도 무너지지 않는 앱"의 차이를 QA 시절부터 체감했습니다.</li>
                                 </ul>
                             </div>
                         </div>
@@ -345,6 +348,7 @@
                                 <ul class="pf-tl-list">
                                     <li>판매금융 파트 대대적 개편에 따른 기획서 기반의 TC 설계 및 상시 업데이트</li>
                                     <li>높은 기획 변동성에 대응하여 금융 프로세스별 예외 케이스와 비즈니스 로직 정밀 검증</li>
+                                    <li class="pf-tl-connect">→ 다양한 예외 케이스를 예측하는 훈련은, FE Interview Prep에서 Zustand 스토어에 캐싱 플래그를 넣어 중복 API 호출을 방지한 설계로 이어졌습니다. 사용자가 같은 화면을 반복해서 오갈 때 발생하는, 눈에 잘 안 띄는 성능 저하를 미리 차단하는 습관입니다.</li>
                                 </ul>
                             </div>
                         </div>
@@ -361,6 +365,7 @@
                                     <li>안드로이드 부문 2,000개 이상의 Full TC 및 Regression 테스트 고속 수행</li>
                                     <li>API 환경 조작 및 계정별 조건 생성을 통한 데이터 기반의 이벤트 혜택 로직 검증</li>
                                     <li>투자 성과 데이터와 래더 페이지 순위 간의 정렬 로직 이슈 발견 및 정정 기여</li>
+                                    <li class="pf-tl-connect">→ 가상화폐 플랫폼 검증 과정에서 비동기 데이터 정렬이 어긋나며 발생하는 결함을 자주 발견했습니다. Smart Wallet Dashboard에서 CODEF API와 Yahoo Finance API 두 응답 속도 차이를 방어하기 위해 LocalStorage Fallback을 설계한 것도 같은 맥락입니다.</li>
                                 </ul>
                             </div>
                         </div>
@@ -375,9 +380,11 @@
                                 <ul class="pf-tl-list">
                                     <li>기존 CCS(블루링크, Kia Connect) 유지보수 및 신규 CCI(MyHyundai, KIA) 통합 리뉴얼 프로젝트 참여</li>
                                     <li>로그 분석을 통한 데이터 무결성 검토 및 앱-차량 간 제어 신호(열선 시트 등) 동기화 결함 조기 발견</li>
+                                    <li class="pf-tl-connect">→ 앱과 차량 간 실시간 신호 동기화에서 발생하는 결함을 다루던 경험은, WORKY mini에서 Supabase Realtime 동기화 중 화면이 일시적으로 어긋나거나 중복 렌더링되는 상황을 미리 방어하는 설계로 이어졌습니다.</li>
                                     <li>소유자 환경별(멤버십, 사업자 명의 등) 권한 및 결제 약관 동의 프로세스 예외 케이스 설계 및 TC 수행</li>
                                     <li>지도 서비스 내 특정 액션 시 발생하는 런타임 크래시를 배포 전 다수 발견하여 출시 품질 안정화 기여</li>
                                     <li>차량 네비게이션 및 원격 제어 기능과 앱 간의 연동 안정성 평가를 위한 실차 테스트 수행</li>
+                                    <li class="pf-tl-connect">→ 유럽향 커넥티드 카 앱의 다국어 테스트를 리드하며, 텍스트 길이 변화가 레이아웃을 깨뜨리는 지점들을 수없이 마주쳤습니다. 이 경험 때문에 Worky의 LocaleContext를 설계할 때부터 한글/영문 텍스트 길이 차이로 인한 오버플로우를 우선순위에 두고 컴포넌트 구조를 잡았습니다.</li>
                                 </ul>
                             </div>
                         </div>
@@ -783,7 +790,7 @@
                         </div>
                     </div>
                     <div class="roadmap-container">
-                        <h2 class="roadmap-title">Career Roadmap</h2>
+                        <h2 class="roadmap-title">Tech Stack Journey</h2>
                         <div class="roadmap-area"> <svg class="path-svg" viewBox="0 0 1400 500">
                                 <defs>
                                     <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -792,55 +799,41 @@
                                     </linearGradient>
                                 </defs>
                                 <path class="dotted-path"
-                                    d="M 80 400 C 160 400, 200 360, 280 360 S 400 250, 480 250 S 580 300, 680 300 S 790 170, 890 170 S 1000 220, 1100 220 S 1240 100, 1320 100" />
+                                    d="M 80 400 C 200 400, 260 260, 380 260 S 580 320, 680 320 S 880 150, 980 150 S 1180 80, 1280 80" />
                             </svg>
                             <div class="roadmap-item completed" style="left: 5.7%; top: 80%;" data-phase="phase-1">
                                 <div class="roadmap-marker"><span class="marker-num">01</span></div>
                                 <div class="roadmap-content">
                                     <h4>Phase 01</h4>
-                                    <p>퇴사 및 직무 전환 준비<br>3.31 퇴사 절차 완료</p>
+                                    <p>Vanilla JS 기반 SPA 설계<br>프레임워크 없이 라우팅·상태관리 직접 구현</p>
                                 </div>
                             </div>
-                            <div class="roadmap-item active" style="left: 20%; top: 72%;" data-phase="phase-2">
+                            <div class="roadmap-item completed" style="left: 27.1%; top: 52%;" data-phase="phase-2">
                                 <div class="roadmap-marker"><span class="marker-num">02</span></div>
                                 <div class="roadmap-content">
                                     <h4>Phase 02</h4>
-                                    <p>포트폴리오 Project 01<br>개인 대시보드 개발 및 완성</p>
+                                    <p>React 생태계 학습 & 컴포넌트 기반 설계 전환<br>상태관리 라이브러리(Zustand) 도입, 재사용 가능한 UI 구조 설계</p>
                                 </div>
                             </div>
-                            <div class="roadmap-item" style="left: 34.3%; top: 50%;" data-phase="phase-3">
+                            <div class="roadmap-item completed" style="left: 48.6%; top: 64%;" data-phase="phase-3">
                                 <div class="roadmap-marker"><span class="marker-num">03</span></div>
                                 <div class="roadmap-content">
                                     <h4>Phase 03</h4>
-                                    <p>Project 02 설계 및 자격증 준비<br>가계부 프로젝트 시작 & 정처기 필기 공부</p>
+                                    <p>Next.js & TypeScript 도입<br>타입 안정성, SSR/API 라우트 구조 학습</p>
                                 </div>
                             </div>
-                            <div class="roadmap-item" style="left: 48.6%; top: 60%;" data-phase="phase-4">
+                            <div class="roadmap-item completed" style="left: 70%; top: 30%;" data-phase="phase-4">
                                 <div class="roadmap-marker"><span class="marker-num">04</span></div>
                                 <div class="roadmap-content">
                                     <h4>Phase 04</h4>
-                                    <p>Project 02 완성 및 차기작 착수<br>가계부 프로젝트 완료 & 신호등 프로젝트 시작</p>
+                                    <p>백엔드 연동 심화<br>Supabase 실시간 동기화, 외부 API(Groq, CODEF) 통합 및 에러 핸들링</p>
                                 </div>
                             </div>
-                            <div class="roadmap-item" style="left: 63.6%; top: 34%;" data-phase="phase-5">
-                                <div class="roadmap-marker"><span class="marker-num">05</span></div>
-                                <div class="roadmap-content">
-                                    <h4>Phase 05</h4>
-                                    <p>포트폴리오 완성 및 1차 검증<br>신호등 프로젝트 완료 & 정처기 필기 합격</p>
-                                </div>
-                            </div>
-                            <div class="roadmap-item" style="left: 78.6%; top: 44%;" data-phase="phase-6">
-                                <div class="roadmap-marker"><span class="marker-num">06</span></div>
-                                <div class="roadmap-content">
-                                    <h4>Phase 06</h4>
-                                    <p>취업 준비 최적화<br>3종 포트폴리오 및 이력서 최종 검수</p>
-                                </div>
-                            </div>
-                            <div class="roadmap-item goal" style="left: 94.3%; top: 20%;" data-phase="phase-7">
+                            <div class="roadmap-item completed goal" style="left: 91.4%; top: 16%;" data-phase="phase-5">
                                 <div class="roadmap-marker"><span class="marker-num">★</span></div>
                                 <div class="roadmap-content">
-                                    <h4>Final Goal</h4>
-                                    <p>프론트엔드 개발자 재취업<br><strong>직무 전환 및 구직 활동 성공</strong></p>
+                                    <h4>Phase 05 (Goal)</h4>
+                                    <p>AI 파이프라인 설계 및 프로덕션 배포<br><strong>시스템 프롬프트 제어, 접근성·i18n까지 아우르는 프로덕션 레벨 앱 구축</strong></p>
                                 </div>
                             </div>
                         </div>

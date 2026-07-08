@@ -1345,8 +1345,8 @@ function updateSystemBriefing() {
 
     // 커리어 로드맵 도트 시각화
     const savedStatus = JSON.parse(localStorage.getItem('roadmap_status') || '[]');
-    const phases      = ['phase-1','phase-2','phase-3','phase-4','phase-5','phase-6','phase-7'];
-    const phaseLabels = ['Phase 01','Phase 02','Phase 03','Phase 04','Phase 05','Phase 06','Goal'];
+    const phases      = ['phase-1','phase-2','phase-3','phase-4','phase-5'];
+    const phaseLabels = ['Phase 01','Phase 02','Phase 03','Phase 04','Phase 05 (Goal)'];
     const dotsEl      = document.getElementById('bento-roadmap-dots');
     const roadBar     = document.getElementById('bento-roadmap-bar');
     const roadPctEl   = document.getElementById('bento-roadmap-pct');

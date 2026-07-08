@@ -3349,7 +3349,8 @@ body.dark-mode .task-title {
   box-shadow: 0 8px 32px rgba(71, 85, 105, 0.08);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body.dark-mode .calendar-container {
@@ -3439,14 +3440,15 @@ body.dark-mode .calendar-days {
 .calendar-dates {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-auto-rows: 1fr;
+  grid-template-rows: repeat(6, 1fr);
   gap: 6px;
   flex: 1;
+  min-height: 0;
 }
 
 .calendar-dates div {
   height: auto;
-  min-height: 60px;
+  min-height: clamp(32px, 7vh, 60px);
   padding: 10px;
   font-size: 14px;
   position: relative;
@@ -3974,6 +3976,15 @@ body.dark-mode .pf-label {
   font-weight: 700;
 }
 
+.pf-about-ai-note {
+  font-size: 14px !important;
+  line-height: 1.7;
+  color: #6b7684 !important;
+  font-style: italic;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
 .pf-stat-row {
   display: flex;
   gap: 40px;
@@ -4100,6 +4111,15 @@ body.dark-mode .pf-label {
   color: #6b7684;
   font-size: 14px;
   line-height: 1.8;
+}
+
+.pf-tl-list li.pf-tl-connect {
+  list-style: none;
+  margin: 8px 0 0 -16px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(49, 130, 246, 0.25);
+  color: #3182f6;
+  font-style: italic;
 }
 
 /* Portfolio Projects */
@@ -4552,6 +4572,16 @@ body.dark-mode .pf-stat-label {
 
 body.dark-mode .pf-about-text strong {
   color: #e2e8f0;
+}
+
+body.dark-mode .pf-about-ai-note {
+  color: #64748b !important;
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .pf-tl-list li.pf-tl-connect {
+  color: #60a5fa !important;
+  border-top-color: rgba(96, 165, 250, 0.25);
 }
 
 
