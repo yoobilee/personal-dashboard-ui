@@ -4045,12 +4045,6 @@ body.dark-mode .pf-label {
   border: 1px solid rgba(49, 130, 246, 0.15);
 }
 
-.pf-tag-dim {
-  background: rgba(0, 0, 0, 0.04);
-  color: #8b95a1;
-  border-color: rgba(0, 0, 0, 0.07);
-}
-
 /* Portfolio Timeline */
 .pf-timeline {
   display: flex;
@@ -4533,12 +4527,6 @@ body.dark-mode .pf-stat-num {
 
 body.dark-mode .pf-skill-group h4 {
   color: #e2e8f0;
-}
-
-body.dark-mode .pf-tag-dim {
-  background: rgba(255, 255, 255, 0.04);
-  color: #475569;
-  border-color: rgba(255, 255, 255, 0.07);
 }
 
 body.dark-mode .pf-tl-head strong {
